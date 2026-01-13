@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dialect Atlas (Logged In) - YanHe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://assets.pyecharts.org/assets/maps/china.js"></script>
+
+    <style>
+        /* --- Global Western Style --- */
+        :root {
+            --primary: #0052cc;
+            --dark: #091e42;
+            --text: #42526e;
+            --bg-light: #ffffff;
+            --gold: #d4af37;
+            --beijing-red: #c9171e;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            padding-top: 76px;
+            background-color: var(--bg-light);
+            overflow: hidden;
+            height: 100vh;
+            transition: background-color 0.5s ease;
+        }
+
+        /* --- Navbar (Exact Match) --- */
+        .navbar-custom {
+            background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid #ebecf0;
+            height: 76px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+        .navbar-brand { font-weight: 900; font-size: 1.6rem; color: var(--primary) !important; letter-spacing: -0.5px; }
+        .nav-link { font-weight: 600; color: #505f79 !important; margin: 0 8px; font-size: 0.95rem; }
+        .nav-link:hover, .nav-link.active { color: var(--primary) !important; }
+
+        /* User Avatar */
+        .user-avatar {
+            width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--primary); padding: 2px; transition: all 0.2s;
+        }
+        .user-avatar:hover { border-color: #0747a6; opacity: 0.9; }
+
+        .dropdown-menu-custom {
+            border: 1px solid #ebecf0; box-shadow: 0 8px 24px rgba(9, 30, 66, 0.15);
+            border-radius: 8px; margin-top: 15px !important; min-width: 240px; padding: 8px 0;
+            z-index: 1001;
+        }
+        .dropdown-menu-custom .dropdown-item { padding: 10px 20px; font-weight: 500; color: var(--text); font-size: 0.9rem; transition: 0.1s; }
+        .dropdown-menu-custom .dropdown-item:hover { background: #f4f5f7; color: var(--primary); }
+        .dropdown-menu-custom .dropdown-item i { margin-right: 12px; width: 16px; text-align: center; color: #505f79; }
+        .dropdown-header-custom { padding: 12px 20px; border-bottom: 1px solid #ebecf0; margin-bottom: 8px; }
+
+        /* --- Switcher --- */
+        .mode-switch-container {
+            position: absolute; top: 96px; left: 50%; transform: translateX(-50%); z-index: 50;
+            background: #fff; padding: 4px; border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; gap: 4px;
+        }
+        .mode-btn {
+            border: none; padding: 6px 20px; border-radius: 25px; font-weight: 700; font-size: 0.85rem;
+            background: transparent; color: #6b778c; transition: 0.3s;
+        }
+        .mode-btn.active { background: #ebecf0; color: var(--dark); }
+        .mode-btn.pro-active {
+            background: linear-gradient(135deg, #172b4d, #091e42);
+            color: #ffd700;
+            box-shadow: 0 4px 12px rgba(9, 30, 66, 0.4);
+        }
+
+        /* --- Map & Drawer --- */
+        .map-wrapper { width: 100%; height: 100%; position: relative; }
+        .drawer {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 75vh;
+            background: #fff; border-radius: 24px 24px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+            transform: translateY(110%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 100; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .drawer.show { transform: translateY(0); }
+        .drawer-hero {
+            height: 160px; background-size: cover; background-position: center; position: relative; color: #fff;
+            display: flex; align-items: flex-end; padding: 20px; flex-shrink: 0;
+        }
+        .drawer-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.85)); }
+        .hero-content { position: relative; z-index: 2; width: 100%; }
+        .btn-close-custom { position: absolute; top: 15px; right: 15px; width: 32px; height: 32px; background: rgba(0,0,0,0.3); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
+
+        .nav-tabs-custom { display: flex; border-bottom: 1px solid #ebecf0; padding: 0 10px; background: #fff; }
+        .tab-link { padding: 15px; font-weight: 600; color: #6b778c; cursor: pointer; border-bottom: 3px solid transparent; font-size: 0.9rem; flex: 1; text-align: center; }
+        .tab-link.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-link.pro-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+        .drawer-body { flex: 1; overflow-y: auto; padding: 25px; background: #fff; }
+        .tab-pane { display: none; animation: fadeIn 0.3s; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Items */
+        .culture-item { display: flex; gap: 15px; border: 1px solid #ebecf0; border-radius: 12px; padding: 12px; margin-bottom: 15px; align-items: center; }
+        .culture-thumb { width: 65px; height: 65px; border-radius: 8px; object-fit: cover; }
+        .dialect-word { font-weight: 800; font-size: 1.1rem; color: var(--beijing-red); margin-right: 8px; }
+
+        .chat-row { margin-bottom: 12px; display: flex; flex-direction: column; }
+        .chat-bubble { max-width: 90%; padding: 10px 14px; border-radius: 12px; font-size: 0.95rem; }
+        .chat-npc { background: #f4f5f7; color: #172b4d; align-self: flex-start; }
+        .chat-user { background: #deebff; color: #0052cc; align-self: flex-end; }
+        .highlight { color: var(--beijing-red); font-weight: 700; border-bottom: 2px dotted rgba(201, 23, 30, 0.3); }
+
+        .pro-mask { filter: blur(5px); pointer-events: none; user-select: none; }
+        .pro-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; align-items: center; justify-content: center; z-index: 10;
+        }
+
+        /* AI */
+        .mic-btn-wrapper { position: relative; width: 80px; height: 80px; margin: 20px auto; }
+        .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 2; position: relative; transition: all 0.3s; }
+        .mic-btn.recording { background: #ff4d4f; transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="home_en_login.html">YanHe</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="education_en.html">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service_en.html">Freelance</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story_en.html">Community</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="culture_login_en.html">Dialect Map</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <a href="culture_login.html" class="nav-link px-0 fw-bold" style="font-size: 0.9rem;">CN / English</a>
+
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://ui-avatars.com/api/?name=YanHe+Li&background=0052cc&color=fff" alt="User" class="user-avatar shadow-sm">
+                            <span class="d-none d-lg-inline ms-2 fw-bold" style="color:var(--dark)">YanHe Li</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" aria-labelledby="userDropdown">
+                            <li>
+                                <div class="dropdown-header-custom">
+                                    <div class="fw-bold" style="color: var(--dark)">YanHe Li</div>
+                                    <div class="small text-muted">Student Verified</div>
+                                </div>
+                            </li>
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person-badge"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-mortarboard"></i> My Learning</a></li>
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-star"></i> Favorites</a></li>
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-people"></i> Following</a></li>
+                            <li><hr class="dropdown-divider" style="border-color: #ebecf0;"></li>
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a class="dropdown-item text-danger" href="culture_en.html"><i class="bi bi-box-arrow-right"></i> Log out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mode-switch-container">
+        <button class="mode-btn active" id="btnStd" onclick="togglePro(false)">Explorer</button>
+        <button class="mode-btn" id="btnPro" onclick="togglePro(true)">Pro Challenge <i class="bi bi-lightning-fill text-warning"></i></button>
+    </div>
+
+    <div class="map-wrapper">
+        <div id="china-map" style="width: 100%; height: 100%;"></div>
+    </div>
+
+    <div class="drawer" id="drawer">
+        <div class="drawer-hero" id="heroBg">
+            <div class="btn-close-custom" onclick="closeDrawer()"><i class="bi bi-x-lg"></i></div>
+            <div class="hero-content">
+                <h2 class="hero-title fw-bold text-white mb-1" id="dCity">Loading...</h2>
+                <div id="dTags"></div>
+            </div>
+        </div>
+
+        <div class="nav-tabs-custom">
+            <div class="tab-link active" onclick="switchTab(this, 'culture')">Culture</div>
+            <div class="tab-link pro-tab" onclick="switchTab(this, 'scenario')"><i class="bi bi-joystick"></i> Scenario</div>
+            <div class="tab-link pro-tab" onclick="switchTab(this, 'ai')"><i class="bi bi-mic-fill"></i> AI Test</div>
+        </div>
+
+        <div class="drawer-body">
+            <div id="tab-culture" class="tab-pane active">
+                <p class="text-secondary small mb-3" id="dIntro"></p>
+                <div id="cultureList"></div>
+            </div>
+
+            <div id="tab-scenario" class="tab-pane">
+                <div class="card border-0 bg-light">
+                    <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                        <strong id="sTitle">Loading...</strong>
+                        <span class="badge bg-warning text-dark">Lv.2 Advanced</span>
+                    </div>
+                    <div class="card-body position-relative p-3" style="min-height: 200px;">
+                        <div id="scenarioContent" class="pro-mask"></div>
+                        <div id="proLock" class="pro-overlay">
+                            <div class="text-center bg-white p-4 rounded-4 shadow-sm border">
+                                <i class="bi bi-lock-fill fs-1 text-secondary mb-2"></i>
+                                <h6 class="fw-bold">Pro Member Only</h6>
+                                <p class="small text-muted mb-3">Unlock immersive scenarios.</p>
+                                <button class="btn btn-dark btn-sm rounded-pill px-4" onclick="togglePro(true)">Upgrade Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-ai" class="tab-pane">
+                <div class="text-center pt-3 position-relative">
+                    <div class="pro-mask">
+                        <p class="text-muted small mb-2">Hold button and read aloud:</p>
+                        <h2 class="fw-bold mb-1" id="aiTarget">---</h2>
+                        <div class="mic-btn-wrapper">
+                             <div class="mic-btn"><i class="bi bi-mic-fill"></i></div>
+                        </div>
+                    </div>
+                    <div class="pro-overlay">
+                        <div class="text-center">
+                            <i class="bi bi-mic-mute-fill fs-1 text-secondary"></i>
+                            <h6 class="mt-2 fw-bold">AI Test Locked</h6>
+                            <button class="btn btn-sm btn-dark rounded-pill mt-2" onclick="togglePro(true)">Upgrade</button>
+                        </div>
+                    </div>
+
+                    <div id="aiRealUI" style="display:none;">
+                        <p class="text-muted small mb-2">Hold button and read aloud:</p>
+                        <h2 class="fw-bold mb-1" id="aiTargetReal">---</h2>
+                        <p class="text-muted small fst-italic" id="aiMeaning">---</p>
+                        <div class="mic-btn-wrapper">
+                            <div class="mic-btn" id="micBtn" onmousedown="startRecord()" onmouseup="stopRecord()"><i class="bi bi-mic-fill"></i></div>
+                        </div>
+                        <p class="small text-muted" id="micStatus">Hold to speak</p>
+                        <div id="aiResult" style="display: none;" class="mt-4 border-top pt-3">
+                            <div class="d-flex align-items-center justify-content-center gap-3">
+                                <div><span style="font-size:2rem; font-weight:900; color:#28a745;">95</span> <span class="small text-success">Rank S</span></div>
+                                <div class="text-start small text-muted">
+                                    <div>Accuracy: <span class="text-dark fw-bold">98%</span></div>
+                                    <div class="text-success mt-1"><i class="bi bi-check-circle-fill"></i> Authentic!</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let isVip = false;
+
+        // Check for unlock success
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('login') === 'success' || urlParams.get('vip') === 'true') {
+                isVip = true;
+                togglePro(true);
+            }
+        };
+
+        const cityData = {
+            'Beijing': {
+                city: 'Beijing · Capital', tags: ['Imperial', 'R-Sound'],
+                bg: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800',
+                intro: 'Beijing dialect reflects the confidence of the capital.',
+                cultureItems: [{ title: 'Core Value', img: 'https://images.unsplash.com/photo-1562624632-6019a7795325?w=200', word: 'Ju Qi', desc: 'Honorable and fair.' }],
+                scenario: { title: 'Directions', chats: [{role: 'npc', text: 'Hey sir, <span class="highlight">Jie Guang</span>?'}, {role: 'user', text: '<span class="highlight">Lao Jia</span>, where is the Tower?'}] },
+                aiChallenge: { word: 'Zhen Di Dao', meaning: '(Very authentic)' }
+            },
+            'Chengdu': {
+                city: 'Chengdu · Sichuan', tags: ['Spicy', 'Pandas'],
+                bg: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600',
+                intro: 'Sichuanese is humorous. Life is "Ba Shi".',
+                cultureItems: [{ title: 'Lifestyle', img: 'https://images.unsplash.com/photo-1524413992383-a26df851dc2d?w=200', word: 'Ba Shi', desc: 'Awesome.' }],
+                scenario: { title: 'Hotpot', chats: [{role: 'npc', text: 'How many people?'}, {role: 'user', text: 'Three. <span class="highlight">Mild Spicy</span>!'}] },
+                aiChallenge: { word: 'Ba Shi De Ban', meaning: '(Super comfortable)' }
+            }
+        };
+
+        var myChart = echarts.init(document.getElementById('china-map'));
+        const mapStyles = { std: { bg: '#f4f5f7', area: '#e3e8f0', point: '#0052cc' }, pro: { bg: '#1a1a1a', area: '#2c3e50', point: '#ffd700' } };
+
+        function getOption(mode) {
+            const s = mode === 'pro' ? mapStyles.pro : mapStyles.std;
+            return {
+                backgroundColor: s.bg,
+                geo: { map: 'china', roam: true, zoom: 1.2, label: {show: false}, itemStyle: { areaColor: s.area } },
+                series: [
+                    { type: 'effectScatter', coordinateSystem: 'geo', data: [{name:'Chengdu',value:[104.06,30.67]}], symbolSize: 14, itemStyle: { color: s.point } },
+                    { type: 'effectScatter', coordinateSystem: 'geo', data: [{name:'Beijing',value:[116.40,39.90]}], symbolSize: 20, itemStyle: { color: mode === 'pro' ? '#ffd700' : '#c9171e' }, rippleEffect: { color: mode === 'pro' ? '#ffd700' : '#c9171e', scale: 6 } }
+                ]
+            };
+        }
+        myChart.setOption(getOption('std'));
+        myChart.on('click', function(params) { if(params.seriesIndex!==undefined) openDrawer(params.data.name); });
+
+        function openDrawer(cityName) {
+            const data = cityData[cityName] || cityData['Beijing'];
+            document.getElementById('heroBg').style.backgroundImage = `url('${data.bg}')`;
+            document.getElementById('dCity').innerText = data.city;
+            document.getElementById('dTags').innerHTML = data.tags.map(t=>`<span class="badge bg-white text-dark bg-opacity-75 me-1">${t}</span>`).join('');
+            document.getElementById('dIntro').innerText = data.intro;
+            document.getElementById('cultureList').innerHTML = data.cultureItems.map(item => `<div class="culture-item"><img src="${item.img}" class="culture-thumb"><div><div class="dialect-word">${item.word}</div><div class="small text-muted">${item.desc}</div></div></div>`).join('');
+            document.getElementById('sTitle').innerText = data.scenario.title;
+            document.getElementById('scenarioContent').innerHTML = data.scenario.chats.map(c => `<div class="chat-row"><div class="chat-bubble ${c.role==='user'?'chat-user':'chat-npc'}">${c.text}</div></div>`).join('');
+            document.getElementById('aiTarget').innerText = data.aiChallenge.word;
+            document.getElementById('aiTargetReal').innerText = data.aiChallenge.word;
+            document.getElementById('aiMeaning').innerText = data.aiChallenge.meaning;
+            document.getElementById('drawer').classList.add('show');
+            switchTab(document.querySelector('.tab-link'), 'culture');
+        }
+
+        function closeDrawer() { document.getElementById('drawer').classList.remove('show'); }
+        function switchTab(el, tabId) {
+            document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active')); el.classList.add('active');
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById('tab-'+tabId).classList.add('active');
+        }
+
+        function togglePro(active) {
+            const btnStd = document.getElementById('btnStd');
+            const btnPro = document.getElementById('btnPro');
+            const proLocks = document.querySelectorAll('.pro-overlay');
+            const masks = document.querySelectorAll('.pro-mask');
+            const aiRealUI = document.getElementById('aiRealUI');
+
+            if(active && !isVip) {
+                window.location.href = 'unlock_pro_en.html';
+                return;
+            }
+
+            if(active) {
+                btnStd.classList.remove('active'); btnPro.classList.add('pro-active');
+                document.body.style.backgroundColor = '#1a1a1a';
+                myChart.setOption(getOption('pro'));
+
+                proLocks.forEach(el => el.style.display = 'none');
+                masks.forEach(el => el.classList.remove('pro-mask'));
+                const aiPlaceholder = document.querySelector('#tab-ai .text-center > div:first-child');
+                if(aiPlaceholder) aiPlaceholder.style.display = 'none';
+                aiRealUI.style.display = 'block';
+
+            } else {
+                btnStd.classList.add('active'); btnPro.classList.remove('pro-active');
+                document.body.style.backgroundColor = '#f4f5f7';
+                myChart.setOption(getOption('std'));
+
+                if(!isVip) {
+                    proLocks.forEach(el => el.style.display = 'flex');
+                    document.getElementById('scenarioContent').classList.add('pro-mask');
+                    aiRealUI.style.display = 'none';
+                    if(document.querySelector('#tab-ai .text-center > div:first-child'))
+                        document.querySelector('#tab-ai .text-center > div:first-child').style.display = 'block';
+                }
+            }
+        }
+
+        function startRecord() {
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micStatus').innerText = 'Listening...';
+            document.getElementById('aiResult').style.display = 'none';
+        }
+        function stopRecord() {
+            document.getElementById('micBtn').classList.remove('recording');
+            document.getElementById('micStatus').innerText = 'Done';
+            document.getElementById('aiResult').style.display = 'block';
+        }
+        window.addEventListener('resize', () => myChart.resize());
+    </script>
+</body>
+</html>

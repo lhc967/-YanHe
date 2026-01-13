@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YanHe Passport - Unified Login</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f0f7ff; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-light); height: 100vh; overflow: hidden;
+        }
+
+        /* --- Minimalist Navbar --- */
+        .navbar-custom {
+            position: absolute; top: 0; left: 0; width: 100%; z-index: 100;
+            padding: 20px 40px; background: transparent; pointer-events: none;
+        }
+        .navbar-custom a { pointer-events: auto; }
+        .navbar-brand {
+            font-weight: 900; font-size: 1.6rem;
+            background: linear-gradient(135deg, #004aad 0%, #0078ff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .back-link {
+            text-decoration: none; color: #666; font-weight: 600; font-size: 14px;
+            display: flex; align-items: center; gap: 5px; transition: 0.3s;
+            background: rgba(255,255,255,0.8); padding: 8px 16px; border-radius: 20px; backdrop-filter: blur(5px);
+        }
+        .back-link:hover { color: var(--primary); background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        /* --- Layout Containers --- */
+        .split-container { display: flex; height: 100%; }
+
+        /* --- Left: Dynamic Brand Section --- */
+        .brand-section {
+            flex: 1.2; background: linear-gradient(135deg, #004aad 0%, #002a5c 100%);
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+            justify-content: center; padding: 0 80px; color: #fff;
+            transition: all 0.5s ease;
+        }
+        .brand-section.individual-mode {
+            background: linear-gradient(135deg, #ff6b00 0%, #cc5500 100%);
+        }
+
+        .brand-content { position: relative; z-index: 2; transition: all 0.5s ease; }
+
+        .brand-circle {
+            position: absolute; border-radius: 50%; background: rgba(255,255,255,0.05);
+            animation: float 8s infinite ease-in-out; pointer-events: none;
+        }
+        @keyframes float { 0%,100%{transform:translate(0,0);} 50%{transform:translate(20px,-20px);} }
+
+        /* --- Right: Form Interaction Section --- */
+        .form-section {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            background: #fff; position: relative; padding: 20px;
+        }
+
+        .auth-card {
+            width: 100%; max-width: 420px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Role Switch Pills */
+        .role-pills {
+            background: #f1f3f5; padding: 5px; border-radius: 12px; display: flex; margin-bottom: 30px;
+        }
+        .role-item {
+            flex: 1; text-align: center; padding: 10px; font-size: 14px; font-weight: 700;
+            color: #666; cursor: pointer; border-radius: 8px; transition: 0.3s; user-select: none;
+        }
+        .role-item.active { background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .role-item.active.individual { color: var(--accent); }
+
+        /* Headers */
+        .auth-header { margin-bottom: 25px; }
+        .auth-title { font-size: 26px; font-weight: 800; color: #333; margin-bottom: 5px; }
+        .auth-subtitle { color: #888; font-size: 14px; }
+
+        /* Form Controls */
+        .form-floating > .form-control {
+            border-radius: 12px; border: 1px solid #eee; background: #f8faff;
+        }
+        .form-floating > .form-control:focus {
+            border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 74, 173, 0.1);
+        }
+        .form-control.individual-focus:focus {
+            border-color: var(--accent); box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
+        }
+
+        .btn-submit {
+            background: var(--primary); border: none; height: 48px; font-size: 16px; font-weight: 700;
+            border-radius: 12px; width: 100%; color: #fff; margin-top: 20px; transition: 0.3s;
+        }
+        .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-submit.individual-btn { background: var(--accent); }
+
+        /* Footer Links */
+        .auth-footer { text-align: center; margin-top: 30px; font-size: 14px; color: #666; }
+        .switch-link { color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: none; }
+        .switch-link.individual-link { color: var(--accent); }
+
+        .view-hidden { display: none !important; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .brand-section { display: none; }
+            .form-section { background: #f8faff; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar-custom d-flex justify-content-between align-items-center">
+        <a class="navbar-brand" href="home_en.html">YanHe</a>
+        <a href="home_en.html" class="back-link"><i class="bi bi-house-door-fill"></i> Back to Home</a>
+    </nav>
+
+    <div class="split-container">
+
+        <div class="brand-section" id="brandSection">
+            <div class="brand-circle" style="width: 400px; height: 400px; top: -100px; right: -100px;"></div>
+            <div class="brand-circle" style="width: 200px; height: 200px; bottom: 50px; left: 50px;"></div>
+
+            <div class="brand-content" id="brandTextEnterprise">
+                <div class="mb-3"><i class="bi bi-building fs-1 text-white opacity-50"></i></div>
+                <h1 class="display-5 fw-bold mb-3">Global Talent<br>Connection</h1>
+                <p class="h5 fw-light opacity-75 mb-4">Join the YanHe enterprise ecosystem.<br>Empowering 1,200+ partners worldwide.</p>
+            </div>
+
+            <div class="brand-content view-hidden" id="brandTextIndividual">
+                <div class="mb-3"><i class="bi bi-mortarboard fs-1 text-white opacity-50"></i></div>
+                <h1 class="display-5 fw-bold mb-3">Monetize Your<br>Language Skills</h1>
+                <p class="h5 fw-light opacity-75 mb-4">Exclusive platform for university talents.<br>Make every translation count.</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="auth-card">
+
+                <div class="role-pills">
+                    <div class="role-item active" id="tabEnterprise" onclick="switchRole('enterprise')">
+                        <i class="bi bi-briefcase me-1"></i> Enterprise
+                    </div>
+                    <div class="role-item" id="tabIndividual" onclick="switchRole('individual')">
+                        <i class="bi bi-person me-1"></i> Individual
+                    </div>
+                </div>
+
+                <div id="viewLogin">
+                    <div class="auth-header">
+                        <div class="auth-title">Welcome Back</div>
+                        <div class="auth-subtitle" id="loginSubtitle">Log in to your Enterprise Dashboard</div>
+                    </div>
+
+                    <form>
+                        <div id="fieldsLoginEnterprise">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" placeholder="Company ID">
+                                <label>Company Reg. No / Work Email</label>
+                            </div>
+                        </div>
+
+                        <div id="fieldsLoginIndividual" class="view-hidden">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control individual-focus" placeholder="Phone">
+                                <label>Phone / Student ID (Verified)</label>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="loginPwd" placeholder="Password">
+                            <label>Password</label>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rememberMe">
+                                <label class="form-check-label small text-muted" for="rememberMe">Remember me</label>
+                            </div>
+                            <a href="#" class="small text-decoration-none text-muted">Forgot password?</a>
+                        </div>
+
+                        <button type="button" class="btn-submit" id="btnLogin" onclick="handleLogin()">
+                            Secure Login
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        New to YanHe? <span class="switch-link" id="linkToReg" onclick="toggleView('register')">Register Now</span>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <p class="small text-muted mb-3">Or continue with</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <button class="btn btn-light rounded-circle border"><i class="bi bi-google"></i></button>
+                            <button class="btn btn-light rounded-circle border"><i class="bi bi-linkedin text-primary"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="viewRegister" class="view-hidden">
+                    <div class="auth-header">
+                        <div class="auth-title">Create Account</div>
+                        <div class="auth-subtitle" id="regSubtitle">Submit credentials to join as Enterprise</div>
+                    </div>
+
+                    <form>
+                        <div id="fieldsRegEnterprise">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" placeholder="Company Name">
+                                <label>Full Legal Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" placeholder="Contact Person">
+                                <label>Contact Person Name</label>
+                            </div>
+                        </div>
+
+                        <div id="fieldsRegIndividual" class="view-hidden">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control individual-focus" placeholder="University">
+                                <label>University Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control individual-focus" placeholder="Major">
+                                <label>Major (e.g. Chinese Lit.)</label>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" placeholder="Email">
+                            <label>Email Address</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" placeholder="Password">
+                            <label>Set Password (8+ chars)</label>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="agreeTerms">
+                            <label class="form-check-label small text-muted" for="agreeTerms">
+                                I agree to the <a href="#" class="text-muted">Terms</a> and <a href="#" class="text-muted">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <button type="button" class="btn-submit" id="btnRegister" onclick="handleRegister()">
+                            Sign Up
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        Already have an account? <span class="switch-link" id="linkToLogin" onclick="toggleView('login')">Log in</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State Variables
+        let currentRole = 'enterprise'; // 'enterprise' or 'individual'
+        let currentView = 'login';      // 'login' or 'register'
+
+        // 1. Switch Role
+        function switchRole(role) {
+            currentRole = role;
+
+            // UI Update: Tab Style
+            document.querySelectorAll('.role-item').forEach(el => el.classList.remove('active', 'individual'));
+            document.getElementById('tab' + capitalize(role)).classList.add('active');
+            if(role === 'individual') document.getElementById('tabIndividual').classList.add('individual');
+
+            // UI Update: Left Brand Section
+            const brandSec = document.getElementById('brandSection');
+            const txtEnt = document.getElementById('brandTextEnterprise');
+            const txtInd = document.getElementById('brandTextIndividual');
+
+            if (role === 'individual') {
+                brandSec.classList.add('individual-mode');
+                txtEnt.classList.add('view-hidden');
+                txtInd.classList.remove('view-hidden');
+            } else {
+                brandSec.classList.remove('individual-mode');
+                txtEnt.classList.remove('view-hidden');
+                txtInd.classList.add('view-hidden');
+            }
+
+            // UI Update: Form Fields
+            updateFormVisibility();
+        }
+
+        // 2. Toggle View (Login vs Register)
+        function toggleView(view) {
+            currentView = view;
+            if(view === 'register') {
+                document.getElementById('viewLogin').classList.add('view-hidden');
+                document.getElementById('viewRegister').classList.remove('view-hidden');
+            } else {
+                document.getElementById('viewLogin').classList.remove('view-hidden');
+                document.getElementById('viewRegister').classList.add('view-hidden');
+            }
+            updateFormVisibility();
+        }
+
+        // 3. Update Form Visibility
+        function updateFormVisibility() {
+            const isIndividual = currentRole === 'individual';
+            const themeBtnClass = isIndividual ? 'individual-btn' : '';
+            const themeLinkClass = isIndividual ? 'individual-link' : '';
+
+            // Button & Link Colors
+            document.querySelectorAll('.btn-submit').forEach(btn => btn.className = 'btn-submit ' + themeBtnClass);
+            document.querySelectorAll('.switch-link').forEach(link => link.className = 'switch-link ' + themeLinkClass);
+
+            // Input Focus Colors
+            document.querySelectorAll('.form-control').forEach(input => {
+                if(isIndividual) input.classList.add('individual-focus');
+                else input.classList.remove('individual-focus');
+            });
+
+            // Field Visibility
+            if (currentView === 'login') {
+                document.getElementById('loginSubtitle').innerText = isIndividual ? 'Login for Students / Creators' : 'Log in to your Enterprise Dashboard';
+                document.getElementById('fieldsLoginEnterprise').classList.toggle('view-hidden', isIndividual);
+                document.getElementById('fieldsLoginIndividual').classList.toggle('view-hidden', !isIndividual);
+            } else {
+                document.getElementById('regSubtitle').innerText = isIndividual ? 'Join our talent pool & start earning' : 'Submit credentials to join as Enterprise';
+                document.getElementById('fieldsRegEnterprise').classList.toggle('view-hidden', isIndividual);
+                document.getElementById('fieldsRegIndividual').classList.toggle('view-hidden', !isIndividual);
+            }
+        }
+
+        // 4. Core Login Logic
+        function handleLogin() {
+            const btn = document.getElementById('btnLogin');
+            btn.innerText = 'Verifying...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                // Save login state
+                localStorage.setItem('yanhe_user_status', 'login');
+
+                // Redirect to Logged-In Home Page (English)
+                window.location.href = 'index_en_login.html';
+            }, 800);
+        }
+
+        // 5. Register Logic
+        function handleRegister() {
+            alert('Registration submitted! Please check your email for verification.');
+            toggleView('login');
+        }
+
+        // Helper
+        function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+    </script>
+</body>
+</html>
