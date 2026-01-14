@@ -68,6 +68,17 @@
 
         /* 隐藏类 */
         .d-none-custom { display: none !important; }
+            /* --- 手机端导航栏白底修复 --- */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: #ffffff; /* 纯白背景 */
+                padding: 20px;
+                border-radius: 16px;
+                margin-top: 15px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                border: 1px solid rgba(0,0,0,0.05);
+            }
+        }
     </style>
     <script>
     (function() {
@@ -90,17 +101,22 @@
             }
         }
     })();
-        /* --- 手机端导航栏白底修复 --- */
-        @media (max-width: 991px) {
-            .navbar-collapse {
-                background: #ffffff; /* 纯白背景 */
-                padding: 20px;
-                border-radius: 16px;
-                margin-top: 15px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-                border: 1px solid rgba(0,0,0,0.05);
-            }
-        }
+        // 【修改点3】新增：智能检测登录状态
+document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开始删
+    // 1. 读取本地存储
+    var status = localStorage.getItem('yanhe_user_status');
+    var authSection = document.getElementById('auth-section');
+
+    // 2. 如果已经登录了
+    if (status === 'login' || status === 'vip') {
+        authSection.innerHTML = `
+            <div class="dropdown">
+                ... (中间省略) ...
+            </div>
+        `;
+    } 
+}); // <--- 删到这里结束
+    
 </script>
 </head>
 
@@ -114,7 +130,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link" href="index.html">首页</a></li>
+                    <li class="nav-item"><a class="nav-link" href="home.html">首页</a></li>
                     <li class="nav-item"><a class="nav-link" href="story.html">中国故事</a></li>
                     <li class="nav-item"><a class="nav-link" href="education.html">教育云</a></li>
                     <li class="nav-item"><a class="nav-link active" href="service.html">任务大厅</a></li>
@@ -355,4 +371,5 @@
         }
     </script>
 </body>
+
 </html>
