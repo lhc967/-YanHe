@@ -77,6 +77,15 @@
         .market-row:last-child { border-bottom: none; }
 
         .d-none-custom { display: none !important; }
+         /* --- 手机端导航栏白底修复 --- */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: #ffffff; /* 纯白背景 */
+                padding: 20px;
+                border-radius: 16px;
+                margin-top: 15px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                border: 1px solid rgba(0,0,0,0.05);
     </style>
 </head>
 
@@ -333,4 +342,5 @@
         }
     </script>
 </body>
+
 </html>
