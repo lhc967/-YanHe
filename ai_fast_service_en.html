@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fast Service - YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --bg-light: #f8faff; --chat-bg: #f2f4f7; }
+        body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg-light); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+        .chat-header {
+            background: #fff; padding: 15px 20px; border-bottom: 1px solid #eee;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02); z-index: 10;
+        }
+        .ai-status { font-size: 12px; color: #ff6b00; display: flex; align-items: center; gap: 5px; background: #fff8e1; padding: 2px 8px; border-radius: 10px; }
+
+        .chat-container {
+            flex: 1; overflow-y: auto; padding: 20px; background: var(--chat-bg);
+            display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth;
+        }
+
+        .message { display: flex; gap: 15px; max-width: 85%; animation: fadeIn 0.3s ease; }
+        .message.user { align-self: flex-end; flex-direction: row-reverse; }
+
+        .avatar {
+            width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .avatar.ai { background: linear-gradient(135deg, #ff9900, #ff6b00); color: #fff; }
+        .avatar.user { background: var(--primary); color: #fff; }
+
+        .bubble { padding: 14px 18px; border-radius: 16px; font-size: 15px; line-height: 1.6; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.02); word-wrap: break-word; }
+        .message.ai .bubble { background: #fff; color: #333; border-top-left-radius: 2px; }
+        .message.user .bubble { background: var(--primary); color: #fff; border-top-right-radius: 2px; }
+
+        .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
+        .shortcut-card {
+            background: #fff; padding: 12px; border-radius: 10px; border: 1px solid #eee;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px;
+        }
+        .shortcut-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .shortcut-icon { width: 30px; height: 30px; background: #eef4fc; color: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+
+        .input-area { background: #fff; padding: 15px; border-top: 1px solid #eee; }
+        .input-wrapper { background: #f8f9fa; border-radius: 25px; padding: 8px 15px; border: 1px solid #eee; display: flex; align-items: center; transition: 0.3s; }
+        .input-wrapper:focus-within { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.1); }
+        .chat-input { border: none; background: transparent; flex: 1; padding: 5px; outline: none; }
+        .send-btn { width: 40px; height: 40px; background: var(--primary); color: #fff; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .send-btn:hover { background: #003366; transform: scale(1.05); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="chat-header">
+        <div class="d-flex align-items-center gap-3">
+            <a href="service_en.html" class="text-dark text-decoration-none"><i class="bi bi-arrow-left fs-5"></i></a>
+            <div>
+                <h6 class="fw-bold m-0">AI Fast Service</h6>
+                <div class="text-muted small" style="font-size: 11px;">Powered by YanHe-Pro Model</div>
+            </div>
+        </div>
+        <div class="ai-status"><i class="bi bi-lightning-charge-fill"></i> Fast Mode</div>
+    </div>
+
+    <div class="chat-container" id="chatBox">
+        <div class="message ai">
+            <div class="avatar ai"><i class="bi bi-robot"></i></div>
+            <div style="width: 100%">
+                <div class="bubble">
+                    👋 Hi! I am the YanHe Task Hall AI Assistant.<br>
+                    I specialize in handling <strong>short texts</strong> and <strong>instant queries</strong>.
+                </div>
+
+                <div class="shortcut-grid">
+                    <div class="shortcut-card" onclick="sendShortcut('Please polish this email for me:')">
+                        <div class="shortcut-icon"><i class="bi bi-envelope-check"></i></div>
+                        <div class="small fw-bold">Email Polish</div>
+                    </div>
+                    <div class="shortcut-card" onclick="sendShortcut('Translate this into authentic Chinese:')">
+                        <div class="shortcut-icon"><i class="bi bi-translate"></i></div>
+                        <div class="small fw-bold">Translation</div>
+                    </div>
+                    <div class="shortcut-card" onclick="sendShortcut('Check grammar mistakes for me:')">
+                        <div class="shortcut-icon"><i class="bi bi-check-circle"></i></div>
+                        <div class="small fw-bold">Grammar Check</div>
+                    </div>
+                    <div class="shortcut-card" onclick="sendShortcut('Explain the cultural background of this:')">
+                        <div class="shortcut-icon"><i class="bi bi-book"></i></div>
+                        <div class="small fw-bold">Culture Query</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <div class="input-wrapper">
+            <i class="bi bi-plus-circle text-secondary fs-5 me-2" style="cursor: pointer;"></i>
+            <input type="text" class="chat-input" id="userInput" placeholder="Enter text to process..." onkeydown="if(event.keyCode==13) sendMessage()">
+            <button class="send-btn" onclick="sendMessage()"><i class="bi bi-send-fill"></i></button>
+        </div>
+    </div>
+
+    <script>
+        function sendShortcut(text) {
+            const input = document.getElementById('userInput');
+            input.value = text;
+            input.focus();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            const chatBox = document.getElementById('chatBox');
+
+            // 1. User Message
+            chatBox.insertAdjacentHTML('beforeend', `
+                <div class="message user">
+                    <div class="avatar user"><i class="bi bi-person-fill"></i></div>
+                    <div class="bubble">${text}</div>
+                </div>
+            `);
+
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // 2. Loading
+            const loadingId = 'loading-' + Date.now();
+            chatBox.insertAdjacentHTML('beforeend', `
+                <div class="message ai" id="${loadingId}">
+                    <div class="avatar ai"><i class="bi bi-three-dots"></i></div>
+                    <div class="bubble text-secondary"><i class="bi bi-cpu"></i> Analyzing context...</div>
+                </div>
+            `);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // 3. Simulation Reply
+            setTimeout(() => {
+                document.getElementById(loadingId).remove();
+
+                chatBox.insertAdjacentHTML('beforeend', `
+                    <div class="message ai">
+                        <div class="avatar ai"><i class="bi bi-robot"></i></div>
+                        <div class="bubble">
+                            Here is the result (Simulation):<br><br>
+                            <strong>Thinking:</strong> The user wants to process this text...<br>
+                            <strong>Result:</strong> Your text has been optimized to be more formal and suitable for business contexts.<br><br>
+                            <div class="d-flex gap-2 mt-2">
+                                <button class="btn btn-sm btn-light border" onclick="alert('Copied')"><i class="bi bi-clipboard"></i> Copy</button>
+                                <button class="btn btn-sm btn-light border"><i class="bi bi-arrow-clockwise"></i> Retry</button>
+                            </div>
+                        </div>
+                    </div>
+                `);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

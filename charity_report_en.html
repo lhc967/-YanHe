@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Report - YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --green: #28a745; --bg-light: #f8faff; }
+        body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; padding-top: 70px; background: var(--bg-light); }
+
+        .navbar-custom { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.03); height: 70px; z-index: 1000; }
+
+        .charity-hero { background: #fff; padding: 50px 0; text-align: center; border-bottom: 1px solid #eee; }
+        .stat-card { padding: 20px; border-right: 1px solid #eee; }
+        .stat-card:last-child { border-right: none; }
+        .stat-num { font-size: 2.5rem; font-weight: 900; color: var(--green); margin-bottom: 5px; }
+        .stat-label { color: #666; font-size: 14px; }
+
+        .map-section { height: 300px; background: #e9ecef; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; position: relative; overflow: hidden; }
+        .map-section img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        .map-overlay { position: absolute; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 20px; border-radius: 30px; bottom: 20px; left: 20px; }
+
+        .story-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02); height: 100%; transition: 0.3s; }
+        .story-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .story-img { height: 180px; background: #ddd; position: relative; }
+        .story-img img { width: 100%; height: 100%; object-fit: cover; }
+        .story-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; color: var(--green); }
+        .story-body { padding: 20px; }
+
+        .transparency-table th { background: #f8f9fa; font-weight: bold; border-top: none; }
+        .transparency-table td { vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container px-4">
+            <a class="navbar-brand fw-bold" href="service_en.html" style="color:var(--primary)"><i class="bi bi-chevron-left"></i> Back</a>
+            <span class="ms-auto fw-bold text-success"><i class="bi bi-heart-fill me-1"></i> YanHe Charity</span>
+        </div>
+    </nav>
+
+    <div class="charity-hero">
+        <div class="container">
+            <h2 class="fw-bold mb-4">Every order transmits hope.</h2>
+            <p class="text-muted mb-5 mw-600 mx-auto">YanHe promises to donate 1% of revenue to the "Language Poverty Alleviation Plan" to help children in remote areas.</p>
+
+            <div class="row g-4">
+                <div class="col-md-4 stat-card">
+                    <div class="stat-num">¥128,450</div>
+                    <div class="stat-label">Total Donated</div>
+                </div>
+                <div class="col-md-4 stat-card">
+                    <div class="stat-num">5,320</div>
+                    <div class="stat-label">Children Helped</div>
+                </div>
+                <div class="col-md-4 stat-card">
+                    <div class="stat-num">12</div>
+                    <div class="stat-label">Teaching Stations</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+
+        <h4 class="fw-bold mb-4 border-start border-4 border-success ps-3">Our Footprint</h4>
+        <div class="map-section">
+            <img src="https://images.unsplash.com/photo-1530906622963-8a60586a49c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Rural China">
+            <div class="map-overlay">
+                <i class="bi bi-geo-alt-fill text-danger"></i> Current Focus: Nujiang, Yunnan Province
+            </div>
+        </div>
+
+        <h4 class="fw-bold mb-4 border-start border-4 border-success ps-3">Charity News</h4>
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="story-card">
+                    <div class="story-img">
+                        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Education">
+                        <span class="story-badge">Mandarin Promotion</span>
+                    </div>
+                    <div class="story-body">
+                        <h6 class="fw-bold">A window for mountain children</h6>
+                        <p class="small text-muted mb-3">Dec 2025: YanHe donated 500 sets of "Audio Picture Books" to Liangshan.</p>
+                        <a href="#" class="text-success small fw-bold">Read More ></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="story-card">
+                    <div class="story-img">
+                        <img src="https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Culture">
+                        <span class="story-badge">Dialect Protection</span>
+                    </div>
+                    <div class="story-body">
+                        <h6 class="fw-bold">Saving disappearing voices</h6>
+                        <p class="small text-muted mb-3">Established the "Suzhou Dialect Oral History" archive through task crowdsourcing.</p>
+                        <a href="#" class="text-success small fw-bold">View Archive ></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="story-card">
+                    <div class="story-img">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b955?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Teacher">
+                        <span class="story-badge">Volunteer Teaching</span>
+                    </div>
+                    <div class="story-body">
+                        <h6 class="fw-bold">BSU Students in Action</h6>
+                        <p class="small text-muted mb-3">YanHe sponsored 20 BSU students for sports & language teaching in remote areas.</p>
+                        <a href="#" class="text-success small fw-bold">View Diary ></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="fw-bold mb-4 border-start border-4 border-success ps-3">Transparency Report (Real-time)</h4>
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 transparency-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="ps-4">Date</th>
+                            <th scope="col">Project</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Handler</th>
+                            <th scope="col">Proof</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ps-4 text-muted">2026-01-12</td>
+                            <td>Nujiang Textbooks</td>
+                            <td class="fw-bold text-danger">- ¥12,000</td>
+                            <td>Xinhua Bookstore</td>
+                            <td><i class="bi bi-file-earmark-pdf text-primary cursor-pointer"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 text-muted">2026-01-10</td>
+                            <td>Recording Equipment</td>
+                            <td class="fw-bold text-danger">- ¥5,600</td>
+                            <td>Sony Store</td>
+                            <td><i class="bi bi-file-earmark-pdf text-primary cursor-pointer"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 text-muted">2026-01-08</td>
+                            <td>Volunteer Subsidy (Batch 1)</td>
+                            <td class="fw-bold text-danger">- ¥8,000</td>
+                            <td>YanHe Finance</td>
+                            <td><i class="bi bi-file-earmark-pdf text-primary cursor-pointer"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-white text-center py-3">
+                <button class="btn btn-outline-secondary btn-sm rounded-pill">Load More</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-5 text-center small">
+        <p class="mb-0">YanHe Charity Foundation is audited annually by independent firms.</p>
+    </footer>
+
+</body>
+</html>

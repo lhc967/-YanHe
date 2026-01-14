@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talent Certification - YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --accent: #d4af37; --bg-light: #f8faff; }
+        body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; padding-top: 70px; background: var(--bg-light); }
+
+        .navbar-custom { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.03); height: 70px; z-index: 1000; }
+
+        .auth-hero { background: linear-gradient(135deg, #004aad, #002a4d); color: #fff; padding: 60px 0; position: relative; overflow: hidden; }
+
+        .benefit-card { background: #fff; padding: 20px; border-radius: 12px; text-align: center; height: 100%; border: 1px solid rgba(0,0,0,0.05); transition: 0.3s; }
+        .benefit-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .icon-box { width: 50px; height: 50px; background: #eef4fc; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 15px; }
+
+        .form-container { background: #fff; padding: 40px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); margin-top: -50px; position: relative; z-index: 2; }
+        .form-label { font-weight: bold; font-size: 14px; color: #555; }
+        .form-control, .form-select { padding: 12px; border-radius: 8px; border: 1px solid #eee; background: #f9f9f9; }
+        .form-control:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.1); }
+
+        .upload-box { border: 2px dashed #ddd; border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; transition: 0.2s; background: #fcfcfc; }
+        .upload-box:hover { border-color: var(--primary); background: #f0f7ff; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container px-4">
+            <a class="navbar-brand fw-bold" href="service_en.html" style="color:var(--primary)"><i class="bi bi-chevron-left"></i> Back to Hall</a>
+        </div>
+    </nav>
+
+    <div class="auth-hero text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-3">University Talent Certification</h2>
+            <p class="opacity-75 mb-4">Join the YanHe Expert Pool and monetize your language skills.</p>
+            <div class="d-flex justify-content-center gap-3 mb-4">
+                <span class="badge bg-white text-primary px-3 py-2 rounded-pill"><i class="bi bi-mortarboard-fill"></i> BSU</span>
+                <span class="badge bg-white text-dark px-3 py-2 rounded-pill opacity-75">BFSU</span>
+                <span class="badge bg-white text-dark px-3 py-2 rounded-pill opacity-75">BLCU</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="form-container">
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-4">
+                            <div class="benefit-card">
+                                <div class="icon-box"><i class="bi bi-coin"></i></div>
+                                <h6 class="fw-bold">0% Commission</h6>
+                                <p class="small text-muted m-0">No fees for alumni</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="benefit-card">
+                                <div class="icon-box"><i class="bi bi-lightning-charge"></i></div>
+                                <h6 class="fw-bold">Priority</h6>
+                                <p class="small text-muted m-0">Priority dispatch</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="benefit-card">
+                                <div class="icon-box"><i class="bi bi-award"></i></div>
+                                <h6 class="fw-bold">Certificate</h6>
+                                <p class="small text-muted m-0">Internship proof</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <form onsubmit="event.preventDefault(); submitAuth();">
+                        <h5 class="fw-bold mb-4 border-start border-4 border-primary ps-3">Step 1: Basic Info</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Real Name</label>
+                                <input type="text" class="form-control" placeholder="Same as Student ID">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">University</label>
+                                <select class="form-select">
+                                    <option selected>Beijing Sport University (BSU)</option>
+                                    <option>BFSU (Beijing Foreign Studies)</option>
+                                    <option>BLCU (Beijing Language & Culture)</option>
+                                    <option>Others</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Major/Department</label>
+                                <input type="text" class="form-control" placeholder="e.g. English Dept">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Student ID No.</label>
+                                <input type="text" class="form-control" placeholder="Enter ID number">
+                            </div>
+                        </div>
+
+                        <h5 class="fw-bold mb-4 border-start border-4 border-primary ps-3">Step 2: Verification</h5>
+                        <div class="mb-4">
+                            <label class="form-label mb-2">Upload Student ID Card (Front)</label>
+                            <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+                                <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                                <p class="mb-0 mt-2 text-secondary">Click to upload (JPG/PNG)</p>
+                                <p class="small text-muted">Max size: 5MB</p>
+                                <input type="file" id="fileInput" hidden>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="agree" required>
+                            <label class="form-check-label small text-muted" for="agree">
+                                I confirm the info is true and agree to <a href="#">YanHe Creator Policy</a>.
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm">Submit for Review</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function submitAuth() {
+            const btn = document.querySelector('button[type="submit"]');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Submitting...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('🎉 Submission Successful! We will review it within 24 hours.');
+                window.location.href = 'service_en.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
