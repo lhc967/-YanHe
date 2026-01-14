@@ -72,20 +72,18 @@
         .client-action-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,82,204,0.1); }
         .action-icon-lg { width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 20px; }
 
-        /* Market Row (New) */
+        /* Market Row */
         .market-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #eee; font-size: 0.9rem; color: #505f79; }
         .market-row:last-child { border-bottom: none; }
 
         .d-none-custom { display: none !important; }
-         /* --- 手机端导航栏白底修复 --- */
+        /* Mobile Fix */
         @media (max-width: 991px) {
             .navbar-collapse {
-                background: #ffffff; /* 纯白背景 */
-                padding: 20px;
-                border-radius: 16px;
-                margin-top: 15px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-                border: 1px solid rgba(0,0,0,0.05);
+                background: #ffffff; padding: 20px; border-radius: 16px; margin-top: 15px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);
+            }
+        }
     </style>
 </head>
 
@@ -101,7 +99,7 @@
                 <ul class="navbar-nav mx-auto gap-1">
                     <li class="nav-item"><a class="nav-link" href="home_en_login.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="story_en_login.html">Community</a></li>
-                    <li class="nav-item"><a class="nav-link" href="learning_en_login">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education_en.html">Courses</a></li>
                     <li class="nav-item"><a class="nav-link active" href="service_login_en.html">Task Hub</a></li>
                     <li class="nav-item"><a class="nav-link" href="culture_login_en.html">Map</a></li>
                 </ul>
@@ -110,6 +108,7 @@
                     <a href="service_login.html" class="btn btn-light rounded-circle shadow-sm border" style="width: 40px; height: 40px; display:flex; align-items:center; justify-content:center;" title="Switch to Chinese">
                         <span style="font-size:12px; font-weight:bold;">CN</span>
                     </a>
+
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://ui-avatars.com/api/?name=YanHe+Li&background=0052cc&color=fff" alt="User" class="rounded-circle user-avatar shadow-sm">
@@ -234,7 +233,7 @@
                         <div class="mb-2"><i class="bi bi-mortarboard-fill fs-1"></i></div>
                         <h6 class="fw-bold">University Talent Verification</h6>
                         <p class="small opacity-75 mb-3">Verify BSU/BFSU status to unlock high-paying tasks & 0% fees.</p>
-                        <button class="btn btn-sm btn-light text-primary rounded-pill w-100 fw-bold">Verify Now</button>
+                        <button class="btn btn-sm btn-light text-primary rounded-pill w-100 fw-bold" onclick="location.href='certification_en.html'">Verify Now</button>
                     </div>
 
                     <div class="sidebar-card">
@@ -264,6 +263,12 @@
                             <span class="fw-bold text-success">¥ 980</span>
                         </div>
                     </div>
+
+                    <div class="sidebar-card border-success border-opacity-25 bg-success bg-opacity-10">
+                        <h6 class="fw-bold text-success"><i class="bi bi-heart-fill me-1"></i> Charity Plan</h6>
+                        <p class="small text-muted mb-2">1% of revenue goes to promoting Mandarin in rural areas.</p>
+                        <a href="charity_report_en.html" class="small text-success fw-bold text-decoration-underline">View Report ></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -282,7 +287,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="client-action-card bg-warning bg-opacity-10" onclick="alert('AI Service Started')">
+                    <div class="client-action-card bg-warning bg-opacity-10" onclick="location.href='ai_fast_service_en.html'">
                         <div class="action-icon-lg bg-warning text-white shadow-sm"><i class="bi bi-robot"></i></div>
                         <h3 class="fw-bold text-dark">AI Instant Service</h3>
                         <p class="text-muted mt-3">
@@ -342,5 +347,4 @@
         }
     </script>
 </body>
-
 </html>
