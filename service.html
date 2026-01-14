@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务大厅 - 言禾 YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        /* --- 全局变量 --- */
+        :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f8faff; }
+        body { font-family: -apple-system, "PingFang SC", sans-serif; padding-top: 70px; background: var(--bg-light); }
+
+        /* 导航栏 */
+        .navbar-custom { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.03); height: 70px; z-index: 1000; }
+        .navbar-brand { font-weight: 900; font-size: 1.5rem; color: var(--primary); letter-spacing: -0.5px; }
+        .nav-link { font-weight: 600; color: #555 !important; padding: 8px 18px !important; border-radius: 30px; transition: 0.3s; }
+        .nav-link:hover { color: var(--primary) !important; background: rgba(0, 74, 173, 0.06); }
+        .nav-link.active { color: #fff !important; background: var(--primary); box-shadow: 0 4px 10px rgba(0, 74, 173, 0.3); }
+
+        /* Hero 区域 & 切换开关 */
+        .service-hero { background: linear-gradient(180deg, #fff 0%, #f0f7ff 100%); padding: 40px 0 20px; text-align: center; }
+
+        .role-switch-container {
+            background: #eef4fc; border-radius: 50px; padding: 5px; display: inline-flex; position: relative;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.05); margin-bottom: 25px;
+        }
+        .role-btn {
+            padding: 10px 35px; border-radius: 40px; border: none; font-weight: bold; font-size: 15px;
+            background: transparent; color: #666; transition: 0.3s; cursor: pointer; position: relative; z-index: 2;
+        }
+        .role-btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(0, 74, 173, 0.3); }
+
+        /* 搜索框 */
+        .search-box-custom { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 50px; padding: 5px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; }
+        .search-input { border: none; flex: 1; padding: 10px 20px; border-radius: 50px; outline: none; }
+        .search-btn { border-radius: 50px; padding: 8px 30px; font-weight: bold; }
+
+        /* --- 创作者视图 (Creator) 样式 --- */
+        .task-card {
+            background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.02);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; cursor: pointer; position: relative; overflow: hidden;
+        }
+        .task-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); border-color: var(--primary); }
+        .price-tag { color: var(--accent); font-weight: 800; font-size: 1.2rem; }
+
+        /* 进度条 (限制人数) */
+        .limit-bar-bg { height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; width: 100px; margin-top: 5px; }
+        .limit-bar-fill { height: 100%; background: #28a745; }
+
+        .sidebar-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .rank-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 14px; }
+        .rank-num { width: 20px; height: 20px; background: #eee; color: #666; border-radius: 4px; text-align: center; line-height: 20px; font-size: 12px; font-weight: bold; margin-right: 10px; }
+        .rank-item:nth-child(1) .rank-num { background: #ffd700; color: #fff; }
+        .rank-item:nth-child(2) .rank-num { background: #c0c0c0; color: #fff; }
+        .rank-item:nth-child(3) .rank-num { background: #cd7f32; color: #fff; }
+
+        /* --- 需求方视图 (Client) 样式 --- */
+        .client-action-card {
+            background: #fff; border-radius: 16px; padding: 40px; text-align: center; height: 100%;
+            border: 2px solid transparent; transition: 0.3s; cursor: pointer;
+        }
+        .client-action-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,74,173,0.1); }
+        .action-icon-lg { width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 20px; }
+
+        .market-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #eee; font-size: 14px; color: #555; }
+        .market-row:last-child { border-bottom: none; }
+
+        /* 隐藏类 */
+        .d-none-custom { display: none !important; }
+    </style>
+    <script>
+    (function() {
+        var status = localStorage.getItem('yanhe_user_status');
+        var path = window.location.pathname;
+        var page = path.substring(path.lastIndexOf('/') + 1);
+
+        // 如果已登录 (login 或 vip)
+        if (status === 'login' || status === 'vip') {
+
+            // 1. 针对 Culture 页面 (因为有 VIP 特殊版)
+            if (page === 'culture.html') {
+                if (status === 'vip') window.location.href = 'culture_vip.html';
+                else window.location.href = 'culture_login.html';
+            }
+            // 2. 针对其他所有页面 (自动加 _login)
+            // 比如 service.html -> service_login.html
+            else {
+                window.location.href = page.replace('.html', '_login.html');
+            }
+        }
+    })();
+        /* --- 手机端导航栏白底修复 --- */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: #ffffff; /* 纯白背景 */
+                padding: 20px;
+                border-radius: 16px;
+                margin-top: 15px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                border: 1px solid rgba(0,0,0,0.05);
+            }
+        }
+</script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="index.html">言禾 YanHe</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav mx-auto gap-1">
+                    <li class="nav-item"><a class="nav-link" href="index.html">首页</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story.html">中国故事</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education.html">教育云</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="service.html">任务大厅</a></li>
+                    <li class="nav-item"><a class="nav-link" href="culture.html">方言地图</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0 ms-lg-4">
+                    <a href="login.html" class="btn btn-outline-secondary rounded-pill btn-sm px-4 fw-bold">登录 / 注册</a>
+                    <a href="service_en.html" class="btn btn-primary rounded-pill btn-sm fw-bold px-3 shadow-sm border-0" style="background:var(--primary)">English</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="service-hero">
+        <div class="container">
+            <div class="role-switch-container">
+                <button class="role-btn active" onclick="switchView('creator', this)">我是创作者 (接单)</button>
+                <button class="role-btn" onclick="switchView('client', this)">我是需求方 (发单)</button>
+            </div>
+
+            <div class="search-box-custom">
+                <input type="text" class="search-input" id="searchInput" placeholder="搜索任务：法律翻译、方言录音、文书润色...">
+                <button class="btn btn-primary rounded-pill search-btn" onclick="location.href='search_result.html'">搜索</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pb-5 mt-4">
+
+        <div id="creator-view">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold m-0"><i class="bi bi-briefcase-fill text-primary"></i> 推荐任务</h5>
+                        <div class="dropdown">
+                            <button class="btn btn-light btn-sm rounded-pill dropdown-toggle" type="button">排序：最新发布</button>
+                        </div>
+                    </div>
+
+                    <div class="task-card" onclick="location.href='task_detail.html?type=task'">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="badge bg-danger bg-opacity-10 text-danger mb-2">企业商单</span>
+                                <h5 class="fw-bold mb-1">《国际商法》合同条款英译中</h5>
+                                <div class="text-muted small mb-2">需要有法律背景的同学，准确翻译术语。</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="price-tag">¥ 500</div>
+                                <div class="small text-muted">/ 千字</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LawFirm" class="rounded-circle" width="24">
+                                <span class="small fw-bold text-secondary">锦天城律师事务所</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 small">
+                                <div class="text-end">
+                                    <span class="text-success fw-bold">招募中</span>
+                                    <div class="text-muted" style="font-size:10px;">已招 3/5 人</div>
+                                </div>
+                                <div>
+                                    <div class="limit-bar-bg"><div class="limit-bar-fill" style="width: 60%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="task-card" onclick="location.href='task_detail.html?type=task'">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="badge bg-warning bg-opacity-10 text-dark mb-2">方言采集</span>
+                                <h5 class="fw-bold mb-1">录制 50 句苏州话日常用语</h5>
+                                <div class="text-muted small mb-2">用于完善言禾语料库，要求发音地道。</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="price-tag">¥ 120</div>
+                                <div class="small text-muted">/ 组</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=YanHe" class="rounded-circle" width="24">
+                                <span class="small fw-bold text-secondary">言禾官方</span>
+                            </div>
+                            <span class="small text-muted">长期招募 • 不限人数</span>
+                        </div>
+                    </div>
+
+                    <div class="task-card" onclick="location.href='task_detail.html?type=task'">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="badge bg-dark text-white mb-2">急单</span>
+                                <h5 class="fw-bold mb-1">留学文书 PS 深度润色</h5>
+                                <div class="text-muted small mb-2">申请英国G5，需要地道的英式表达。</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="price-tag">¥ 300</div>
+                                <div class="small text-muted">一口价</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Student" class="rounded-circle" width="24">
+                                <span class="small fw-bold text-secondary">个人雇主</span>
+                            </div>
+                            <span class="small text-danger fw-bold">剩 4 小时截止</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="sidebar-card text-center bg-primary text-white" style="background: linear-gradient(135deg, var(--primary), var(--accent));">
+                        <div class="mb-2"><i class="bi bi-mortarboard-fill fs-1"></i></div>
+                        <h6 class="fw-bold">高校语言人才认证</h6>
+                        <p class="small opacity-75 mb-3">认证 BSU / 北外 等高校身份，解锁高薪商单，免除平台佣金。</p>
+                        <button class="btn btn-sm btn-light text-primary rounded-pill w-100 fw-bold">立即认证</button>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h6 class="fw-bold mb-3">🏆 本周接单榜 (高校区)</h6>
+                        <div class="rank-item">
+                            <div class="d-flex align-items-center">
+                                <div class="rank-num">1</div>
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jack" class="rounded-circle me-2" width="30">
+                                <span>英语系·张同学</span>
+                            </div>
+                            <span class="fw-bold text-danger">¥ 3,200</span>
+                        </div>
+                        <div class="rank-item">
+                            <div class="d-flex align-items-center">
+                                <div class="rank-num">2</div>
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lily" class="rounded-circle me-2" width="30">
+                                <span>德语系·李同学</span>
+                            </div>
+                            <span class="fw-bold text-danger">¥ 1,850</span>
+                        </div>
+                        <div class="rank-item">
+                            <div class="d-flex align-items-center">
+                                <div class="rank-num">3</div>
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="rounded-circle me-2" width="30">
+                                <span>俄语系·王同学</span>
+                            </div>
+                            <span class="fw-bold text-danger">¥ 980</span>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card border-success border-opacity-25 bg-success bg-opacity-10">
+                        <h6 class="fw-bold text-success"><i class="bi bi-heart-fill me-1"></i> 语言扶贫计划</h6>
+                        <p class="small text-muted mb-2">每完成一笔订单，我们将捐赠 1% 用于乡村儿童普通话推广。</p>
+                        <a href="#" class="small text-success fw-bold text-decoration-underline">查看公益报告 ></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="client-view" class="d-none-custom">
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <div class="client-action-card bg-primary bg-opacity-10" onclick="location.href='task_publish.html?type=task'">
+                        <div class="action-icon-lg bg-primary text-white shadow-sm"><i class="bi bi-pencil-square"></i></div>
+                        <h3 class="fw-bold text-primary">发布高薪悬赏</h3>
+                        <p class="text-muted mt-3">
+                            针对复杂、专业的语言需求。<br>
+                            连接 BSU 等高校 12,000+ 专业人才。<br>
+                            <span class="badge bg-primary mt-2">资金托管</span> <span class="badge bg-primary mt-2">双向盲审</span>
+                        </p>
+                        <button class="btn btn-primary rounded-pill px-5 mt-3 fw-bold">立即发布需求</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="client-action-card bg-warning bg-opacity-10" onclick="alert('AI服务已启动')">
+                        <div class="action-icon-lg bg-warning text-white shadow-sm"><i class="bi bi-robot"></i></div>
+                        <h3 class="fw-bold text-dark">AI 智能极速服务</h3>
+                        <p class="text-muted mt-3">
+                            针对日常、简单的翻译与润色。<br>
+                            言禾自研大模型，秒级响应，低成本。<br>
+                            <span class="badge bg-warning text-dark mt-2">24h 在线</span> <span class="badge bg-warning text-dark mt-2">立等可取</span>
+                        </p>
+                        <button class="btn btn-warning text-white rounded-pill px-5 mt-3 fw-bold">试用 AI 助手</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-card mx-auto" style="max-width: 800px;">
+                <h5 class="fw-bold mb-3 text-center"><i class="bi bi-graph-up-arrow text-success"></i> 近期市场成交行情参考</h5>
+                <div class="market-row">
+                    <span><span class="badge bg-light text-dark border me-2">法律</span> 合同翻译 (英译中)</span>
+                    <span class="fw-bold text-dark">¥ 180 - 260 / 千字</span>
+                </div>
+                <div class="market-row">
+                    <span><span class="badge bg-light text-dark border me-2">口译</span> 陪同翻译 (日语)</span>
+                    <span class="fw-bold text-dark">¥ 800 - 1500 / 天</span>
+                </div>
+                <div class="market-row">
+                    <span><span class="badge bg-light text-dark border me-2">配音</span> 方言录音 (短句)</span>
+                    <span class="fw-bold text-dark">¥ 50 - 100 / 组</span>
+                </div>
+                <div class="market-row">
+                    <span><span class="badge bg-light text-dark border me-2">文书</span> 留学文书润色</span>
+                    <span class="fw-bold text-dark">¥ 300 - 800 / 篇</span>
+                </div>
+                <p class="text-center text-muted small mt-3 mb-0">* 数据基于平台过去 30 天成交均价，仅供参考。</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-auto text-center small">
+        <div class="container">
+            <p class="mb-1 fw-bold">言禾 YanHe International Education © 2026</p>
+            <div class="text-white-50">
+                京ICP备12345678号 | <a href="#" class="text-white-50 text-decoration-underline">下载2025年度社会责任报告</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function switchView(role, btn) {
+            // 切换按钮状态
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // 切换搜索框提示
+            const searchInput = document.getElementById('searchInput');
+            if (role === 'creator') {
+                searchInput.placeholder = "搜索任务：法律翻译、方言录音、文书润色...";
+                document.getElementById('creator-view').classList.remove('d-none-custom');
+                document.getElementById('client-view').classList.add('d-none-custom');
+            } else {
+                searchInput.placeholder = "搜索人才：英语八级、同声传译、粤语母语...";
+                document.getElementById('creator-view').classList.add('d-none-custom');
+                document.getElementById('client-view').classList.remove('d-none-custom');
+            }
+        }
+    </script>
+</body>
+</html>
