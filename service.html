@@ -68,7 +68,8 @@
 
         /* 隐藏类 */
         .d-none-custom { display: none !important; }
-            /* --- 手机端导航栏白底修复 --- */
+          })();
+        /* --- 手机端导航栏白底修复 --- */
         @media (max-width: 991px) {
             .navbar-collapse {
                 background: #ffffff; /* 纯白背景 */
@@ -100,8 +101,7 @@
                 window.location.href = page.replace('.html', '_login.html');
             }
         }
-    })();
-        // 【修改点3】新增：智能检测登录状态
+            // 【修改点3】新增：智能检测登录状态
 document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开始删
     // 1. 读取本地存储
     var status = localStorage.getItem('yanhe_user_status');
@@ -114,9 +114,8 @@ document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开�
                 ... (中间省略) ...
             </div>
         `;
-    } 
+    }
 }); // <--- 删到这里结束
-    
 </script>
 </head>
 
@@ -130,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开�
             </button>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link" href="home.html">首页</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">首页</a></li>
                     <li class="nav-item"><a class="nav-link" href="story.html">中国故事</a></li>
                     <li class="nav-item"><a class="nav-link" href="education.html">教育云</a></li>
                     <li class="nav-item"><a class="nav-link active" href="service.html">任务大厅</a></li>
@@ -249,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开�
                         <div class="mb-2"><i class="bi bi-mortarboard-fill fs-1"></i></div>
                         <h6 class="fw-bold">高校语言人才认证</h6>
                         <p class="small opacity-75 mb-3">认证 BSU / 北外 等高校身份，解锁高薪商单，免除平台佣金。</p>
-                        <button class="btn btn-sm btn-light text-primary rounded-pill w-100 fw-bold">立即认证</button>
+                        <a button class="btn btn-sm btn-light text-primary rounded-pill w-100 fw-bold" href="certification.html">立即认证</button></a>
                     </div>
 
                     <div class="sidebar-card">
@@ -283,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开�
                     <div class="sidebar-card border-success border-opacity-25 bg-success bg-opacity-10">
                         <h6 class="fw-bold text-success"><i class="bi bi-heart-fill me-1"></i> 语言扶贫计划</h6>
                         <p class="small text-muted mb-2">每完成一笔订单，我们将捐赠 1% 用于乡村儿童普通话推广。</p>
-                        <a href="#" class="small text-success fw-bold text-decoration-underline">查看公益报告 ></a>
+                        <a href="charity_report.html" class="small text-success fw-bold text-decoration-underline">查看公益报告 ></a>
                     </div>
                 </div>
             </div>
@@ -304,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开�
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="client-action-card bg-warning bg-opacity-10" onclick="alert('AI服务已启动')">
+                    <div class="client-action-card bg-warning bg-opacity-10" onclick="alert('AI服务已启动')" >
                         <div class="action-icon-lg bg-warning text-white shadow-sm"><i class="bi bi-robot"></i></div>
                         <h3 class="fw-bold text-dark">AI 智能极速服务</h3>
                         <p class="text-muted mt-3">
@@ -312,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开�
                             言禾自研大模型，秒级响应，低成本。<br>
                             <span class="badge bg-warning text-dark mt-2">24h 在线</span> <span class="badge bg-warning text-dark mt-2">立等可取</span>
                         </p>
-                        <button class="btn btn-warning text-white rounded-pill px-5 mt-3 fw-bold">试用 AI 助手</button>
+                        <a button class="btn btn-warning text-white rounded-pill px-5 mt-3 fw-bold" href='ai_fast_service'>试用 AI 助手</button></a>
                     </div>
                 </div>
             </div>
@@ -371,5 +370,4 @@ document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开�
         }
     </script>
 </body>
-
 </html>
