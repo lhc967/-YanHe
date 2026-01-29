@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スマート復習 - 言禾 YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --dark: #333; --bg-light: #f8faff; --success: #28a745; --danger: #dc3545; --warning: #ffc107; }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background: var(--bg-light);
+            height: 100vh; overflow: hidden; /* 没入モード */
+            display: flex; flex-direction: column;
+        }
+
+        /* ヘッダー */
+        .review-header {
+            padding: 15px 30px; background: #fff; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+        }
+        .close-btn { color: #999; font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
+        .close-btn:hover { color: var(--dark); transform: rotate(90deg); }
+
+        /* プログレスバー */
+        .progress-container { width: 300px; }
+        .progress-custom { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+        .progress-bar-custom { height: 100%; background: var(--success); width: 20%; transition: width 0.5s ease; }
+        .progress-text { font-size: 12px; color: #999; text-align: center; margin-top: 5px; font-weight: bold; }
+
+        /* メインステージ */
+        .review-stage {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            perspective: 1000px;
+            padding-bottom: 80px;
+        }
+
+        /* カードコンテナ */
+        .flashcard {
+            width: 100%; max-width: 600px; height: 400px; cursor: pointer;
+            position: relative; transform-style: preserve-3d; transition: transform 0.6s;
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        /* カード共通 */
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 16px; background: #fff; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 1px solid #eee; padding: 40px; text-align: center;
+        }
+
+        /* 表面 (日本語) */
+        .card-front { z-index: 2; }
+        .word-lg { font-size: 3.5rem; font-weight: 800; color: var(--dark); margin-bottom: 20px; font-family: "Hiragino Kaku Gothic ProN", sans-serif; }
+        .hint-text { color: #999; font-size: 14px; }
+
+        /* 裏面 (中国語) */
+        .card-back { transform: rotateY(180deg); background: #fdfdfd; }
+        .phonetic { font-size: 1.2rem; color: #666; margin-bottom: 5px; font-family: Arial, sans-serif; }
+        .cn-word { font-size: 2.5rem; font-weight: 900; color: var(--primary); margin-bottom: 10px; }
+        .meaning-jp { font-size: 1rem; color: #888; margin-bottom: 20px; }
+        
+        .example-box { background: #f8f9fa; padding: 15px; border-radius: 8px; width: 100%; text-align: left; border-left: 4px solid var(--primary); }
+        .example-cn { font-size: 1.2rem; font-weight: 600; margin-bottom: 4px; color: #333; }
+        .example-jp { font-size: 0.9rem; color: #666; }
+
+        /* コントロールバー */
+        .control-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 100px;
+            background: #fff; border-top: 1px solid #eee;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.02); z-index: 10;
+        }
+
+        .btn-grade {
+            border: none; padding: 0; width: 110px; height: 55px; border-radius: 8px;
+            font-weight: bold; font-size: 15px; color: #fff; transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;
+        }
+        .btn-grade:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+
+        .btn-again { background: #ff6b6b; border-bottom: 4px solid #e03131; }
+        .btn-hard { background: #ff922b; border-bottom: 4px solid #e8590c; }
+        .btn-good { background: #51cf66; border-bottom: 4px solid #2f9e44; }
+        .btn-easy { background: #339af0; border-bottom: 4px solid #1c7ed6; }
+
+        .grade-sub { font-size: 12px; opacity: 0.8; font-weight: normal; }
+
+        .grading-actions { display: none; gap: 15px; }
+        .btn-show {
+            background: var(--dark); color: #fff; padding: 15px 80px; border-radius: 50px;
+            font-weight: bold; font-size: 18px; border: none; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: 0.2s;
+        }
+        .btn-show:hover { transform: scale(1.05); }
+
+        .kb-hint { position: absolute; bottom: 120px; color: #adb5bd; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+        .key-cap { border: 1px solid #dee2e6; padding: 2px 8px; border-radius: 4px; font-weight: bold; background: #fff; box-shadow: 0 2px 0 #eee; }
+
+        .btn-audio {
+            position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: #ddd;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn-audio:hover { color: var(--primary); }
+
+        .success-overlay {
+            position: fixed; inset: 0; background: #fff; z-index: 100;
+            display: none; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .success-icon { font-size: 80px; color: var(--success); animation: popIn 0.5s; margin-bottom: 20px; }
+        @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
+    </style>
+</head>
+<body>
+
+    <div class="review-header">
+        <div class="d-flex align-items-center gap-3">
+            <a href="education_jp.html" class="close-btn" title="終了"><i class="bi bi-x-lg"></i></a>
+            <div class="fw-bold text-muted">日中スマート単語帳</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-custom">
+                <div class="progress-bar-custom" id="progressBar" style="width: 20%"></div>
+            </div>
+            <div class="progress-text" id="progressText">2 / 10</div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 text-warning fw-bold">
+            <i class="bi bi-fire"></i> 5日連続
+        </div>
+    </div>
+
+    <div class="review-stage">
+
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="card-face card-front">
+                <div class="btn-audio" onclick="event.stopPropagation(); playAudio('jp')"><i class="bi bi-volume-up-fill"></i></div>
+                <div class="small text-muted text-uppercase mb-3 fw-bold tracking-wide">ビジネス中国語</div>
+                <div class="word-lg" id="cardFront">交渉する</div>
+                <div class="hint-text">クリックして中国語を確認</div>
+            </div>
+
+            <div class="card-face card-back">
+                <div class="btn-audio" onclick="event.stopPropagation(); playAudio('cn')"><i class="bi bi-volume-up-fill"></i></div>
+                <div class="cn-word" id="cardCn">谈判</div>
+                <div class="phonetic" id="cardPinyin">tán pàn</div>
+                <div class="meaning-jp" id="cardMeaningJp">（意味：話し合う、交渉する）</div>
+
+                <div class="example-box">
+                    <div class="example-cn" id="cardExCn">这次谈判进行得非常顺利。</div>
+                    <div class="example-jp" id="cardExJp">今回の交渉は非常に順調に進みました。</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kb-hint d-none d-md-flex">
+            <span class="key-cap">Space</span> で反転
+        </div>
+
+    </div>
+
+    <div class="control-bar">
+        <button class="btn-show" id="btnShow" onclick="flipCard()">答えを表示</button>
+
+        <div class="grading-actions" id="gradingActions">
+            <button class="btn-grade btn-again" onclick="nextCard('again')">
+                忘れた
+                <span class="grade-sub">1分後</span>
+            </button>
+            <button class="btn-grade btn-hard" onclick="nextCard('hard')">
+                難しい
+                <span class="grade-sub">2日後</span>
+            </button>
+            <button class="btn-grade btn-good" onclick="nextCard('good')">
+                普通
+                <span class="grade-sub">4日後</span>
+            </button>
+            <button class="btn-grade btn-easy" onclick="nextCard('easy')">
+                簡単
+                <span class="grade-sub">7日後</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="success-overlay" id="successScreen">
+        <div class="success-icon"><i class="bi bi-check-circle-fill"></i></div>
+        <h2 class="fw-bold mb-2">本日の学習完了！</h2>
+        <p class="text-muted mb-5">今日10個の中国語単語を復習しました。HSKレベル +1%</p>
+        <a href="education_jp.html" class="btn btn-dark rounded-pill px-5 py-3 fw-bold">戻る</a>
+    </div>
+
+    <script>
+        // データ：日本語(Front) -> 中国語(Back)
+        const cards = [
+            { 
+                front: "交渉する", 
+                cn: "谈判", 
+                pinyin: "tán pàn", 
+                meaningJp: "（話し合う、交渉する）",
+                exCn: "这次谈判进行得非常顺利。", 
+                exJp: "今回の交渉は非常に順調に進みました。" 
+            },
+            { 
+                front: "予算", 
+                cn: "预算", 
+                pinyin: "yù suàn", 
+                meaningJp: "（必要な経費、バジェット）",
+                exCn: "我们需要削减预算。", 
+                exJp: "私たちは予算を削減する必要があります。" 
+            },
+            { 
+                front: "契約", 
+                cn: "合同", 
+                pinyin: "hé tong", 
+                meaningJp: "（契約書、取り決め）",
+                exCn: "请在这里签署合同。", 
+                exJp: "こちらに契約書の署名をお願いします。" 
+            },
+            { 
+                front: "協力", 
+                cn: "合作", 
+                pinyin: "hé zuò", 
+                meaningJp: "（協力する、提携する）",
+                exCn: "期待与您的合作。", 
+                exJp: "あなたとの協力を楽しみにしています。" 
+            }
+        ];
+
+        let currentIndex = 0;
+        let isFlipped = false;
+
+        // 初期化
+        updateCard();
+
+        function flipCard() {
+            const card = document.getElementById('flashcard');
+            const btnShow = document.getElementById('btnShow');
+            const grading = document.getElementById('gradingActions');
+
+            if (!isFlipped) {
+                card.classList.add('flipped');
+                isFlipped = true;
+                btnShow.style.display = 'none';
+                grading.style.display = 'flex';
+                document.querySelector('.kb-hint').innerHTML = '<span class="key-cap">1</span> <span class="key-cap">2</span> <span class="key-cap">3</span> <span class="key-cap">4</span> で評価';
+                
+                // 自動で中国語音声を再生 (シミュレーション)
+                // playAudio('cn');
+            }
+        }
+
+        function nextCard(difficulty) {
+            console.log(`Card ${currentIndex} rated: ${difficulty}`);
+            currentIndex++;
+
+            if (currentIndex >= cards.length) {
+                document.getElementById('successScreen').style.display = 'flex';
+                return;
+            }
+
+            const card = document.getElementById('flashcard');
+            const btnShow = document.getElementById('btnShow');
+            const grading = document.getElementById('gradingActions');
+
+            card.style.transition = 'none';
+            card.classList.remove('flipped');
+            setTimeout(() => { card.style.transition = 'transform 0.6s'; }, 50);
+
+            isFlipped = false;
+            btnShow.style.display = 'block';
+            grading.style.display = 'none';
+            document.querySelector('.kb-hint').innerHTML = '<span class="key-cap">Space</span> で反転';
+
+            updateProgress();
+            setTimeout(() => { updateCard(); }, 150);
+        }
+
+        function updateCard() {
+            const data = cards[currentIndex];
+            document.getElementById('cardFront').innerText = data.front;
+            document.getElementById('cardCn').innerText = data.cn;
+            document.getElementById('cardPinyin').innerText = data.pinyin;
+            document.getElementById('cardMeaningJp').innerText = data.meaningJp;
+            document.getElementById('cardExCn').innerText = data.exCn;
+            document.getElementById('cardExJp').innerText = data.exJp;
+        }
+
+        function updateProgress() {
+            const pct = ((currentIndex) / cards.length) * 100;
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressText').innerText = (currentIndex + 1) + ' / ' + cards.length;
+        }
+
+        function playAudio(lang) {
+            const text = lang === 'cn' ? "正在播放中文发音..." : "日本語音声を再生中...";
+            alert('🔊 ' + text);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if(!isFlipped) flipCard();
+            }
+            if (isFlipped) {
+                if (e.key === '1') nextCard('again');
+                if (e.key === '2') nextCard('hard');
+                if (e.key === '3') nextCard('good');
+                if (e.key === '4') nextCard('easy');
+            }
+        });
+    </script>
+</body>
+</html>

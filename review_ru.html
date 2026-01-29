@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Умное повторение - YanHe</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --dark: #333; --bg-light: #f8faff; --success: #28a745; --danger: #dc3545; --warning: #ffc107; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-light);
+            height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column;
+            margin: 0;
+        }
+
+        /* Шапка */
+        .review-header {
+            padding: 15px 30px; background: #fff; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+        }
+        .close-btn { color: #999; font-size: 1.5rem; cursor: pointer; transition: 0.2s; text-decoration: none; }
+        .close-btn:hover { color: var(--dark); transform: rotate(90deg); }
+
+        /* Прогресс */
+        .progress-container { width: 300px; }
+        .progress-custom { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+        .progress-bar-custom { height: 100%; background: var(--success); width: 0%; transition: width 0.5s ease; }
+        .progress-text { font-size: 12px; color: #999; text-align: center; margin-top: 5px; font-weight: bold; }
+
+        /* Сцена карточек */
+        .review-stage {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            perspective: 1000px;
+            padding-bottom: 80px;
+        }
+
+        .flashcard {
+            width: 100%; max-width: 600px; height: 380px; cursor: pointer;
+            position: relative; transform-style: preserve-3d; transition: transform 0.6s;
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 16px; background: #fff; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 1px solid #eee; padding: 40px; text-align: center;
+        }
+
+        .card-front { z-index: 2; }
+        .word-lg { font-size: 3.5rem; font-weight: 800; color: var(--dark); margin-bottom: 20px; }
+        .hint-text { color: #999; font-size: 14px; }
+
+        .card-back { transform: rotateY(180deg); background: #fdfdfd; }
+        .phonetic { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
+        .meaning { font-size: 2rem; font-weight: 900; color: var(--primary); margin-bottom: 25px; }
+        .example-box { background: #f8f9fa; padding: 15px; border-radius: 8px; width: 100%; text-align: left; border-left: 4px solid var(--primary); }
+        .example-main { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; color: #333; }
+        .example-sub { font-size: 0.9rem; color: #666; }
+
+        /* Панель управления */
+        .control-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 100px;
+            background: #fff; border-top: 1px solid #eee;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.02); z-index: 10;
+        }
+
+        .btn-grade {
+            border: none; width: 110px; height: 55px; border-radius: 8px;
+            font-weight: bold; font-size: 14px; color: #fff; transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;
+        }
+        .btn-again { background: #ff6b6b; border-bottom: 4px solid #e03131; }
+        .btn-hard { background: #ff922b; border-bottom: 4px solid #e8590c; }
+        .btn-good { background: #51cf66; border-bottom: 4px solid #2f9e44; }
+        .btn-easy { background: #339af0; border-bottom: 4px solid #1c7ed6; }
+        .grade-sub { font-size: 11px; opacity: 0.8; font-weight: normal; }
+
+        .btn-show {
+            background: var(--dark); color: #fff; padding: 15px 80px; border-radius: 50px;
+            font-weight: bold; font-size: 18px; border: none; transition: 0.2s;
+        }
+
+        .kb-hint { position: absolute; bottom: 120px; color: #adb5bd; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+        .key-cap { border: 1px solid #dee2e6; padding: 2px 8px; border-radius: 4px; font-weight: bold; background: #fff; }
+
+        .btn-audio { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: #ddd; cursor: pointer; }
+        .btn-audio:hover { color: var(--primary); }
+
+        .success-overlay {
+            position: fixed; inset: 0; background: #fff; z-index: 100;
+            display: none; align-items: center; justify-content: center; flex-direction: column;
+            text-align: center;
+        }
+        .success-icon { font-size: 80px; color: var(--success); margin-bottom: 20px; animation: popIn 0.5s; }
+        @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
+    </style>
+</head>
+<body>
+
+    <div class="review-header">
+        <div class="d-flex align-items-center gap-3">
+            <a href="education_ru.html" class="close-btn"><i class="bi bi-x-lg"></i></a>
+            <div class="fw-bold text-muted">Умное повторение</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-custom">
+                <div class="progress-bar-custom" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">1 / 10</div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 text-warning fw-bold">
+            <i class="bi bi-fire"></i> 5 дней подряд
+        </div>
+    </div>
+
+    <div class="review-stage">
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="card-face card-front">
+                <div class="btn-audio" onclick="event.stopPropagation(); playAudio()"><i class="bi bi-volume-up-fill"></i></div>
+                <div class="small text-muted text-uppercase mb-3 fw-bold">Бизнес-китайский</div>
+                <div class="word-lg" id="cardFront">Negotiation</div>
+                <div class="hint-text">Нажмите, чтобы увидеть перевод</div>
+            </div>
+
+            <div class="card-face card-back">
+                <div class="btn-audio" onclick="event.stopPropagation(); playAudio()"><i class="bi bi-volume-up-fill"></i></div>
+                <div class="phonetic" id="cardPhonetic">/nɪˌɡoʊʃiˈeɪʃn/</div>
+                <div class="meaning" id="cardMeaning">谈判 (Tánpàn)</div>
+
+                <div class="example-box">
+                    <div class="example-main" id="cardExEn">The negotiation went very smoothly.</div>
+                    <div class="example-sub" id="cardExCn">Переговоры прошли очень гладко.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kb-hint d-none d-md-flex">
+            Нажмите <span class="key-cap">Пробел</span> для переворота
+        </div>
+    </div>
+
+    <div class="control-bar">
+        <button class="btn-show" id="btnShow" onclick="flipCard()">Показать ответ</button>
+
+        <div class="grading-actions d-none" id="gradingActions">
+            <button class="btn-grade btn-again" onclick="nextCard('again')">
+                Снова
+                <span class="grade-sub">1 мин</span>
+            </button>
+            <button class="btn-grade btn-hard" onclick="nextCard('hard')">
+                Трудно
+                <span class="grade-sub">2 дня</span>
+            </button>
+            <button class="btn-grade btn-good" onclick="nextCard('good')">
+                Хорошо
+                <span class="grade-sub">4 дня</span>
+            </button>
+            <button class="btn-grade btn-easy" onclick="nextCard('easy')">
+                Легко
+                <span class="grade-sub">7 дней</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="success-overlay" id="successScreen">
+        <div class="success-icon"><i class="bi bi-check-circle-fill"></i></div>
+        <h2 class="fw-bold mb-2">Задание выполнено!</h2>
+        <p class="text-muted mb-5">Вы повторили все слова на сегодня. Индекс памяти +5%</p>
+        <a href="education_ru.html" class="btn btn-dark rounded-pill px-5 py-3 fw-bold">В личный кабинет</a>
+    </div>
+
+    <script>
+        const cards = [
+            { front: "Negotiation", phonetic: "/nɪˌɡoʊʃiˈeɪʃn/", meaning: "谈判 (Tánpàn)", exEn: "The negotiation went very smoothly.", exCn: "Переговоры прошли очень гладко." },
+            { front: "Budget", phonetic: "/ˈbʌdʒɪt/", meaning: "预算 (Yùsuàn)", exEn: "We need to cut the budget.", exCn: "Нам нужно сократить бюджет." },
+            { front: "Contract", phonetic: "/ˈkɑːntrækt/", meaning: "合同 (Hétóng)", exEn: "Please sign the contract here.", exCn: "Пожалуйста, подпишите контракт здесь." }
+        ];
+
+        let currentIndex = 0;
+        let isFlipped = false;
+
+        updateCard();
+
+        function flipCard() {
+            if (isFlipped) return;
+            document.getElementById('flashcard').classList.add('flipped');
+            document.getElementById('btnShow').classList.add('d-none');
+            document.getElementById('gradingActions').classList.remove('d-none');
+            document.getElementById('gradingActions').classList.add('d-flex');
+            isFlipped = true;
+            document.querySelector('.kb-hint').innerHTML = 'Используйте клавиши <span class="key-cap">1</span> <span class="key-cap">2</span> <span class="key-cap">3</span> <span class="key-cap">4</span>';
+        }
+
+        function nextCard(difficulty) {
+            currentIndex++;
+            if (currentIndex >= cards.length) {
+                document.getElementById('successScreen').style.display = 'flex';
+                return;
+            }
+
+            const card = document.getElementById('flashcard');
+            card.style.transition = 'none';
+            card.classList.remove('flipped');
+
+            setTimeout(() => {
+                card.style.transition = 'transform 0.6s';
+                isFlipped = false;
+                document.getElementById('btnShow').classList.remove('d-none');
+                document.getElementById('gradingActions').classList.replace('d-flex', 'd-none');
+                document.querySelector('.kb-hint').innerHTML = 'Нажмите <span class="key-cap">Пробел</span> для переворота';
+                updateCard();
+                updateProgress();
+            }, 50);
+        }
+
+        function updateCard() {
+            const data = cards[currentIndex];
+            document.getElementById('cardFront').innerText = data.front;
+            document.getElementById('cardPhonetic').innerText = data.phonetic;
+            document.getElementById('cardMeaning').innerText = data.meaning;
+            document.getElementById('cardExEn').innerText = data.exEn;
+            document.getElementById('cardExCn').innerText = data.exCn;
+        }
+
+        function updateProgress() {
+            const pct = (currentIndex / cards.length) * 100;
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressText').innerText = (currentIndex + 1) + ' / ' + cards.length;
+        }
+
+        function playAudio() {
+            alert('🔊 Воспроизведение произношения...');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') { e.preventDefault(); if(!isFlipped) flipCard(); }
+            if (isFlipped) {
+                if (e.key === '1') nextCard('again');
+                if (e.key === '2') nextCard('hard');
+                if (e.key === '3') nextCard('good');
+                if (e.key === '4') nextCard('easy');
+            }
+        });
+    </script>
+</body>
+</html>

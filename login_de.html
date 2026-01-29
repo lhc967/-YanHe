@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>言禾通行证 - 统一身份认证</title>
+    <title>YanHe Pass - Einheitliche Authentifizierung</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f0f7ff; }
         body {
-            font-family: -apple-system, "PingFang SC", sans-serif;
+            font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
             background: var(--bg-light); height: 100vh; overflow: hidden;
         }
 
-        /* --- 极简顶部导航 --- */
+        /* --- Minimalistische Top-Navigation --- */
         .navbar-custom {
             position: absolute; top: 0; left: 0; width: 100%; z-index: 100;
-            /* 修复：这里之前拼写成了 pointeloginr-events */
             padding: 20px 40px; background: transparent; pointer-events: none;
         }
         .navbar-custom a { pointer-events: auto; }
@@ -32,10 +31,10 @@
         }
         .back-link:hover { color: var(--primary); background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* --- 布局容器 --- */
+        /* --- Layout-Container --- */
         .split-container { display: flex; height: 100%; }
 
-        /* --- 左侧：动态品牌区 --- */
+        /* --- Links: Dynamischer Markenbereich --- */
         .brand-section {
             flex: 1.2; background: linear-gradient(135deg, #004aad 0%, #002a5c 100%);
             position: relative; overflow: hidden; display: flex; flex-direction: column;
@@ -54,7 +53,7 @@
         }
         @keyframes float { 0%,100%{transform:translate(0,0);} 50%{transform:translate(20px,-20px);} }
 
-        /* --- 右侧：表单交互区 --- */
+        /* --- Rechts: Formular-Interaktionsbereich --- */
         .form-section {
             flex: 1; display: flex; align-items: center; justify-content: center;
             background: #fff; position: relative; padding: 20px;
@@ -66,7 +65,7 @@
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 顶部身份切换 Tab */
+        /* Identitätsumschalter oben */
         .role-pills {
             background: #f1f3f5; padding: 5px; border-radius: 12px; display: flex; margin-bottom: 30px;
         }
@@ -77,12 +76,12 @@
         .role-item.active { background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .role-item.active.individual { color: var(--accent); }
 
-        /* 标题区 */
+        /* Titelbereich */
         .auth-header { margin-bottom: 25px; }
         .auth-title { font-size: 26px; font-weight: 800; color: #333; margin-bottom: 5px; }
         .auth-subtitle { color: #888; font-size: 14px; }
 
-        /* 表单控件 */
+        /* Formularelemente */
         .form-floating > .form-control {
             border-radius: 12px; border: 1px solid #eee; background: #f8faff;
         }
@@ -100,14 +99,14 @@
         .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-submit.individual-btn { background: var(--accent); }
 
-        /* 底部切换链接 */
+        /* Umschalt-Link unten */
         .auth-footer { text-align: center; margin-top: 30px; font-size: 14px; color: #666; }
         .switch-link { color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: none; }
         .switch-link.individual-link { color: var(--accent); }
 
         .view-hidden { display: none !important; }
 
-        /* 响应式 */
+        /* Responsiv */
         @media (max-width: 992px) {
             .brand-section { display: none; }
             .form-section { background: #f8faff; }
@@ -117,8 +116,8 @@
 <body>
 
     <nav class="navbar-custom d-flex justify-content-between align-items-center">
-        <a class="navbar-brand" href="index.html">言禾 YanHe</a>
-        <a href="index.html" class="back-link"><i class="bi bi-house-door-fill"></i> 返回首页</a>
+        <a class="navbar-brand" href="home_de.html">YanHe</a>
+        <a href="home_de.html" class="back-link"><i class="bi bi-house-door-fill"></i> Zur Startseite</a>
     </nav>
 
     <div class="split-container">
@@ -129,14 +128,14 @@
 
             <div class="brand-content" id="brandTextEnterprise">
                 <div class="mb-3"><i class="bi bi-building fs-1 text-white opacity-50"></i></div>
-                <h1 class="display-5 fw-bold mb-3">连接全球<br>语言人才</h1>
-                <p class="h5 fw-light opacity-75 mb-4">加入言禾企业生态，一键发布众包需求。<br>已赋能 1,200+ 合作伙伴。</p>
+                <h1 class="display-5 fw-bold mb-3">Globale Sprachtalente<br>verbinden</h1>
+                <p class="h5 fw-light opacity-75 mb-4">Treten Sie dem YanHe-Unternehmensökosystem bei.<br>Wir unterstützen bereits 1.200+ Partner.</p>
             </div>
 
             <div class="brand-content view-hidden" id="brandTextIndividual">
                 <div class="mb-3"><i class="bi bi-mortarboard fs-1 text-white opacity-50"></i></div>
-                <h1 class="display-5 fw-bold mb-3">知识变现<br>文化出海</h1>
-                <p class="h5 fw-light opacity-75 mb-4">高校语言人才的专属平台。<br>让你的每一次翻译都有价值。</p>
+                <h1 class="display-5 fw-bold mb-3">Wissen monetarisieren<br>Kultur exportieren</h1>
+                <p class="h5 fw-light opacity-75 mb-4">Die exklusive Plattform für Hochschul-Sprachtalente.<br>Geben Sie jeder Übersetzung einen Wert.</p>
             </div>
         </div>
 
@@ -145,58 +144,58 @@
 
                 <div class="role-pills">
                     <div class="role-item active" id="tabEnterprise" onclick="switchRole('enterprise')">
-                        <i class="bi bi-briefcase me-1"></i> 企业/机构
+                        <i class="bi bi-briefcase me-1"></i> Unternehmen
                     </div>
                     <div class="role-item" id="tabIndividual" onclick="switchRole('individual')">
-                        <i class="bi bi-person me-1"></i> 个人/学生
+                        <i class="bi bi-person me-1"></i> Privat/Student
                     </div>
                 </div>
 
                 <div id="viewLogin">
                     <div class="auth-header">
-                        <div class="auth-title">欢迎回来</div>
-                        <div class="auth-subtitle" id="loginSubtitle">使用企业认证账号登录工作台</div>
+                        <div class="auth-title">Willkommen zurück</div>
+                        <div class="auth-subtitle" id="loginSubtitle">Mit Unternehmenskonto anmelden</div>
                     </div>
 
                     <form>
                         <div id="fieldsLoginEnterprise">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" placeholder="企业ID">
-                                <label>统一社会信用代码 / 企业邮箱</label>
+                                <input type="text" class="form-control" placeholder="Unternehmens-ID">
+                                <label>Steuer-ID / Firmen-E-Mail</label>
                             </div>
                         </div>
 
                         <div id="fieldsLoginIndividual" class="view-hidden">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control individual-focus" placeholder="手机号">
-                                <label>手机号 / 学号 (高校认证)</label>
+                                <input type="text" class="form-control individual-focus" placeholder="Mobilnummer">
+                                <label>Mobilnr. / Matrikelnr.</label>
                             </div>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="loginPwd" placeholder="密码">
-                            <label>登录密码</label>
+                            <input type="password" class="form-control" id="loginPwd" placeholder="Passwort">
+                            <label>Passwort</label>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="rememberMe">
-                                <label class="form-check-label small text-muted" for="rememberMe">记住我</label>
+                                <label class="form-check-label small text-muted" for="rememberMe">Angemeldet bleiben</label>
                             </div>
-                            <a href="#" class="small text-decoration-none text-muted">忘记密码?</a>
+                            <a href="#" class="small text-decoration-none text-muted">Passwort vergessen?</a>
                         </div>
 
                         <button type="button" class="btn-submit" id="btnLogin" onclick="handleLogin()">
-                            安全登录
+                            Sicher anmelden
                         </button>
                     </form>
 
                     <div class="auth-footer">
-                        还没有账号？ <span class="switch-link" id="linkToReg" onclick="toggleView('register')">立即注册入驻</span>
+                        Noch kein Konto? <span class="switch-link" id="linkToReg" onclick="toggleView('register')">Jetzt registrieren</span>
                     </div>
 
                     <div class="text-center mt-4">
-                        <p class="small text-muted mb-3">或通过以下方式登录</p>
+                        <p class="small text-muted mb-3">Oder anmelden mit</p>
                         <div class="d-flex justify-content-center gap-3">
                             <button class="btn btn-light rounded-circle border"><i class="bi bi-wechat text-success"></i></button>
                             <button class="btn btn-light rounded-circle border"><i class="bi bi-alipay text-primary"></i></button>
@@ -206,56 +205,56 @@
 
                 <div id="viewRegister" class="view-hidden">
                     <div class="auth-header">
-                        <div class="auth-title">创建账号</div>
-                        <div class="auth-subtitle" id="regSubtitle">提交企业资质，开启众包之旅</div>
+                        <div class="auth-title">Konto erstellen</div>
+                        <div class="auth-subtitle" id="regSubtitle">Qualifikationen einreichen und starten</div>
                     </div>
 
                     <form>
                         <div id="fieldsRegEnterprise">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" placeholder="企业全称">
-                                <label>企业全称 (需与执照一致)</label>
+                                <input type="text" class="form-control" placeholder="Firmenname">
+                                <label>Firmenname (laut Lizenz)</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" placeholder="联系人">
-                                <label>商务对接人姓名</label>
+                                <input type="text" class="form-control" placeholder="Kontaktperson">
+                                <label>Name der Kontaktperson</label>
                             </div>
                         </div>
 
                         <div id="fieldsRegIndividual" class="view-hidden">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control individual-focus" placeholder="学校">
-                                <label>所在高校名称</label>
+                                <input type="text" class="form-control individual-focus" placeholder="Universität">
+                                <label>Name der Universität</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control individual-focus" placeholder="专业">
-                                <label>专业 (例如：汉语国际教育)</label>
+                                <input type="text" class="form-control individual-focus" placeholder="Studiengang">
+                                <label>Studiengang (z.B. Germanistik)</label>
                             </div>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" placeholder="邮箱">
-                            <label>电子邮箱 / 手机号</label>
+                            <input type="email" class="form-control" placeholder="E-Mail">
+                            <label>E-Mail / Mobilnummer</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" placeholder="设置密码">
-                            <label>设置密码 (8位以上)</label>
+                            <input type="password" class="form-control" placeholder="Passwort festlegen">
+                            <label>Passwort (min. 8 Zeichen)</label>
                         </div>
 
                         <div class="form-check mb-4">
                             <input class="form-check-input" type="checkbox" id="agreeTerms">
                             <label class="form-check-label small text-muted" for="agreeTerms">
-                                我已阅读并同意 <a href="#" class="text-muted">《用户协议》</a> 与 <a href="#" class="text-muted">《隐私政策》</a>
+                                Ich stimme den <a href="#" class="text-muted">Nutzungsbedingungen</a> und der <a href="#" class="text-muted">Datenschutzrichtlinie</a> zu.
                             </label>
                         </div>
 
                         <button type="button" class="btn-submit" id="btnRegister" onclick="handleRegister()">
-                            立即注册
+                            Registrieren
                         </button>
                     </form>
 
                     <div class="auth-footer">
-                        已有账号？ <span class="switch-link" id="linkToLogin" onclick="toggleView('login')">返回登录</span>
+                        Bereits registriert? <span class="switch-link" id="linkToLogin" onclick="toggleView('login')">Zurück zur Anmeldung</span>
                     </div>
                 </div>
 
@@ -264,20 +263,20 @@
     </div>
 
     <script>
-        // 当前状态变量
-        let currentRole = 'enterprise'; // 'enterprise' or 'individual'
-        let currentView = 'login';      // 'login' or 'register'
+        // Statusvariablen
+        let currentRole = 'enterprise'; // 'enterprise' oder 'individual'
+        let currentView = 'login';      // 'login' oder 'register'
 
-        // 1. 切换角色 (企业 vs 个人)
+        // 1. Rolle wechseln
         function switchRole(role) {
             currentRole = role;
 
-            // UI 更新：Tab 样式
+            // UI Update: Tab-Stil
             document.querySelectorAll('.role-item').forEach(el => el.classList.remove('active', 'individual'));
             document.getElementById('tab' + capitalize(role)).classList.add('active');
             if(role === 'individual') document.getElementById('tabIndividual').classList.add('individual');
 
-            // UI 更新：左侧品牌区
+            // UI Update: Linker Markenbereich
             const brandSec = document.getElementById('brandSection');
             const txtEnt = document.getElementById('brandTextEnterprise');
             const txtInd = document.getElementById('brandTextIndividual');
@@ -292,11 +291,11 @@
                 txtInd.classList.add('view-hidden');
             }
 
-            // UI 更新：表单字段与颜色
+            // UI Update: Formularfelder
             updateFormVisibility();
         }
 
-        // 2. 切换视图 (登录 vs 注册)
+        // 2. Ansicht wechseln (Login vs Register)
         function toggleView(view) {
             currentView = view;
             if(view === 'register') {
@@ -309,55 +308,56 @@
             updateFormVisibility();
         }
 
-        // 3. 更新表单字段显隐
+        // 3. Sichtbarkeit der Formularfelder aktualisieren
         function updateFormVisibility() {
             const isIndividual = currentRole === 'individual';
             const themeBtnClass = isIndividual ? 'individual-btn' : '';
             const themeLinkClass = isIndividual ? 'individual-link' : '';
 
-            // 按钮与链接颜色
+            // Button- und Linkfarben
             document.querySelectorAll('.btn-submit').forEach(btn => btn.className = 'btn-submit ' + themeBtnClass);
             document.querySelectorAll('.switch-link').forEach(link => link.className = 'switch-link ' + themeLinkClass);
 
-            // 输入框焦点颜色
+            // Input-Fokusfarbe
             document.querySelectorAll('.form-control').forEach(input => {
                 if(isIndividual) input.classList.add('individual-focus');
                 else input.classList.remove('individual-focus');
             });
 
-            // 字段显隐
+            // Felder ein-/ausblenden
             if (currentView === 'login') {
-                document.getElementById('loginSubtitle').innerText = isIndividual ? '高校师生 / 个人创作者登录' : '使用企业认证账号登录工作台';
+                document.getElementById('loginSubtitle').innerText = isIndividual ? 'Studenten / Ersteller Login' : 'Mit Unternehmenskonto anmelden';
                 document.getElementById('fieldsLoginEnterprise').classList.toggle('view-hidden', isIndividual);
                 document.getElementById('fieldsLoginIndividual').classList.toggle('view-hidden', !isIndividual);
             } else {
-                document.getElementById('regSubtitle').innerText = isIndividual ? '加入言禾人才库，开启兼职之旅' : '提交企业资质，发布语言需求';
+                document.getElementById('regSubtitle').innerText = isIndividual ? 'Talentpool beitreten und Nebenjob starten' : 'Qualifikationen einreichen, Bedarf veröffentlichen';
                 document.getElementById('fieldsRegEnterprise').classList.toggle('view-hidden', isIndividual);
                 document.getElementById('fieldsRegIndividual').classList.toggle('view-hidden', !isIndividual);
             }
         }
 
-        // 4. 核心登录逻辑
+        // 4. Anmeldelogik (mit Statusspeicherung)
         function handleLogin() {
             const btn = document.getElementById('btnLogin');
-            btn.innerText = '验证中...';
+            btn.innerText = 'Verifiziere...';
             btn.disabled = true;
 
             setTimeout(() => {
-                // 保存登录状态
+                // [Kernschritt] Login-Status speichern
                 localStorage.setItem('yanhe_user_status', 'login');
-                // 跳转到已登录首页 (使用 url_for 生成的安全链接)
-                window.location.href = "index_login.html";
+
+                // Weiterleitung zur Startseite (eingeloggt)
+                window.location.href = 'home_de.html';
             }, 800);
         }
 
-        // 5. 注册逻辑
+        // 5. Registrierungslogik
         function handleRegister() {
-            alert('注册申请已提交！\n我们会发送验证邮件到您的邮箱。');
+            alert('Registrierung eingereicht!\nWir senden eine Bestätigungs-E-Mail.');
             toggleView('login');
         }
 
-        // 辅助函数
+        // Hilfsfunktion
         function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
     </script>
 </body>

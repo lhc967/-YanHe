@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>教育云平台 - 言禾 YanHe</title>
+    <title>Образовательная платформа - YanHe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
-        /* --- 全局变量 --- */
+        /* --- Глобальные переменные --- */
         :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f8faff; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             padding-top: 70px;
             background: var(--bg-light);
             color: #333;
         }
 
-        /* --- 导航栏 --- */
+        /* --- Навигация --- */
         .navbar-custom {
             background: rgba(255,255,255,0.95); backdrop-filter: blur(16px);
             box-shadow: 0 2px 15px rgba(0,0,0,0.04); height: 70px;
@@ -25,6 +25,7 @@
             font-weight: 900; font-size: 1.5rem; letter-spacing: -0.5px;
             background: linear-gradient(135deg, #004aad 0%, #0078ff 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
         }
         .nav-link {
             font-size: 15px; font-weight: 600; color: #555 !important;
@@ -33,7 +34,7 @@
         .nav-link:hover { color: var(--primary) !important; background: rgba(0, 74, 173, 0.06); }
         .nav-link.active { color: #fff !important; background: var(--primary); box-shadow: 0 4px 10px rgba(0, 74, 173, 0.3); }
 
-        /* --- 艾宾浩斯记忆仪表盘 --- */
+        /* --- Панель памяти (Эббингауз) --- */
         .memory-dashboard {
             background: linear-gradient(135deg, #003366 0%, #004aad 100%);
             color: #fff; padding: 30px 0; margin-bottom: 30px;
@@ -44,24 +45,22 @@
             background: rgba(255,255,255,0.05); border-radius: 50%;
         }
 
-        /* 记忆电池条 */
         .brain-battery {
             background: rgba(255,255,255,0.1); border-radius: 12px; padding: 4px;
             height: 24px; width: 100%; max-width: 300px; overflow: hidden; position: relative;
         }
         .battery-level {
             height: 100%; border-radius: 8px; background: linear-gradient(90deg, #ffc107, #ff9800);
-            width: 65%;
-            transition: width 1s ease-in-out; position: relative;
+            width: 65%; transition: width 1s ease-in-out; position: relative;
         }
         .battery-level::after {
-            content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+            content: ''; position: absolute; inset: 0;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
             transform: translateX(-100%); animation: shimmer 2s infinite;
         }
         @keyframes shimmer { 100% { transform: translateX(100%); } }
 
-        /* --- 搜索与筛选区 --- */
+        /* --- Поиск и фильтры --- */
         .filter-bar { background: #fff; padding: 15px 0; border-bottom: 1px solid #eee; margin-bottom: 20px; }
         .search-input { border-radius: 30px; border: 1px solid #eee; background: #f9f9f9; padding: 10px 20px; }
         .filter-tag {
@@ -71,7 +70,7 @@
         .filter-tag.active { border-color: var(--primary); color: var(--primary); background: rgba(0,74,173,0.05); font-weight: bold; }
         .filter-tag:hover { color: var(--primary); }
 
-        /* --- 课程卡片 --- */
+        /* --- Карточки курсов --- */
         .course-card {
             background: #fff; border-radius: 12px; overflow: hidden; height: 100%;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.3s;
@@ -94,7 +93,7 @@
         .progress-sm { height: 6px; border-radius: 3px; background: #f0f0f0; margin-top: 10px; }
         .progress-bar-custom { background: var(--primary); border-radius: 3px; }
 
-        /* --- AI 小精灵 --- */
+        /* --- AI Помощник --- */
         .ai-sprite-container {
             position: fixed; bottom: 30px; right: 20px; z-index: 100;
             display: flex; flex-direction: column; align-items: end;
@@ -112,61 +111,32 @@
         }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         @keyframes popIn { from { opacity: 0; transform: scale(0.8) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        /* --- 修复手机端导航栏背景透明问题 --- */
-@media (max-width: 991px) {
-    .navbar-collapse {
-        background: #ffffff; /* 纯白背景 */
-        padding: 20px;       /* 内边距，让文字不贴边 */
-        border-radius: 16px; /* 圆角，更好看 */
-        margin-top: 15px;    /* 和顶部导航栏拉开一点距离 */
-        box-shadow: 0 10px 40px rgba(0,0,0,0.1); /* 加点阴影，更有层次感 */
-        border: 1px solid rgba(0,0,0,0.05); /* 淡淡的边框 */
-    }
-}
-    </style>
-    <script>
-    (function() {
-        var status = localStorage.getItem('yanhe_user_status');
-        var path = window.location.pathname;
-        var page = path.substring(path.lastIndexOf('/') + 1);
 
-        // 如果已登录 (login 或 vip)
-        if (status === 'login' || status === 'vip') {
-
-            // 1. 针对 Culture 页面 (因为有 VIP 特殊版)
-            if (page === 'culture.html') {
-                if (status === 'vip') window.location.href = 'culture_vip.html';
-                else window.location.href = 'culture_login.html';
-            }
-            // 2. 针对其他所有页面 (自动加 _login)
-            // 比如 service.html -> service_login.html
-            else {
-                window.location.href = page.replace('.html', '_login.html');
-            }
+        @media (max-width: 991px) {
+            .navbar-collapse { background: #ffffff; padding: 20px; border-radius: 16px; margin-top: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
         }
-    })();
-</script>
+    </style>
 </head>
 
 <body>
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="index.html">言禾 YanHe</a>
+            <a class="navbar-brand" href="index_ru.html">YanHe</a>
             <button class="navbar-toggler border-0 bg-light rounded-circle p-2" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                 <i class="bi bi-list fs-5"></i>
             </button>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link" href="index.html">首页</a></li>
-                    <li class="nav-item"><a class="nav-link" href="story.html">中国故事</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="education.html">教育云</a></li>
-                    <li class="nav-item"><a class="nav-link" href="service.html">任务大厅</a></li>
-                    <li class="nav-item"><a class="nav-link" href="culture.html">方言地图</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index_ru.html">Главная</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story_ru.html">Истории</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="education_ru.html">Обучение</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service_ru.html">Задания</a></li>
+                    <li class="nav-item"><a class="nav-link" href="culture_ru.html">Карта</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-                    <a href="auto_login.html class="btn btn-outline-secondary rounded-pill btn-sm px-3 fw-bold">登录</a>
-                    <a href="education_en.html" class="btn btn-primary rounded-pill btn-sm fw-bold px-3 shadow-sm border-0" style="background:var(--primary)">English</a>
+                    <a href="login_ru.html" class="btn btn-outline-secondary rounded-pill btn-sm px-3 fw-bold">Вход</a>
+                    <a href="education.html" class="btn btn-primary rounded-pill btn-sm fw-bold px-3 border-0" style="background:var(--primary)">中文</a>
                 </div>
             </div>
         </div>
@@ -176,20 +146,20 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8 mb-3 mb-lg-0">
-                    <h2 class="fw-bold mb-2"><i class="bi bi-lightning-charge-fill text-warning"></i> 记忆能量站</h2>
-                    <p class="mb-0 opacity-75">根据艾宾浩斯曲线，你今天有 <strong class="text-warning">12</strong> 个生词和 <strong class="text-warning">3</strong> 个句型即将遗忘。</p>
+                    <h2 class="fw-bold mb-2"><i class="bi bi-lightning-charge-fill text-warning"></i> Станция памяти</h2>
+                    <p class="mb-0 opacity-75">Согласно кривой забывания, сегодня вам нужно повторить <strong class="text-warning">12</strong> слов и <strong class="text-warning">3</strong> грамматические конструкции.</p>
                 </div>
                 <div class="col-lg-4">
                     <div class="bg-white bg-opacity-10 p-3 rounded-3 border border-white border-opacity-20">
                         <div class="d-flex justify-content-between text-sm mb-1">
-                            <span>当前记忆饱和度</span>
+                            <span>Уровень насыщения памяти</span>
                             <span class="fw-bold text-warning">65%</span>
                         </div>
                         <div class="brain-battery mb-2">
                             <div class="battery-level"></div>
                         </div>
-                        <a href="review.html" class="btn btn-sm btn-light text-primary fw-bold w-100 rounded-pill text-decoration-none">
-                            <i class="bi bi-play-fill"></i> 立即开始复习
+                        <a href="review_ru.html" class="btn btn-sm btn-light text-primary fw-bold w-100 rounded-pill text-decoration-none">
+                            <i class="bi bi-play-fill"></i> Начать повторение
                         </a>
                     </div>
                 </div>
@@ -203,150 +173,110 @@
                 <div class="input-group">
                     <span class="input-group-text bg-white border-end-0 rounded-start-pill ps-3"><i class="bi bi-search text-muted"></i></span>
                     <input type="text" class="form-control border-start-0 rounded-end-pill bg-white shadow-sm search-input"
-                           placeholder="搜索课程 / 教授 / 知识点..."
-                           onkeydown="if(event.keyCode==13) location.href='search_result.html'">
-                    <button class="btn btn-primary rounded-pill ms-2 px-3 fw-bold" onclick="location.href='search_result.html'">搜索</button>
+                           placeholder="Поиск курсов, лекций, тем..."
+                           onkeydown="if(event.keyCode==13) location.href='search_ru.html'">
+                    <button class="btn btn-primary rounded-pill ms-2 px-3 fw-bold" onclick="location.href='search_ru.html'">Найти</button>
                 </div>
             </div>
             <div class="col-lg-8">
                 <div class="d-flex gap-2 overflow-auto pb-2" style="white-space: nowrap;">
-                    <span class="filter-tag active" onclick="toggleFilter(this)">综合排序</span>
-                    <span class="filter-tag" onclick="toggleFilter(this)">HSK等级</span>
-                    <span class="filter-tag" onclick="toggleFilter(this)">商务汉语</span>
-                    <span class="filter-tag" onclick="toggleFilter(this)">中国文化</span>
-                    <span class="filter-tag" onclick="toggleFilter(this)">方言特色 <i class="bi bi-geo-alt-fill text-danger"></i></span>
+                    <span class="filter-tag active" onclick="toggleFilter(this)">Все темы</span>
+                    <span class="filter-tag" onclick="toggleFilter(this)">Уровни HSK</span>
+                    <span class="filter-tag" onclick="toggleFilter(this)">Бизнес-китайский</span>
+                    <span class="filter-tag" onclick="toggleFilter(this)">Культура Китая</span>
+                    <span class="filter-tag" onclick="toggleFilter(this)">Диалекты <i class="bi bi-geo-alt-fill text-danger"></i></span>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="container pb-5">
-        <h5 class="fw-bold mb-4 border-start border-4 border-primary ps-3">为你推荐 (AI Aggregated)</h5>
+        <h5 class="fw-bold mb-4 border-start border-4 border-primary ps-3">Рекомендовано для вас (AI Агрегатор)</h5>
 
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
 
             <div class="col">
-                <div class="course-card" onclick="location.href='course_detail.html'">
+                <div class="course-card" onclick="location.href='course_detail_ru.html'">
                     <div class="card-img-top">
                         <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80" class="w-100 h-100 object-fit-cover">
-                        <span class="source-badge bg-primary"><i class="bi bi-patch-check-fill"></i> 言禾原创</span>
+                        <span class="source-badge bg-primary"><i class="bi bi-patch-check-fill"></i> Оригинал YanHe</span>
                     </div>
                     <div class="course-body">
-                        <div class="course-title">零基础直达HSK 3级：情景对话速成</div>
+                        <div class="course-title">С нуля до HSK 3: Интенсивный разговорный курс</div>
                         <div class="course-meta">
                             <div class="d-flex align-items-center">
                                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Teacher" class="teacher-avatar">
-                                <span>BSU教研组</span>
+                                <span>Методисты BSU</span>
                             </div>
-                            <span class="text-danger fw-bold">Free</span>
+                            <span class="text-danger fw-bold">Бесплатно</span>
                         </div>
                         <div class="progress-sm">
                             <div class="progress-bar-custom" style="width: 40%"></div>
                         </div>
                         <div class="d-flex justify-content-between mt-2" style="font-size:10px; color:#999;">
-                            <span>已学 40%</span>
-                            <span>1.2k人学习</span>
+                            <span>Пройдено 40%</span>
+                            <span>1.2k студентов</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col">
-                <div class="course-card" onclick="location.href='course_detail.html'">
+                <div class="course-card" onclick="location.href='course_detail_ru.html'">
                     <div class="card-img-top">
                         <img src="https://images.unsplash.com/photo-1523730205978-59fd1b2965e3?w=500&q=80" class="w-100 h-100 object-fit-cover">
-                        <span class="source-badge"><i class="bi bi-globe"></i> 来源：中国大学MOOC</span>
+                        <span class="source-badge"><i class="bi bi-globe"></i> Из: MOOC China</span>
                     </div>
                     <div class="course-body">
-                        <div class="course-title">中国古代建筑欣赏与历史文化</div>
+                        <div class="course-title">Древняя архитектура и история Китая</div>
                         <div class="course-meta">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-building me-1"></i>
-                                <span>清华大学</span>
+                                <span>Ун-т Цинхуа</span>
                             </div>
-                            <span class="text-success">评分 4.9</span>
+                            <span class="text-success">Рейтинг 4.9</span>
                         </div>
-                        <button class="btn btn-outline-primary btn-sm w-100 mt-3 rounded-pill" style="font-size:12px;" onclick="event.stopPropagation(); location.href='course_detail.html'">加入学习列表</button>
+                        <button class="btn btn-outline-primary btn-sm w-100 mt-3 rounded-pill" style="font-size:12px;">В учебный план</button>
                     </div>
                 </div>
             </div>
 
             <div class="col">
-                <div class="course-card" onclick="location.href='course_paid.html'">
+                <div class="course-card" onclick="location.href='course_paid_ru.html'">
                     <div class="card-img-top">
                         <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=500&q=80" class="w-100 h-100 object-fit-cover">
-                        <span class="source-badge bg-success"><i class="bi bi-graph-up"></i> 热门</span>
+                        <span class="source-badge bg-success"><i class="bi bi-graph-up"></i> Популярное</span>
                     </div>
                     <div class="course-body">
-                        <div class="course-title">Business Chinese: Email & Negotiation</div>
+                        <div class="course-title">Business Chinese: Переговоры и переписка</div>
                         <div class="course-meta">
                             <div class="d-flex align-items-center">
                                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Biz" class="teacher-avatar">
-                                <span>Prof. Wang</span>
+                                <span>Проф. Ван</span>
                             </div>
                             <span class="text-danger fw-bold">¥ 99</span>
                         </div>
-                        <div class="text-muted mt-2" style="font-size:11px;">适合：B1-B2水平 | 20课时</div>
+                        <div class="text-muted mt-2" style="font-size:11px;">Уровень: B1-B2 | 20 уроков</div>
                     </div>
                 </div>
             </div>
 
             <div class="col">
-                <div class="course-card" onclick="location.href='course_detail.html'">
+                <div class="course-card" onclick="location.href='culture_ru.html'">
                     <div class="card-img-top">
                         <img src="https://images.unsplash.com/photo-1533669955142-6a73332af4db?w=500&q=80" class="w-100 h-100 object-fit-cover">
-                        <span class="source-badge bg-warning text-dark"><i class="bi bi-mic-fill"></i> 方言</span>
+                        <span class="source-badge bg-warning text-dark"><i class="bi bi-mic-fill"></i> Диалект</span>
                     </div>
                     <div class="course-body">
-                        <div class="course-title">四川话入门：从“巴适”开始</div>
+                        <div class="course-title">Введение в сычуаньский диалект: Отдыхаем "Баши"</div>
                         <div class="course-meta">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-geo-alt"></i>
-                                <span>成都/重庆</span>
+                                <span>Чэнду/Чунцин</span>
                             </div>
                             <span><i class="bi bi-people"></i> 8k+</span>
                         </div>
-                        <button class="btn btn-outline-warning text-dark btn-sm w-100 mt-3 rounded-pill" style="font-size:12px;" onclick="event.stopPropagation(); location.href='culture.html'">去地图查看</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="course-card" onclick="location.href='course_play.html'">
-                    <div class="card-img-top">
-                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&q=80" class="w-100 h-100 object-fit-cover">
-                        <span class="source-badge"><i class="bi bi-youtube"></i> 来源：Bilibili</span>
-                    </div>
-                    <div class="course-body">
-                        <div class="course-title">30天练就地道中文口语（搬运自频道X）</div>
-                        <div class="course-meta">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-play-btn me-1"></i>
-                                <span>UP主搬运</span>
-                            </div>
-                            <span class="text-muted">Free</span>
-                        </div>
-                        <button class="btn btn-outline-primary btn-sm w-100 mt-3 rounded-pill" style="font-size:12px;">跳转原视频</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="course-card" onclick="location.href='course_paid.html'">
-                    <div class="card-img-top">
-                        <img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?w=500&q=80" class="w-100 h-100 object-fit-cover">
-                         <span class="source-badge bg-primary"><i class="bi bi-book"></i> 言禾原创</span>
-                    </div>
-                    <div class="course-body">
-                        <div class="course-title">中国当代文学导读：莫言与余华</div>
-                        <div class="course-meta">
-                            <div class="d-flex align-items-center">
-                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lit" class="teacher-avatar">
-                                <span>文学院</span>
-                            </div>
-                            <span class="text-danger fw-bold">¥ 199</span>
-                        </div>
-                         <div class="text-muted mt-2" style="font-size:11px;">含电子书 | 专家精讲</div>
+                        <button class="btn btn-outline-warning text-dark btn-sm w-100 mt-3 rounded-pill" style="font-size:12px;">Смотреть на карте</button>
                     </div>
                 </div>
             </div>
@@ -356,9 +286,9 @@
 
     <div class="ai-sprite-container">
         <div class="sprite-bubble">
-            👋 嘿！看到你对“四川话”感兴趣，要不要我教你两句？
+            👋 Привет! Вижу, ты интересуешься Сычуанем. Хочешь, научу паре фраз?
         </div>
-        <div class="sprite-avatar" onclick="location.href='ai_chat.html'">
+        <div class="sprite-avatar" onclick="location.href='ai_chat_ru.html'">
             <i class="bi bi-robot"></i>
         </div>
     </div>
@@ -368,7 +298,6 @@
         function toggleFilter(el) {
             document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
             el.classList.add('active');
-            // 这里可以添加逻辑：比如 location.href='search_result.html?category=' + el.innerText
         }
     </script>
 </body>

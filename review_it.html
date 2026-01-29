@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ripasso Intelligente - YanHe</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #004aad; --dark: #333; --bg-light: #f8faff; --success: #28a745; --danger: #dc3545; --warning: #ffc107; }
+        body {
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-light);
+            height: 100vh; overflow: hidden; /* Immersivo */
+            display: flex; flex-direction: column;
+        }
+
+        /* Testata Minimal */
+        .review-header {
+            padding: 15px 30px; background: #fff; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+        }
+        .close-btn { color: #999; font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
+        .close-btn:hover { color: var(--dark); transform: rotate(90deg); }
+
+        /* Barra di Progresso */
+        .progress-container { width: 300px; }
+        .progress-custom { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+        .progress-bar-custom { height: 100%; background: var(--success); width: 20%; transition: width 0.5s ease; }
+        .progress-text { font-size: 12px; color: #999; text-align: center; margin-top: 5px; font-weight: bold; }
+
+        /* Area Principale */
+        .review-stage {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            perspective: 1000px; /* Necessario per il flip 3D */
+            padding-bottom: 80px;
+        }
+
+        /* Contenitore Card */
+        .flashcard {
+            width: 100%; max-width: 600px; height: 380px; cursor: pointer;
+            position: relative; transform-style: preserve-3d; transition: transform 0.6s;
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        /* Stile Facce Card */
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 16px; background: #fff; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 1px solid #eee; padding: 40px; text-align: center;
+        }
+
+        /* Fronte (Italiano) */
+        .card-front { z-index: 2; }
+        .word-lg { font-size: 3.5rem; font-weight: 800; color: var(--dark); margin-bottom: 20px; font-family: "Times New Roman", serif; }
+        .hint-text { color: #999; font-size: 14px; }
+
+        /* Retro (Cinese) */
+        .card-back { transform: rotateY(180deg); background: #fdfdfd; }
+        .phonetic { font-size: 1.2rem; color: #666; margin-bottom: 10px; font-style: italic; }
+        .meaning { font-size: 2.5rem; font-weight: 900; color: var(--primary); margin-bottom: 25px; font-family: "PingFang SC", sans-serif; }
+        .example-box { background: #f8f9fa; padding: 15px; border-radius: 8px; width: 100%; text-align: left; border-left: 4px solid var(--primary); }
+        .example-it { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; color: #333; }
+        .example-cn { font-size: 0.9rem; color: #666; }
+
+        /* Barra di Controllo */
+        .control-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 100px;
+            background: #fff; border-top: 1px solid #eee;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.02); z-index: 10;
+        }
+
+        /* Pulsanti Ebbinghaus */
+        .btn-grade {
+            border: none; padding: 0; width: 110px; height: 55px; border-radius: 8px;
+            font-weight: bold; font-size: 15px; color: #fff; transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;
+        }
+        .btn-grade:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+
+        .btn-again { background: #ff6b6b; border-bottom: 4px solid #e03131; }
+        .btn-hard { background: #ff922b; border-bottom: 4px solid #e8590c; }
+        .btn-good { background: #51cf66; border-bottom: 4px solid #2f9e44; }
+        .btn-easy { background: #339af0; border-bottom: 4px solid #1c7ed6; }
+
+        .grade-sub { font-size: 12px; opacity: 0.8; font-weight: normal; }
+
+        /* Stato Iniziale */
+        .grading-actions { display: none; gap: 15px; }
+        .btn-show {
+            background: var(--dark); color: #fff; padding: 15px 80px; border-radius: 50px;
+            font-weight: bold; font-size: 18px; border: none; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: 0.2s;
+        }
+        .btn-show:hover { transform: scale(1.05); }
+
+        /* Suggerimento Tastiera */
+        .kb-hint { position: absolute; bottom: 120px; color: #adb5bd; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+        .key-cap { border: 1px solid #dee2e6; padding: 2px 8px; border-radius: 4px; font-weight: bold; background: #fff; box-shadow: 0 2px 0 #eee; }
+
+        /* Audio */
+        .btn-audio {
+            position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: #ddd;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn-audio:hover { color: var(--primary); }
+
+        /* Schermata Successo */
+        .success-overlay {
+            position: fixed; inset: 0; background: #fff; z-index: 100;
+            display: none; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .success-icon { font-size: 80px; color: var(--success); animation: popIn 0.5s; margin-bottom: 20px; }
+        @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
+    </style>
+</head>
+<body>
+
+    <div class="review-header">
+        <div class="d-flex align-items-center gap-3">
+            <a href="education_it.html" class="close-btn" title="Esci"><i class="bi bi-x-lg"></i></a>
+            <div class="fw-bold text-muted">Ripasso Intelligente</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-custom">
+                <div class="progress-bar-custom" id="progressBar" style="width: 20%"></div>
+            </div>
+            <div class="progress-text" id="progressText">2 / 10</div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 text-warning fw-bold">
+            <i class="bi bi-fire"></i> 5 giorni di fila
+        </div>
+    </div>
+
+    <div class="review-stage">
+
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="card-face card-front">
+                <div class="btn-audio" onclick="event.stopPropagation(); playAudio('it')"><i class="bi bi-volume-up-fill"></i></div>
+                <div class="small text-muted text-uppercase mb-3 fw-bold tracking-wide">Vocabolario Business</div>
+                <div class="word-lg" id="cardFront">Negoziazione</div>
+                <div class="hint-text">Clicca per girare (中文释义)</div>
+            </div>
+
+            <div class="card-face card-back">
+                <div class="btn-audio" onclick="event.stopPropagation(); playAudio('cn')"><i class="bi bi-volume-up-fill"></i></div>
+                <div class="phonetic" id="cardPhonetic">[neɡottsjaˈtsjone]</div>
+                <div class="meaning" id="cardMeaning">谈判 / 协商</div>
+
+                <div class="example-box">
+                    <div class="example-it" id="cardExIt">La negoziazione è andata molto bene.</div>
+                    <div class="example-cn" id="cardExCn">谈判进行得非常顺利。</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kb-hint d-none d-md-flex">
+            Premi <span class="key-cap">Spazio</span> per girare
+        </div>
+
+    </div>
+
+    <div class="control-bar">
+        <button class="btn-show" id="btnShow" onclick="flipCard()">Mostra Risposta</button>
+
+        <div class="grading-actions" id="gradingActions">
+            <button class="btn-grade btn-again" onclick="nextCard('again')">
+                Ancora
+                <span class="grade-sub">1 min</span>
+            </button>
+            <button class="btn-grade btn-hard" onclick="nextCard('hard')">
+                Difficile
+                <span class="grade-sub">2 gg</span>
+            </button>
+            <button class="btn-grade btn-good" onclick="nextCard('good')">
+                Bene
+                <span class="grade-sub">4 gg</span>
+            </button>
+            <button class="btn-grade btn-easy" onclick="nextCard('easy')">
+                Facile
+                <span class="grade-sub">7 gg</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="success-overlay" id="successScreen">
+        <div class="success-icon"><i class="bi bi-check-circle-fill"></i></div>
+        <h2 class="fw-bold mb-2">Sessione Completata!</h2>
+        <p class="text-muted mb-5">Hai ripassato 3 parole oggi. Ottimo lavoro!</p>
+        <a href="education_it.html" class="btn btn-dark rounded-pill px-5 py-3 fw-bold">Torna alla Dashboard</a>
+    </div>
+
+    <script>
+        // 核心数据：意大利语 (Front) -> 中文 (Back)
+        const cards = [
+            {
+                front: "Negoziazione",
+                phonetic: "[neɡottsjaˈtsjone]",
+                meaning: "谈判；协商",
+                exIt: "La negoziazione è andata molto bene.",
+                exCn: "谈判进行得非常顺利。"
+            },
+            {
+                front: "Bilancio", // 替换了 Budget 为更地道的意语词
+                phonetic: "[biˈlantʃo]",
+                meaning: "预算；资产负债表",
+                exIt: "Dobbiamo tagliare il bilancio.",
+                exCn: "我们需要削减预算。"
+            },
+            {
+                front: "Contratto",
+                phonetic: "[konˈtratto]",
+                meaning: "合同；契约",
+                exIt: "Per favore, firma il contratto qui.",
+                exCn: "请在这里签署合同。"
+            }
+        ];
+
+        let currentIndex = 0;
+        let isFlipped = false;
+
+        // 初始化
+        updateCard();
+        updateProgress();
+
+        function flipCard() {
+            const card = document.getElementById('flashcard');
+            const btnShow = document.getElementById('btnShow');
+            const grading = document.getElementById('gradingActions');
+
+            if (!isFlipped) {
+                // 翻转
+                card.classList.add('flipped');
+                isFlipped = true;
+
+                // 切换按钮
+                btnShow.style.display = 'none';
+                grading.style.display = 'flex';
+
+                // 更新提示
+                document.querySelector('.kb-hint').innerHTML = 'Premi <span class="key-cap">1</span> <span class="key-cap">2</span> <span class="key-cap">3</span> <span class="key-cap">4</span> per valutare';
+            }
+        }
+
+        function nextCard(difficulty) {
+            // 这里可以接入后端 API 记录艾宾浩斯数据
+            console.log(`Parola ${currentIndex} valutata: ${difficulty}`);
+
+            currentIndex++;
+
+            if (currentIndex >= cards.length) {
+                // 完成
+                document.getElementById('successScreen').style.display = 'flex';
+                return;
+            }
+
+            // 重置 UI
+            const card = document.getElementById('flashcard');
+            const btnShow = document.getElementById('btnShow');
+            const grading = document.getElementById('gradingActions');
+
+            // 瞬间复位 (无动画)
+            card.style.transition = 'none';
+            card.classList.remove('flipped');
+            setTimeout(() => { card.style.transition = 'transform 0.6s'; }, 50);
+
+            isFlipped = false;
+            btnShow.style.display = 'block';
+            grading.style.display = 'none';
+            document.querySelector('.kb-hint').innerHTML = 'Premi <span class="key-cap">Spazio</span> per girare';
+
+            // 更新进度
+            updateProgress();
+
+            // 延迟加载数据
+            setTimeout(() => {
+                updateCard();
+            }, 150);
+        }
+
+        function updateCard() {
+            const data = cards[currentIndex];
+            document.getElementById('cardFront').innerText = data.front;
+            document.getElementById('cardPhonetic').innerText = data.phonetic;
+            document.getElementById('cardMeaning').innerText = data.meaning;
+            document.getElementById('cardExIt').innerText = data.exIt;
+            document.getElementById('cardExCn').innerText = data.exCn;
+        }
+
+        function updateProgress() {
+            const pct = ((currentIndex) / cards.length) * 100;
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressText').innerText = (currentIndex + 1) + ' / ' + cards.length;
+        }
+
+        function playAudio(lang) {
+            // 简单模拟
+            if(lang === 'it') alert('🔊 Riproduzione audio Italiano...');
+            else alert('🔊 播放中文发音...');
+        }
+
+        // 键盘快捷键监听
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if(!isFlipped) flipCard();
+            }
+            if (isFlipped) {
+                if (e.key === '1') nextCard('again');
+                if (e.key === '2') nextCard('hard');
+                if (e.key === '3') nextCard('good');
+                if (e.key === '4') nextCard('easy');
+            }
+        });
+    </script>
+</body>
+</html>

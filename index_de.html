@@ -1,26 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>言禾 YanHe - 国际中文教育互联平台 (已登录)</title>
+    <title>YanHe - Internationale Plattform für Chinesisch-Bildung</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root { --primary: #004aad; --accent: #ff6b00; --dark-blue: #003366; --bg-light: #f8faff; }
-        body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; padding-top: 70px; background: var(--bg-light); }
-
-        /* --- 手机端导航栏白底修复 --- */
-        @media (max-width: 991px) {
-            .navbar-collapse {
-                background: #ffffff; /* 纯白背景 */
-                padding: 20px;
-                border-radius: 16px;
-                margin-top: 15px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-                border: 1px solid rgba(0,0,0,0.05);
-            }
-        }
+        body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; padding-top: 70px; background: var(--bg-light); }
 
         /* --- 1. 高级感导航栏 --- */
         .navbar-custom {
@@ -36,38 +24,25 @@
         .nav-link:hover { color: var(--primary) !important; background: rgba(0, 74, 173, 0.06); }
         .nav-link.active { color: #fff !important; background: var(--primary); box-shadow: 0 4px 10px rgba(0, 74, 173, 0.3); }
 
-        /* --- 登录后新增样式：用户下拉菜单 --- */
-        .user-avatar {
-            width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--primary); padding: 2px;
-        }
-        .dropdown-menu-custom {
-            border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 15px !important;
-            min-width: 200px; padding: 10px;
-        }
-        .dropdown-menu-custom .dropdown-item {
-            padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #555; transition: 0.2s;
-        }
-        .dropdown-menu-custom .dropdown-item:hover {
-            background: #f0f7ff; color: var(--primary);
-        }
-        .dropdown-menu-custom .dropdown-item i { margin-right: 10px; font-size: 16px; vertical-align: middle; }
-        /* 保持原有样式不变 */
-
         /* --- 2. Hero 区域 (视觉冲击) --- */
         .hero {
             background: linear-gradient(135deg, #f0f7ff 0%, #fff 100%);
             padding: 60px 0 80px; position: relative; overflow: hidden;
         }
+        /* 装饰背景 */
         .hero::before {
             content: ''; position: absolute; top: -50%; right: -20%; width: 800px; height: 800px;
             background: radial-gradient(circle, rgba(0,74,173,0.05) 0%, transparent 70%);
             border-radius: 50%; z-index: 0;
         }
+
         .hero-title {
             font-size: 3rem; line-height: 1.2; font-weight: 900; color: #111; margin-bottom: 20px; position: relative; z-index: 1;
         }
         .hero-title span { color: var(--primary); }
+
         .hero-desc { font-size: 1.1rem; color: #666; margin-bottom: 35px; position: relative; z-index: 1; max-width: 500px; }
+
         .badge-official {
             background: #fff; border: 1px solid #e0e0e0; color: #333;
             padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: bold;
@@ -100,11 +75,13 @@
             font-size: 28px; margin-bottom: 20px; transition: 0.3s;
         }
         .biz-card:hover .biz-icon { transform: scale(1.1) rotate(5deg); }
+
         /* 卡片配色 */
         .card-story .biz-icon { background: #fff0f0; color: #dc3545; }
         .card-edu .biz-icon { background: #eef4ff; color: var(--primary); }
         .card-task .biz-icon { background: #fff8e1; color: #ffc107; }
         .card-map .biz-icon { background: #e8f5e9; color: #198754; }
+
         .biz-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 8px; color: #333; }
         .biz-sub { font-size: 0.9rem; color: #888; line-height: 1.5; }
         .btn-arrow {
@@ -119,80 +96,64 @@
             .stats-bar { padding: 25px 0; }
             .stat-num { font-size: 24px; }
         }
-        /* 入场动画 */
-        .animate-up { animation: fadeInUp 0.8s ease forwards; opacity: 0; transform: translateY(20px); }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        /* --- 修复手机端导航栏背景透明问题 --- */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 16px;
+                margin-top: 15px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                border: 1px solid rgba(0,0,0,0.05);
+            }
+        }
     </style>
+  <script>
+    (function() {
+        var status = localStorage.getItem('yanhe_user_status');
+        var path = window.location.pathname;
+        var page = path.substring(path.lastIndexOf('/') + 1);
 
+        // 如果已登录 (login 或 vip)
+        if (status === 'login' || status === 'vip') {
+            // 针对 Culture 页面
+            if (page === 'culture_de.html') {
+                if (status === 'vip') window.location.href = 'culture_de_vip.html';
+                else window.location.href = 'culture_login_de.html';
+            }
+            // 针对其他所有页面 (自动加 _login)
+            else {
+                // 如果当前页面已经是登录页，则不跳转，防止死循环
+                if (!page.includes('_login')) {
+                    window.location.href = page.replace('.html', '_login.html');
+                }
+            }
+        }
+    })();
+</script>
 </head>
+
 <body>
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="home.html">言禾 YanHe</a>
+            <a class="navbar-brand" href="home_de.html">YanHe</a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <i class="bi bi-list fs-1 text-primary"></i>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-center gap-1">
-                    <li class="nav-item"><a class="nav-link active" href="home.html">首页</a></li>
-                    <li class="nav-item"><a class="nav-link" href="story.html">中国故事</a></li>
-                    <li class="nav-item"><a class="nav-link" href="education.html">教育云</a></li>
-                    <li class="nav-item"><a class="nav-link" href="service.html">任务大厅</a></li>
-                    <li class="nav-item"><a class="nav-link" href="culture.html">方言地图</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="home_de.html">Startseite</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story_de.html">China-Geschichten</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education_de.html">Bildungs-Cloud</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service_de.html">Service-Hub</a></li>
+                    <li class="nav-item"><a class="nav-link" href="culture_de.html">Dialekt-Karte</a></li>
                 </ul>
-
-                <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0 ms-lg-4">
-
-                    <a href="home_en.html" class="btn btn-light rounded-circle shadow-sm border" style="width: 40px; height: 40px; display:flex; align-items:center; justify-content:center;" title="Switch to English">
-                        <span style="font-size:12px; font-weight:bold;">EN</span>
-                    </a>
-
-                    <div class="dropdown">
-                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                 alt="User" class="rounded-circle user-avatar shadow-sm">
-                            <span class="d-none d-md-inline ms-2 fw-bold text-dark">李言禾</span>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom animate-up" style="animation-duration: 0.3s;" aria-labelledby="userDropdown">
-                            <li class="px-3 py-2 border-bottom mb-2">
-                                <div class="fw-bold text-dark">李言禾</div>
-                                <div class="small text-muted">学生认证用户</div>
-                            </li>
-
-                            <li><a class="dropdown-item" href="index_login.html">
-                                <i class="bi bi-person-badge"></i> 个人主页 (Profile)
-                            </a></li>
-
-                            <li><a class="dropdown-item" href="index_login.html">
-                                <i class="bi bi-mortarboard"></i> 我的课程 (Learning)
-                            </a></li>
-
-                            <li><a class="dropdown-item" href="index_login.html">
-                                <i class="bi bi-star"></i> 收藏的帖子
-                            </a></li>
-
-                            <li><a class="dropdown-item" href="index_login.html">
-                                <i class="bi bi-heart"></i> 点赞的内容
-                            </a></li>
-
-                             <li><a class="dropdown-item" href="index_login.html">
-                                <i class="bi bi-people"></i> 我的关注
-                            </a></li>
-
-                            <li><hr class="dropdown-divider"></li>
-
-                            <li><a class="dropdown-item" href="index_login.html">
-                                <i class="bi bi-gear"></i> 编辑资料 / 设置
-                            </a></li>
-                            <li><a class="dropdown-item text-danger" href="index.html">
-                                <i class="bi bi-box-arrow-right"></i> 退出登录
-                            </a></li>
-                        </ul>
-                    </div>
+                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0 ms-lg-4">
+                    <a href="index_login.html" class="btn btn-outline-secondary rounded-pill btn-sm px-4 fw-bold">Anmelden</a>
+                    <a href="home_en.html" class="btn btn-primary rounded-pill btn-sm fw-bold px-3 shadow-sm border-0" style="background:var(--primary)">English</a>
                 </div>
-                </div>
+            </div>
         </div>
     </nav>
 
@@ -201,31 +162,31 @@
             <div class="row align-items-center">
                 <div class="col-lg-6">
                     <div class="mb-4 animate-up">
-                        <span class="badge-official"><i class="bi bi-patch-check-fill text-primary"></i> 教育部产学研试点</span>
-                        <span class="badge-official"><i class="bi bi-heart-fill text-danger"></i> 乡村振兴重点项目</span>
+                        <span class="badge-official"><i class="bi bi-patch-check-fill text-primary"></i> Bildungsministerium Pilotprojekt</span>
+                        <span class="badge-official"><i class="bi bi-heart-fill text-danger"></i> Ländliche Revitalisierung</span>
                     </div>
 
                     <h1 class="hero-title animate-up" style="animation-delay: 0.1s;">
-                        连接全球语言<br>共享<span>中华智慧</span>
+                        Sprachen verbinden<br><span>Weisheit</span> teilen
                     </h1>
 
                     <p class="hero-desc animate-up" style="animation-delay: 0.2s;">
-                        基于 AI Agent 与 GIS 技术的国际中文教育平台。<br>
-                        聚合全网优质课程，提供专家级众包翻译服务。
+                        Internationale Plattform für Chinesisch-Bildung basierend auf KI-Agenten und GIS-Technologie.<br>
+                        Wir bündeln hochwertige Online-Kurse und bieten Crowdsourcing-Übersetzungen auf Expertenniveau.
                     </p>
 
                     <div class="d-flex gap-3 mb-5 animate-up" style="animation-delay: 0.3s;">
-                        <a href="service.html" class="btn btn-primary rounded-pill px-4 py-3 fw-bold shadow-lg d-flex align-items-center gap-2">
-                            <i class="bi bi-briefcase-fill"></i> 发布/接取任务
+                        <a href="service_de.html" class="btn btn-primary rounded-pill px-4 py-3 fw-bold shadow-lg d-flex align-items-center gap-2">
+                            <i class="bi bi-briefcase-fill"></i> Aufgabe starten
                         </a>
-                        <a href="education.html" class="btn btn-outline-dark rounded-pill px-4 py-3 fw-bold d-flex align-items-center gap-2">
-                            <i class="bi bi-mortarboard-fill"></i> 继续学习
+                        <a href="education_de.html" class="btn btn-outline-dark rounded-pill px-4 py-3 fw-bold d-flex align-items-center gap-2">
+                            <i class="bi bi-mortarboard-fill"></i> Kostenlos lernen
                         </a>
                     </div>
 
                     <div class="small text-muted border-top pt-3 d-flex flex-wrap gap-4 align-items-center animate-up" style="animation-delay: 0.4s;">
-                        <span><i class="bi bi-shield-lock-fill text-success"></i> 专利号：ZL2025100XXXX</span>
-                        <span><i class="bi bi-code-slash text-primary"></i> 软著号：2025SRXXXX</span>
+                        <span><i class="bi bi-shield-lock-fill text-success"></i> Patent-Nr.: ZL2025100XXXX</span>
+                        <span><i class="bi bi-code-slash text-primary"></i> Software-Nr.: 2025SRXXXX</span>
                     </div>
                 </div>
 
@@ -240,19 +201,19 @@
                 <div class="row text-center gy-4 gx-0">
                     <div class="col-6 col-md-3 border-end border-white border-opacity-25">
                         <span class="stat-num counter" data-target="28">0</span>
-                        <span class="stat-desc">覆盖国家/地区</span>
+                        <span class="stat-desc">Länder & Regionen</span>
                     </div>
                     <div class="col-6 col-md-3 border-end-md border-white border-opacity-25">
                         <span class="stat-num counter" data-target="12000">0</span>
-                        <span class="stat-desc">入驻语言专家</span>
+                        <span class="stat-desc">Sprachexperten</span>
                     </div>
                     <div class="col-6 col-md-3 border-end border-white border-opacity-25">
                         <span class="stat-num">¥<span class="counter" data-target="86000">0</span></span>
-                        <span class="stat-desc">人均增收 (元)</span>
+                        <span class="stat-desc">Ø Einkommensplus</span>
                     </div>
                     <div class="col-6 col-md-3">
                         <span class="stat-num counter" data-target="5320">0</span>
-                        <span class="stat-desc">服务贫困学生</span>
+                        <span class="stat-desc">Unterstützte Schüler</span>
                     </div>
                 </div>
             </div>
@@ -263,37 +224,37 @@
         <div class="row g-4">
 
             <div class="col-md-6 col-lg-3">
-                <a href="story.html" class="biz-card card-story">
+                <a href="story_de.html" class="biz-card card-story">
                     <div class="biz-icon"><i class="bi bi-camera-reels"></i></div>
-                    <div class="biz-title">中国故事</div>
-                    <div class="biz-sub">仿小红书社区，沉浸式了解真实中国文化。</div>
+                    <div class="biz-title">China-Geschichten</div>
+                    <div class="biz-sub">Xiaohongshu-Stil Community: Eintauchen in die echte Kultur.</div>
                     <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
                 </a>
             </div>
 
             <div class="col-md-6 col-lg-3">
-                <a href="education.html" class="biz-card card-edu">
+                <a href="education_de.html" class="biz-card card-edu">
                     <div class="biz-icon"><i class="bi bi-mortarboard"></i></div>
-                    <div class="biz-title">智慧教育云</div>
-                    <div class="biz-sub">AI 辅助教学，结合艾宾浩斯记忆法。</div>
+                    <div class="biz-title">Bildungs-Cloud</div>
+                    <div class="biz-sub">KI-gestützter Unterricht mit der Ebbinghaus-Methode.</div>
                     <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
                 </a>
             </div>
 
             <div class="col-md-6 col-lg-3">
-                <a href="service.html" class="biz-card card-task">
+                <a href="service_de.html" class="biz-card card-task">
                     <div class="biz-icon"><i class="bi bi-briefcase"></i></div>
-                    <div class="biz-title">任务大厅</div>
-                    <div class="biz-sub">双端登录系统，连接企业需求与高校人才。</div>
+                    <div class="biz-title">Service-Hub</div>
+                    <div class="biz-sub">Verbindet Unternehmensbedarf mit Hochschultalenten.</div>
                     <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
                 </a>
             </div>
 
             <div class="col-md-6 col-lg-3">
-                <a href="culture.html" class="biz-card card-map">
+                <a href="culture_de.html" class="biz-card card-map">
                     <div class="biz-icon"><i class="bi bi-map"></i></div>
-                    <div class="biz-title">方言地图 Pro</div>
-                    <div class="biz-sub">GIS 可视化技术，抢救与保护方言文化。</div>
+                    <div class="biz-title">Dialekt-Karte Pro</div>
+                    <div class="biz-sub">GIS-Technologie zur Rettung und zum Schutz der Dialekte.</div>
                     <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
                 </a>
             </div>
@@ -303,34 +264,41 @@
 
     <footer class="bg-dark text-white py-4 mt-auto text-center small">
         <div class="container">
-            <p class="mb-1 fw-bold">言禾 YanHe International Education © 2026</p>
+            <p class="mb-1 fw-bold">YanHe International Education © 2026</p>
             <div class="text-white-50">
-                京ICP备12345678号 | 2026“挑战杯”参赛作品
+                ICP-Lizenz 12345678 | 2026 "Challenge Cup" Beitrag
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        // 数字滚动特效
+        // 数字滚动特效 (Counter Animation)
         document.addEventListener("DOMContentLoaded", () => {
             const counters = document.querySelectorAll('.counter');
+
             counters.forEach(counter => {
                 const target = +counter.getAttribute('data-target');
-                const duration = 2000;
+                const duration = 2000; // 动画时长 2秒
                 const increment = target / (duration / 16);
+
                 const updateCounter = () => {
                     const c = +counter.innerText;
                     if(c < target) {
                         counter.innerText = Math.ceil(c + increment);
                         requestAnimationFrame(updateCounter);
                     } else {
-                        counter.innerText = target.toLocaleString();
+                        counter.innerText = target.toLocaleString(); // 添加千位分隔符
                     }
                 };
                 updateCounter();
             });
         });
     </script>
+    <style>
+        /* 简单的入场动画 */
+        .animate-up { animation: fadeInUp 0.8s ease forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
 </body>
 </html>

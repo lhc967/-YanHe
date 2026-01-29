@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YanHe ID — Единая авторизация</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f0f7ff; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-light); height: 100vh; overflow: hidden; margin: 0;
+        }
+
+        /* --- Навигация --- */
+        .navbar-custom {
+            position: absolute; top: 0; left: 0; width: 100%; z-index: 100;
+            padding: 20px 40px; background: transparent; pointer-events: none;
+        }
+        .navbar-custom a { pointer-events: auto; }
+        .navbar-brand {
+            font-weight: 900; font-size: 1.6rem;
+            background: linear-gradient(135deg, #004aad 0%, #0078ff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .back-link {
+            text-decoration: none; color: #666; font-weight: 600; font-size: 14px;
+            display: flex; align-items: center; gap: 5px; transition: 0.3s;
+            background: rgba(255,255,255,0.8); padding: 8px 16px; border-radius: 20px; backdrop-filter: blur(5px);
+        }
+
+        /* --- Сплит-контейнер --- */
+        .split-container { display: flex; height: 100%; }
+
+        /* --- Левая часть: Брендинг --- */
+        .brand-section {
+            flex: 1.2; background: linear-gradient(135deg, #004aad 0%, #002a5c 100%);
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+            justify-content: center; padding: 0 80px; color: #fff;
+            transition: all 0.5s ease;
+        }
+        .brand-section.individual-mode {
+            background: linear-gradient(135deg, #ff6b00 0%, #cc5500 100%);
+        }
+        .brand-content { position: relative; z-index: 2; transition: all 0.5s ease; }
+
+        .brand-circle {
+            position: absolute; border-radius: 50%; background: rgba(255,255,255,0.05);
+            animation: float 8s infinite ease-in-out; pointer-events: none;
+        }
+        @keyframes float { 0%,100%{transform:translate(0,0);} 50%{transform:translate(20px,-20px);} }
+
+        /* --- Правая часть: Формы --- */
+        .form-section {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            background: #fff; position: relative; padding: 20px;
+        }
+        .auth-card { width: 100%; max-width: 420px; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Переключатель ролей */
+        .role-pills { background: #f1f3f5; padding: 5px; border-radius: 12px; display: flex; margin-bottom: 30px; }
+        .role-item {
+            flex: 1; text-align: center; padding: 10px; font-size: 14px; font-weight: 700;
+            color: #666; cursor: pointer; border-radius: 8px; transition: 0.3s;
+        }
+        .role-item.active { background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .role-item.active.individual { color: var(--accent); }
+
+        .form-floating > .form-control { border-radius: 12px; border: 1px solid #eee; background: #f8faff; }
+        .btn-submit {
+            background: var(--primary); border: none; height: 48px; font-size: 16px; font-weight: 700;
+            border-radius: 12px; width: 100%; color: #fff; margin-top: 20px; transition: 0.3s;
+        }
+        .btn-submit.individual-btn { background: var(--accent); }
+        .switch-link { color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: none; }
+        .switch-link.individual-link { color: var(--accent); }
+        .view-hidden { display: none !important; }
+
+        @media (max-width: 992px) { .brand-section { display: none; } .form-section { background: #f8faff; } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar-custom d-flex justify-content-between align-items-center">
+        <a class="navbar-brand" href="index_ru.html">YanHe</a>
+        <a href="index_ru.html" class="back-link"><i class="bi bi-house-door-fill"></i> На главную</a>
+    </nav>
+
+    <div class="split-container">
+        <div class="brand-section" id="brandSection">
+            <div class="brand-circle" style="width: 400px; height: 400px; top: -100px; right: -100px;"></div>
+            <div class="brand-circle" style="width: 200px; height: 200px; bottom: 50px; left: 50px;"></div>
+
+            <div class="brand-content" id="brandTextEnterprise">
+                <div class="mb-3"><i class="bi bi-building fs-1 text-white opacity-50"></i></div>
+                <h1 class="display-5 fw-bold mb-3">Доступ к мировым<br>экспертам</h1>
+                <p class="h5 fw-light opacity-75 mb-4">Вступайте в экосистему YanHe для бизнеса. Публикуйте задачи и находите лучших лингвистов.</p>
+            </div>
+
+            <div class="brand-content view-hidden" id="brandTextIndividual">
+                <div class="mb-3"><i class="bi bi-mortarboard fs-1 text-white opacity-50"></i></div>
+                <h1 class="display-5 fw-bold mb-3">Монетизируйте<br>свои знания</h1>
+                <p class="h5 fw-light opacity-75 mb-4">Эксклюзивная платформа для студентов и преподавателей. Сделайте ваш перевод ценным.</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="auth-card">
+                <div class="role-pills">
+                    <div class="role-item active" id="tabEnterprise" onclick="switchRole('enterprise')">
+                        <i class="bi bi-briefcase me-1"></i> Бизнес
+                    </div>
+                    <div class="role-item" id="tabIndividual" onclick="switchRole('individual')">
+                        <i class="bi bi-person me-1"></i> Студент / Автор
+                    </div>
+                </div>
+
+                <div id="viewLogin">
+                    <div class="mb-4">
+                        <h2 class="fw-bold h3 mb-1">С возвращением</h2>
+                        <p class="text-muted small" id="loginSubtitle">Войдите в бизнес-кабинет YanHe</p>
+                    </div>
+
+                    <form>
+                        <div id="fieldsLoginEnterprise">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" placeholder="ID">
+                                <label>ИНН / Корпоративный Email</label>
+                            </div>
+                        </div>
+                        <div id="fieldsLoginIndividual" class="view-hidden">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" placeholder="Phone">
+                                <label>Телефон / Номер студенческого</label>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" placeholder="Password">
+                            <label>Пароль</label>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-4 small">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rememberMe">
+                                <label class="form-check-label text-muted" for="rememberMe">Запомнить меня</label>
+                            </div>
+                            <a href="#" class="text-decoration-none text-muted">Забыли пароль?</a>
+                        </div>
+                        <button type="button" class="btn-submit" id="btnLogin" onclick="handleLogin()">Войти в систему</button>
+                    </form>
+
+                    <div class="auth-footer mt-4 text-center">
+                        <span class="text-muted">Нет аккаунта?</span>
+                        <span class="switch-link" id="linkToReg" onclick="toggleView('register')">Зарегистрироваться</span>
+                    </div>
+                </div>
+
+                <div id="viewRegister" class="view-hidden">
+                    <div class="mb-4">
+                        <h2 class="fw-bold h3 mb-1">Регистрация</h2>
+                        <p class="text-muted small" id="regSubtitle">Станьте частью сообщества YanHe</p>
+                    </div>
+                    <form>
+                        <div id="fieldsRegEnterprise">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" placeholder="Name">
+                                <label>Название компании</label>
+                            </div>
+                        </div>
+                        <div id="fieldsRegIndividual" class="view-hidden">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" placeholder="Uni">
+                                <label>Ваш ВУЗ</label>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" placeholder="Email">
+                            <label>Email / Телефон</label>
+                        </div>
+                        <button type="button" class="btn-submit" onclick="handleRegister()">Создать аккаунт</button>
+                    </form>
+                    <div class="auth-footer mt-4 text-center">
+                        <span class="text-muted">Уже есть аккаунт?</span>
+                        <span class="switch-link" id="linkToLogin" onclick="toggleView('login')">Войти</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'enterprise';
+        let currentView = 'login';
+
+        function switchRole(role) {
+            currentRole = role;
+            document.querySelectorAll('.role-item').forEach(el => el.classList.remove('active', 'individual'));
+            document.getElementById('tab' + (role.charAt(0).toUpperCase() + role.slice(1))).classList.add('active');
+            if(role === 'individual') document.getElementById('tabIndividual').classList.add('individual');
+
+            const brandSec = document.getElementById('brandSection');
+            const txtEnt = document.getElementById('brandTextEnterprise');
+            const txtInd = document.getElementById('brandTextIndividual');
+
+            if (role === 'individual') {
+                brandSec.classList.add('individual-mode');
+                txtEnt.classList.add('view-hidden');
+                txtInd.classList.remove('view-hidden');
+            } else {
+                brandSec.classList.remove('individual-mode');
+                txtEnt.classList.remove('view-hidden');
+                txtInd.classList.add('view-hidden');
+            }
+            updateFormVisibility();
+        }
+
+        function toggleView(view) {
+            currentView = view;
+            document.getElementById('viewLogin').classList.toggle('view-hidden', view === 'register');
+            document.getElementById('viewRegister').classList.toggle('view-hidden', view === 'login');
+            updateFormVisibility();
+        }
+
+        function updateFormVisibility() {
+            const isInd = currentRole === 'individual';
+            document.querySelectorAll('.btn-submit').forEach(btn => btn.className = 'btn-submit ' + (isInd ? 'individual-btn' : ''));
+            document.querySelectorAll('.switch-link').forEach(link => link.className = 'switch-link ' + (isInd ? 'individual-link' : ''));
+
+            if (currentView === 'login') {
+                document.getElementById('loginSubtitle').innerText = isInd ? 'Для студентов, преподавателей и авторов' : 'Используйте бизнес-аккаунт для работы';
+                document.getElementById('fieldsLoginEnterprise').classList.toggle('view-hidden', isInd);
+                document.getElementById('fieldsLoginIndividual').classList.toggle('view-hidden', !isInd);
+            } else {
+                document.getElementById('regSubtitle').innerText = isInd ? 'Присоединяйтесь к базе талантов' : 'Зарегистрируйте компанию для публикации задач';
+                document.getElementById('fieldsRegEnterprise').classList.toggle('view-hidden', isInd);
+                document.getElementById('fieldsRegIndividual').classList.toggle('view-hidden', !isInd);
+            }
+        }
+
+        function handleLogin() {
+            const btn = document.getElementById('btnLogin');
+            btn.innerText = 'Проверка...';
+            btn.disabled = true;
+            setTimeout(() => {
+                localStorage.setItem('yanhe_user_status', 'login');
+                window.location.href = "index_login_ru.html";
+            }, 800);
+        }
+
+        function handleRegister() {
+            alert('Заявка на регистрацию отправлена!\nПроверьте вашу почту для подтверждения.');
+            toggleView('login');
+        }
+    </script>
+</body>
+</html>

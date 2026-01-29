@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - YanHe</title>
+    <title>Mein Profil - YanHe</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -105,22 +105,22 @@
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="home_en.html">YanHe</a>
+            <a class="navbar-brand" href="home_de.html">YanHe</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="education_en.html">Courses</a></li>
-                    <li class="nav-item"><a class="nav-link" href="service_en.html">Task Hub</a></li>
-                    <li class="nav-item"><a class="nav-link" href="story_en.html">Community</a></li>
-                    <li class="nav-item"><a class="nav-link" href="culture_en.html">Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education_de.html">Bildung</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service_de.html">Marktplatz</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story_de.html">Geschichten</a></li>
+                    <li class="nav-item"><a class="nav-link" href="culture_de.html">Karte</a></li>
                 </ul>
             </div>
             <div class="dropdown">
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="nav-avatar dropdown-toggle" id="navAvatarImg" data-bs-toggle="dropdown">
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow mt-2">
                     <li><h6 class="dropdown-header">Felix Schneider</h6></li>
-                    <li><a class="dropdown-item" href="auth.profile_en.html"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                    <li><a class="dropdown-item" href="auth.profile_de.html"><i class="bi bi-person me-2"></i>Mein Profil</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="home_en.html">Log Out</a></li>
+                    <li><a class="dropdown-item text-danger" href="home_de.html">Abmelden</a></li>
                 </ul>
             </div>
         </div>
@@ -140,58 +140,58 @@
                     <span class="badge bg-warning text-dark align-middle" style="font-size:0.7rem;">Lv.5</span>
                 </div>
                 <div class="stats-box">
-                    <div class="stat-item">128 <span>Following</span></div>
-                    <div class="stat-item">3.5k <span>Followers</span></div>
-                    <div class="stat-item">58 <span>Collections</span></div>
+                    <div class="stat-item">128 <span>Gefolgt</span></div>
+                    <div class="stat-item">3.5k <span>Follower</span></div>
+                    <div class="stat-item">58 <span>Sammlungen</span></div>
                 </div>
-                <div class="user-bio" id="displayBio">Looking for Business Chinese partners. Currently in Shanghai. 📍</div>
+                <div class="user-bio" id="displayBio">Suche Partner für Business-Chinesisch. Derzeit in Shanghai. 📍</div>
             </div>
-            <button class="btn-edit" onclick="openEditModal()">Edit Profile</button>
+            <button class="btn-edit" onclick="openEditModal()">Profil bearbeiten</button>
         </div>
 
         <div class="profile-tabs">
-            <div class="tab-item active" onclick="switchTab('learning', this)">Learning</div>
-            <div class="tab-item" onclick="switchTab('posts', this)">My Posts</div>
-            <div class="tab-item" onclick="switchTab('collections', this)">Collections</div>
+            <div class="tab-item active" onclick="switchTab('learning', this)">Lernen</div>
+            <div class="tab-item" onclick="switchTab('posts', this)">Meine Beiträge</div>
+            <div class="tab-item" onclick="switchTab('collections', this)">Sammlungen</div>
         </div>
     </div>
 
     <div class="content-area">
 
         <div id="tab-learning" class="tab-content-section">
-            <h5 class="fw-bold mb-3">Continue Learning</h5>
+            <h5 class="fw-bold mb-3">Weiterlernen</h5>
 
-            <a href="course_detail_en.html" class="course-progress-card">
+            <a href="course_detail_de.html" class="course-progress-card">
                 <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300" class="course-thumb">
                 <div class="flex-fill">
                     <div class="d-flex justify-content-between mb-1">
-                        <div class="fw-bold">Business Chinese: Negotiation</div>
+                        <div class="fw-bold">Business Chinesisch: Verhandlung</div>
                         <span class="text-primary fw-bold">75%</span>
                     </div>
                     <div class="progress mb-2" style="height: 6px;">
                         <div class="progress-bar" style="width: 75%"></div>
                     </div>
-                    <div class="small text-muted">Next: Pricing Strategy • <span class="text-primary fw-bold">Resume</span></div>
+                    <div class="small text-muted">Nächste: Preisstrategie • <span class="text-primary fw-bold">Fortsetzen</span></div>
                 </div>
             </a>
 
-            <a href="review_en.html" class="course-progress-card">
+            <a href="review_de.html" class="course-progress-card">
                 <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?w=300" class="course-thumb">
                 <div class="flex-fill">
                     <div class="d-flex justify-content-between mb-1">
-                        <div class="fw-bold">Daily Vocabulary Review</div>
+                        <div class="fw-bold">Tägliche Vokabelwiederholung</div>
                         <span class="text-success fw-bold">30%</span>
                     </div>
                     <div class="progress mb-2" style="height: 6px;">
                         <div class="progress-bar bg-success" style="width: 30%"></div>
                     </div>
-                    <div class="small text-muted">12 words to review • <span class="text-success fw-bold">Start</span></div>
+                    <div class="small text-muted">12 Wörter zu wiederholen • <span class="text-success fw-bold">Starten</span></div>
                 </div>
             </a>
         </div>
 
         <div id="tab-posts" class="tab-content-section d-none">
-            <h5 class="fw-bold mb-3">My Video Posts</h5>
+            <h5 class="fw-bold mb-3">Meine Video-Beiträge</h5>
             <div class="video-grid">
                 <div class="video-card" onclick="openPostModal('Shanghai Trip 🏙️', 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600')">
                     <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=400" style="width:100%;height:100%;object-fit:cover;">
@@ -200,10 +200,10 @@
                         <small><i class="bi bi-play-fill"></i> 12.5k</small>
                     </div>
                 </div>
-                <div class="video-card" onclick="openPostModal('Spicy Food Challenge 🌶️', 'https://images.unsplash.com/photo-1563245372-f21720e38c4d?w=600')">
+                <div class="video-card" onclick="openPostModal('Scharfes Essen Challenge 🌶️', 'https://images.unsplash.com/photo-1563245372-f21720e38c4d?w=600')">
                     <img src="https://images.unsplash.com/photo-1563245372-f21720e38c4d?w=400" style="width:100%;height:100%;object-fit:cover;">
                     <div class="video-overlay">
-                        <div class="fw-bold mb-1">Spicy Food Challenge 🌶️</div>
+                        <div class="fw-bold mb-1">Scharfes Essen Challenge 🌶️</div>
                         <small><i class="bi bi-play-fill"></i> 8.2k</small>
                     </div>
                 </div>
@@ -211,20 +211,20 @@
         </div>
 
         <div id="tab-collections" class="tab-content-section d-none">
-            <h5 class="fw-bold mb-3">Saved Items</h5>
+            <h5 class="fw-bold mb-3">Gespeicherte Inhalte</h5>
             <div class="collection-grid">
-                <div class="collection-card" onclick="openPostModal('Traditional Architecture', 'https://images.unsplash.com/photo-1523730205978-59fd1b2965e3?w=600')">
+                <div class="collection-card" onclick="openPostModal('Traditionelle Architektur', 'https://images.unsplash.com/photo-1523730205978-59fd1b2965e3?w=600')">
                     <img src="https://images.unsplash.com/photo-1523730205978-59fd1b2965e3?w=400" class="collection-img">
                     <div class="collection-body">
-                        <div class="fw-bold">Traditional Architecture</div>
-                        <div class="small text-muted">From Community</div>
+                        <div class="fw-bold">Traditionelle Architektur</div>
+                        <div class="small text-muted">Aus der Community</div>
                     </div>
                 </div>
-                <div class="collection-card" onclick="openPostModal('Modern Art 798', 'https://images.unsplash.com/photo-1543165365-07232fe12224?w=600')">
+                <div class="collection-card" onclick="openPostModal('Moderne Kunst 798', 'https://images.unsplash.com/photo-1543165365-07232fe12224?w=600')">
                     <img src="https://images.unsplash.com/photo-1543165365-07232fe12224?w=400" class="collection-img">
                     <div class="collection-body">
-                        <div class="fw-bold">Modern Art 798</div>
-                        <div class="small text-muted">From Community</div>
+                        <div class="fw-bold">Moderne Kunst 798</div>
+                        <div class="small text-muted">Aus der Community</div>
                     </div>
                 </div>
             </div>
@@ -236,7 +236,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Edit Profile</h5>
+                    <h5 class="modal-title fw-bold">Profil bearbeiten</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -245,22 +245,22 @@
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" id="editAvatarPreview" width="80" class="rounded-circle mb-2 border">
                             <br>
                             <button type="button" class="btn btn-sm btn-outline-primary rounded-pill mt-2" onclick="randomizeAvatar()">
-                                <i class="bi bi-shuffle"></i> Randomize Avatar
+                                <i class="bi bi-shuffle"></i> Avatar zufällig
                             </button>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Display Name</label>
+                        <label class="form-label small fw-bold">Anzeigename</label>
                         <input type="text" class="form-control" id="inputName" value="Felix Schneider">
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold">Bio</label>
-                        <textarea class="form-control" id="inputBio" rows="3">Looking for Business Chinese partners. Currently in Shanghai. 📍</textarea>
+                        <textarea class="form-control" id="inputBio" rows="3">Suche Partner für Business-Chinesisch. Derzeit in Shanghai. 📍</textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                    <button type="button" class="btn btn-primary" onclick="saveProfile()">Änderungen speichern</button>
                 </div>
             </div>
         </div>
@@ -282,11 +282,11 @@
                                 </div>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <h5 class="fw-bold mb-3" id="postTitle">Title</h5>
-                            <p class="small text-muted mb-4">Posted just now</p>
+                            <h5 class="fw-bold mb-3" id="postTitle">Titel</h5>
+                            <p class="small text-muted mb-4">Gerade eben gepostet</p>
                             <hr>
                             <div class="mt-auto">
-                                <input type="text" class="form-control" placeholder="Write a comment...">
+                                <input type="text" class="form-control" placeholder="Kommentar schreiben...">
                             </div>
                         </div>
                     </div>
@@ -299,50 +299,50 @@
     <script>
         let currentAvatarSeed = 'Felix';
 
-        // 1. Tab Switching Logic
+        // 1. Tab-Umschaltlogik
         function switchTab(tabId, el) {
-            // Hide all content
+            // Alle Inhalte ausblenden
             document.querySelectorAll('.tab-content-section').forEach(d => d.classList.add('d-none'));
-            // Show selected content
+            // Ausgewählten Inhalt anzeigen
             document.getElementById('tab-' + tabId).classList.remove('d-none');
-            // Update active button state
+            // Aktiven Button-Status aktualisieren
             document.querySelectorAll('.tab-item').forEach(d => d.classList.remove('active'));
             el.classList.add('active');
         }
 
-        // 2. Open Edit Modal
+        // 2. Bearbeiten-Modal öffnen
         function openEditModal() {
             var myModal = new bootstrap.Modal(document.getElementById('editModal'));
             myModal.show();
         }
 
-        // 3. Randomize Avatar in Modal
+        // 3. Avatar im Modal zufällig ändern
         function randomizeAvatar() {
             const seeds = ['Felix', 'Max', 'Luna', 'Zoe', 'Jack', 'Leo', 'Bella'];
             currentAvatarSeed = seeds[Math.floor(Math.random() * seeds.length)];
             document.getElementById('editAvatarPreview').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentAvatarSeed}`;
         }
 
-        // 4. Save Profile Changes (Updates the page instantly)
+        // 4. Profiländerungen speichern (aktualisiert die Seite sofort)
         function saveProfile() {
-            // Update Text
+            // Text aktualisieren
             const name = document.getElementById('inputName').value;
             const bio = document.getElementById('inputBio').value;
             document.getElementById('displayName').innerText = name;
             document.getElementById('displayBio').innerText = bio;
 
-            // Update Avatars (Header + Navbar)
+            // Avatare aktualisieren (Header + Navbar)
             const newSrc = `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentAvatarSeed}`;
             document.getElementById('headerAvatar').src = newSrc;
             document.getElementById('navAvatarImg').src = newSrc;
 
-            // Close Modal
+            // Modal schließen
             const modalEl = document.getElementById('editModal');
             const modal = bootstrap.Modal.getInstance(modalEl);
             modal.hide();
         }
 
-        // 5. Open Post/Collection Detail
+        // 5. Post/Sammlungs-Details öffnen
         function openPostModal(title, imgSrc) {
             document.getElementById('postTitle').innerText = title;
             document.getElementById('postImage').src = imgSrc;

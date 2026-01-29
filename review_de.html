@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smarte Wiederholung - YanHe</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #004aad; --dark: #333; --bg-light: #f8faff; --success: #28a745; --danger: #dc3545; --warning: #ffc107; }
+        body {
+            font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background: var(--bg-light);
+            height: 100vh; overflow: hidden; /* Immersiv, kein Scrollen */
+            display: flex; flex-direction: column;
+        }
+
+        /* Minimaler Header */
+        .review-header {
+            padding: 15px 30px; background: #fff; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+        }
+        .close-btn { color: #999; font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
+        .close-btn:hover { color: var(--dark); transform: rotate(90deg); }
+
+        /* Fortschrittsbalken */
+        .progress-container { width: 300px; }
+        .progress-custom { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+        .progress-bar-custom { height: 100%; background: var(--success); width: 20%; transition: width 0.5s ease; }
+        .progress-text { font-size: 12px; color: #999; text-align: center; margin-top: 5px; font-weight: bold; }
+
+        /* Hauptbühne */
+        .review-stage {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            perspective: 1000px; /* Notwendig für 3D-Flip */
+            padding-bottom: 80px; /* Platz für Footer */
+        }
+
+        /* Kartencontainer */
+        .flashcard {
+            width: 100%; max-width: 600px; height: 400px; cursor: pointer;
+            position: relative; transform-style: preserve-3d; transition: transform 0.6s;
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        /* Kartenseiten allgemein */
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 16px; background: #fff; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 1px solid #eee; padding: 40px; text-align: center;
+        }
+
+        /* Vorderseite (Chinesisch) */
+        .card-front { z-index: 2; }
+        .hanzi-lg { font-size: 4rem; font-weight: 800; color: var(--dark); margin-bottom: 20px; font-family: "KaiTi", "STKaiti", serif; } /* 使用楷体增强中文感 */
+        .hint-text { color: #999; font-size: 14px; }
+
+        /* Rückseite (Deutsch + Pinyin) */
+        .card-back { transform: rotateY(180deg); background: #fdfdfd; }
+        .pinyin { font-size: 1.4rem; color: #666; margin-bottom: 5px; font-weight: 500; font-family: Arial, sans-serif; }
+        .meaning { font-size: 1.8rem; font-weight: 900; color: var(--primary); margin-bottom: 25px; }
+
+        .example-box { background: #f8f9fa; padding: 15px; border-radius: 8px; width: 100%; text-align: left; border-left: 4px solid var(--primary); }
+        .example-cn { font-size: 1.2rem; font-weight: 600; margin-bottom: 4px; color: #333; }
+        .example-de { font-size: 0.95rem; color: #666; font-style: italic; }
+
+        /* Untere Steuerleiste */
+        .control-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 100px;
+            background: #fff; border-top: 1px solid #eee;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.02); z-index: 10;
+        }
+
+        /* Ebbinghaus-Buttons */
+        .btn-grade {
+            border: none; padding: 0; width: 110px; height: 55px; border-radius: 8px;
+            font-weight: bold; font-size: 15px; color: #fff; transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;
+        }
+        .btn-grade:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+
+        .btn-again { background: #ff6b6b; border-bottom: 4px solid #e03131; }
+        .btn-hard { background: #ff922b; border-bottom: 4px solid #e8590c; }
+        .btn-good { background: #51cf66; border-bottom: 4px solid #2f9e44; }
+        .btn-easy { background: #339af0; border-bottom: 4px solid #1c7ed6; }
+
+        .grade-sub { font-size: 12px; opacity: 0.8; font-weight: normal; }
+
+        /* Anfangszustand: Nur "Antwort anzeigen" */
+        .grading-actions { display: none; gap: 15px; }
+        .btn-show {
+            background: var(--dark); color: #fff; padding: 15px 80px; border-radius: 50px;
+            font-weight: bold; font-size: 18px; border: none; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: 0.2s;
+        }
+        .btn-show:hover { transform: scale(1.05); }
+
+        /* Tastaturhinweis */
+        .kb-hint { position: absolute; bottom: 120px; color: #adb5bd; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+        .key-cap { border: 1px solid #dee2e6; padding: 2px 8px; border-radius: 4px; font-weight: bold; background: #fff; box-shadow: 0 2px 0 #eee; }
+
+        /* Audio-Icon */
+        .btn-audio {
+            position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: #ddd;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn-audio:hover { color: var(--primary); }
+
+        /* Erfolgsbildschirm */
+        .success-overlay {
+            position: fixed; inset: 0; background: #fff; z-index: 100;
+            display: none; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .success-icon { font-size: 80px; color: var(--success); animation: popIn 0.5s; margin-bottom: 20px; }
+        @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
+    </style>
+</head>
+<body>
+
+    <div class="review-header">
+        <div class="d-flex align-items-center gap-3">
+            <a href="education_de.html" class="close-btn" title="Beenden"><i class="bi bi-x-lg"></i></a>
+            <div class="fw-bold text-muted">HSK 4 Vokabeln</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-custom">
+                <div class="progress-bar-custom" id="progressBar" style="width: 20%"></div>
+            </div>
+            <div class="progress-text" id="progressText">2 / 10</div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 text-warning fw-bold">
+            <i class="bi bi-fire"></i> 5 Tage Serie
+        </div>
+    </div>
+
+    <div class="review-stage">
+
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="card-face card-front">
+                <div class="btn-audio" onclick="event.stopPropagation(); playAudio()"><i class="bi bi-volume-up-fill"></i></div>
+                <div class="small text-muted text-uppercase mb-3 fw-bold tracking-wide">Business Chinesisch</div>
+                <div class="hanzi-lg" id="cardHanzi">谈判</div>
+                <div class="hint-text">Tippen zum Umdrehen</div>
+            </div>
+
+            <div class="card-face card-back">
+                <div class="btn-audio" onclick="event.stopPropagation(); playAudio()"><i class="bi bi-volume-up-fill"></i></div>
+                <div class="pinyin" id="cardPinyin">tán pàn</div>
+                <div class="meaning" id="cardMeaning">Verhandlung</div>
+
+                <div class="example-box">
+                    <div class="example-cn" id="cardExCn">谈判进行得很顺利。</div>
+                    <div class="example-de" id="cardExDe">Die Verhandlung verlief sehr reibungslos.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kb-hint d-none d-md-flex">
+            Drücke <span class="key-cap">Leertaste</span> zum Umdrehen
+        </div>
+
+    </div>
+
+    <div class="control-bar">
+        <button class="btn-show" id="btnShow" onclick="flipCard()">Antwort zeigen</button>
+
+        <div class="grading-actions" id="gradingActions">
+            <button class="btn-grade btn-again" onclick="nextCard('again')">
+                Nochmal
+                <span class="grade-sub">1 Min</span>
+            </button>
+            <button class="btn-grade btn-hard" onclick="nextCard('hard')">
+                Schwer
+                <span class="grade-sub">2 Tage</span>
+            </button>
+            <button class="btn-grade btn-good" onclick="nextCard('good')">
+                Gut
+                <span class="grade-sub">4 Tage</span>
+            </button>
+            <button class="btn-grade btn-easy" onclick="nextCard('easy')">
+                Einfach
+                <span class="grade-sub">7 Tage</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="success-overlay" id="successScreen">
+        <div class="success-icon"><i class="bi bi-check-circle-fill"></i></div>
+        <h2 class="fw-bold mb-2">Tagesziel erreicht!</h2>
+        <p class="text-muted mb-5">Du hast heute 10 chinesische Vokabeln gelernt. Weiter so!</p>
+        <a href="education_de.html" class="btn btn-dark rounded-pill px-5 py-3 fw-bold">Zurück zur Übersicht</a>
+    </div>
+
+    <script>
+        // Daten für Deutschsprachige, die Chinesisch lernen
+        const cards = [
+            { hanzi: "谈判", pinyin: "tán pàn", meaning: "Verhandlung", exCn: "谈判进行得很顺利。", exDe: "Die Verhandlung verlief sehr reibungslos." },
+            { hanzi: "预算", pinyin: "yù suàn", meaning: "Budget / Haushalt", exCn: "我们需要削减预算。", exDe: "Wir müssen das Budget kürzen." },
+            { hanzi: "合同", pinyin: "hé tong", meaning: "Vertrag", exCn: "请在这里签署合同。", exDe: "Bitte unterschreiben Sie den Vertrag hier." }
+        ];
+
+        let currentIndex = 0;
+        let isFlipped = false;
+
+        // Initialisierung
+        updateCard();
+
+        function flipCard() {
+            const card = document.getElementById('flashcard');
+            const btnShow = document.getElementById('btnShow');
+            const grading = document.getElementById('gradingActions');
+
+            if (!isFlipped) {
+                // Umdrehen
+                card.classList.add('flipped');
+                isFlipped = true;
+
+                // Buttons umschalten
+                btnShow.style.display = 'none';
+                grading.style.display = 'flex';
+
+                // Hinweis aktualisieren
+                document.querySelector('.kb-hint').innerHTML = 'Drücke <span class="key-cap">1</span> <span class="key-cap">2</span> <span class="key-cap">3</span> <span class="key-cap">4</span> zum Bewerten';
+            }
+        }
+
+        function nextCard(difficulty) {
+            // Hier könnte eine API aufgerufen werden
+            console.log(`Karte ${currentIndex} bewertet als: ${difficulty}`);
+
+            currentIndex++;
+
+            if (currentIndex >= cards.length) {
+                // Fertig
+                document.getElementById('successScreen').style.display = 'flex';
+                return;
+            }
+
+            // UI zurücksetzen
+            const card = document.getElementById('flashcard');
+            const btnShow = document.getElementById('btnShow');
+            const grading = document.getElementById('gradingActions');
+
+            // Sofortiges Zurücksetzen (ohne Animation)
+            card.style.transition = 'none';
+            card.classList.remove('flipped');
+            setTimeout(() => { card.style.transition = 'transform 0.6s'; }, 50);
+
+            isFlipped = false;
+            btnShow.style.display = 'block';
+            grading.style.display = 'none';
+            document.querySelector('.kb-hint').innerHTML = 'Drücke <span class="key-cap">Leertaste</span> zum Umdrehen';
+
+            // Fortschritt aktualisieren
+            updateProgress();
+
+            // Daten verzögert laden
+            setTimeout(() => {
+                updateCard();
+            }, 150);
+        }
+
+        function updateCard() {
+            const data = cards[currentIndex];
+            document.getElementById('cardHanzi').innerText = data.hanzi;
+            document.getElementById('cardPinyin').innerText = data.pinyin;
+            document.getElementById('cardMeaning').innerText = data.meaning;
+            document.getElementById('cardExCn').innerText = data.exCn;
+            document.getElementById('cardExDe').innerText = data.exDe;
+        }
+
+        function updateProgress() {
+            const pct = ((currentIndex) / cards.length) * 100;
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressText').innerText = (currentIndex + 1) + ' / ' + cards.length;
+        }
+
+        function playAudio() {
+            // Simuliert chinesische Aussprache
+            alert('🔊 (Spiele chinesische Aussprache ab)');
+        }
+
+        // Tastaturkürzel
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if(!isFlipped) flipCard();
+            }
+            if (isFlipped) {
+                if (e.key === '1') nextCard('again');
+                if (e.key === '2') nextCard('hard');
+                if (e.key === '3') nextCard('good');
+                if (e.key === '4') nextCard('easy');
+            }
+        });
+    </script>
+</body>
+</html>

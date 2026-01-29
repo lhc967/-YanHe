@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YanHe — Международная платформа китайского образования (Вход выполнен)</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --accent: #ff6b00; --dark-blue: #003366; --bg-light: #f8faff; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding-top: 70px; background: var(--bg-light); }
+
+        /* --- Исправление навигации для мобильных --- */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 16px;
+                margin-top: 15px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                border: 1px solid rgba(0,0,0,0.05);
+            }
+        }
+
+        /* --- Навигация --- */
+        .navbar-custom {
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03); height: 70px; z-index: 1000;
+        }
+        .navbar-brand {
+            font-weight: 900; font-size: 1.6rem; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #004aad 0%, #0078ff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-link { font-weight: 600; color: #555 !important; padding: 8px 18px !important; border-radius: 30px; transition: all 0.3s; }
+        .nav-link:hover { color: var(--primary) !important; background: rgba(0, 74, 173, 0.06); }
+        .nav-link.active { color: #fff !important; background: var(--primary); box-shadow: 0 4px 10px rgba(0, 74, 173, 0.3); }
+
+        /* --- Меню профиля --- */
+        .user-avatar {
+            width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--primary); padding: 2px;
+        }
+        .dropdown-menu-custom {
+            border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 15px !important;
+            min-width: 240px; padding: 10px;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #555; transition: 0.2s;
+        }
+        .dropdown-menu-custom .dropdown-item:hover { background: #f0f7ff; color: var(--primary); }
+        .dropdown-menu-custom .dropdown-item i { margin-right: 12px; font-size: 16px; vertical-align: middle; }
+
+        /* --- Hero блок --- */
+        .hero {
+            background: linear-gradient(135deg, #f0f7ff 0%, #fff 100%);
+            padding: 60px 0 80px; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%; width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(0,74,173,0.05) 0%, transparent 70%);
+            border-radius: 50%; z-index: 0;
+        }
+        .hero-title { font-size: 3rem; line-height: 1.2; font-weight: 900; color: #111; margin-bottom: 20px; position: relative; z-index: 1; }
+        .hero-title span { color: var(--primary); }
+        .hero-desc { font-size: 1.1rem; color: #666; margin-bottom: 35px; position: relative; z-index: 1; max-width: 550px; }
+        .badge-official { background: #fff; border: 1px solid #e0e0e0; color: #333; padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; margin-right: 10px; margin-bottom: 15px; }
+
+        /* --- Статистика --- */
+        .stats-bar { background: linear-gradient(135deg, #004aad 0%, #003366 100%); color: #fff; padding: 35px 0; border-radius: 20px; box-shadow: 0 20px 50px rgba(0, 74, 173, 0.25); margin-top: 30px; position: relative; z-index: 2; }
+        .stat-num { font-size: 32px; font-weight: 800; display: block; line-height: 1; margin-bottom: 5px; }
+        .stat-desc { font-size: 13px; opacity: 0.8; }
+
+        /* --- Карточки --- */
+        .biz-card { background: #fff; border-radius: 16px; padding: 30px; height: 100%; border: 1px solid #f0f0f0; transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); cursor: pointer; text-decoration: none; display: block; color: inherit; position: relative; overflow: hidden; }
+        .biz-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--primary); }
+        .biz-icon { width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 20px; }
+        .card-story .biz-icon { background: #fff0f0; color: #dc3545; }
+        .card-edu .biz-icon { background: #eef4ff; color: var(--primary); }
+        .card-task .biz-icon { background: #fff8e1; color: #ffc107; }
+        .card-map .biz-icon { background: #e8f5e9; color: #198754; }
+        .biz-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 8px; }
+        .biz-sub { font-size: 0.9rem; color: #888; line-height: 1.5; }
+        .btn-arrow { position: absolute; bottom: 25px; right: 25px; width: 30px; height: 30px; border-radius: 50%; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #aaa; transition: 0.3s; }
+        .biz-card:hover .btn-arrow { background: var(--primary); color: #fff; }
+
+        .animate-up { animation: fadeInUp 0.8s ease forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="index_login_ru.html">YanHe</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-1 text-primary"></i>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center gap-1">
+                    <li class="nav-item"><a class="nav-link active" href="index_login_ru.html">Главная</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story_ru.html">Истории</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education_ru.html">Обучение</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service_ru.html">Задания</a></li>
+                    <li class="nav-item"><a class="nav-link" href="culture_ru.html">Карта</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0 ms-lg-4">
+                    <a href="index_login.html" class="btn btn-light rounded-circle shadow-sm border d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" title="中文">
+                        <span style="font-size:12px; font-weight:bold;">CN</span>
+                    </a>
+
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="userDropdown" data-bs-toggle="dropdown">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="User" class="rounded-circle user-avatar shadow-sm">
+                            <span class="d-none d-md-inline ms-2 fw-bold text-dark">Ли Яньхэ</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom animate-up">
+                            <li class="px-3 py-2 border-bottom mb-2">
+                                <div class="fw-bold text-dark">Ли Яньхэ</div>
+                                <div class="small text-muted">Верифицированный студент</div>
+                            </li>
+                            <li><a class="dropdown-item" href="profile_ru.html"><i class="bi bi-person-badge"></i> Мой профиль</a></li>
+                            <li><a class="dropdown-item" href="education_ru.html"><i class="bi bi-mortarboard"></i> Обучение</a></li>
+                            <li><a class="dropdown-item" href="profile_ru.html"><i class="bi bi-star"></i> Закладки</a></li>
+                            <li><a class="dropdown-item" href="profile_ru.html"><i class="bi bi-heart"></i> Лайки</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="settings_ru.html"><i class="bi bi-gear"></i> Настройки</a></li>
+                            <li><a class="dropdown-item text-danger" href="index_ru.html" onclick="localStorage.clear();"><i class="bi bi-box-arrow-right"></i> Выйти</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="mb-4 animate-up">
+                        <span class="badge-official"><i class="bi bi-patch-check-fill text-primary"></i> Пилотный проект Минобразования</span>
+                        <span class="badge-official"><i class="bi bi-heart-fill text-danger"></i> Программа поддержки регионов</span>
+                    </div>
+
+                    <h1 class="hero-title animate-up" style="animation-delay: 0.1s;">
+                        Объединяя языки,<br>делясь <span>мудростью Китая</span>
+                    </h1>
+
+                    <p class="hero-desc animate-up" style="animation-delay: 0.2s;">
+                        Инновационная платформа обучения на базе AI-агентов и ГИС.
+                        Все лучшие курсы сети и экспертные услуги перевода в одном месте.
+                    </p>
+
+                    <div class="d-flex gap-3 mb-5 animate-up" style="animation-delay: 0.3s;">
+                        <a href="service_ru.html" class="btn btn-primary rounded-pill px-4 py-3 fw-bold shadow-lg d-flex align-items-center gap-2">
+                            <i class="bi bi-briefcase-fill"></i> Новые задания
+                        </a>
+                        <a href="education_ru.html" class="btn btn-outline-dark rounded-pill px-4 py-3 fw-bold d-flex align-items-center gap-2">
+                            <i class="bi bi-mortarboard-fill"></i> Продолжить обучение
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 d-none d-lg-block text-center animate-up" style="animation-delay: 0.2s;">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800" class="img-fluid rounded-4 shadow-lg border border-4 border-white" style="transform: rotate(2deg);">
+                </div>
+            </div>
+
+            <div class="stats-bar animate-up" style="animation-delay: 0.5s;">
+                <div class="row text-center gy-4 gx-0">
+                    <div class="col-6 col-md-3 border-end border-white border-opacity-25">
+                        <span class="stat-num counter" data-target="28">0</span>
+                        <span class="stat-desc">Стран охвата</span>
+                    </div>
+                    <div class="col-6 col-md-3 border-end-md border-white border-opacity-25">
+                        <span class="stat-num counter" data-target="12000">0</span>
+                        <span class="stat-desc">Экспертов</span>
+                    </div>
+                    <div class="col-6 col-md-3 border-end border-white border-opacity-25">
+                        <span class="stat-num">¥<span class="counter" data-target="86000">0</span></span>
+                        <span class="stat-desc">Средний доход (CNY)</span>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <span class="stat-num counter" data-target="5320">0</span>
+                        <span class="stat-desc">Обученных детей</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5 pb-5">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <a href="story_ru.html" class="biz-card card-story">
+                    <div class="biz-icon"><i class="bi bi-camera-reels"></i></div>
+                    <div class="biz-title">Истории</div>
+                    <div class="biz-sub">Погружение в культуру через живое сообщество.</div>
+                    <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <a href="education_ru.html" class="biz-card card-edu">
+                    <div class="biz-icon"><i class="bi bi-mortarboard"></i></div>
+                    <div class="biz-title">Smart Cloud</div>
+                    <div class="biz-sub">AI-обучение на основе методики Эббингауза.</div>
+                    <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <a href="service_ru.html" class="biz-card card-task">
+                    <div class="biz-icon"><i class="bi bi-briefcase"></i></div>
+                    <div class="biz-title">Задания</div>
+                    <div class="biz-sub">Связь бизнеса и университетских талантов.</div>
+                    <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <a href="culture_ru.html" class="biz-card card-map">
+                    <div class="biz-icon"><i class="bi bi-map"></i></div>
+                    <div class="biz-title">Карта диалектов</div>
+                    <div class="biz-sub">ГИС-технологии для защиты языкового наследия.</div>
+                    <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-auto text-center small">
+        <div class="container">
+            <p class="mb-1 fw-bold">YanHe International Education © 2026</p>
+            <div class="text-white-50">Лицензия ICP №12345678 | Проект для конкурса «Challenge Cup»</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                const updateCounter = () => {
+                    const c = +counter.innerText.replace(/,/g, '');
+                    if(c < target) {
+                        counter.innerText = Math.ceil(c + increment).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                };
+                updateCounter();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YanHe - Benvenuto (Accesso Effettuato)</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #004aad; --accent: #ff6b00; --dark-blue: #003366; --bg-light: #f8faff; --gold: #d4af37; }
+        body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding-top: 70px; background: var(--bg-light); }
+
+        /* --- 1. Navbar (Stato Logged In) --- */
+        .navbar-custom {
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03); height: 70px; z-index: 1000;
+        }
+        .navbar-brand {
+            font-weight: 900; font-size: 1.6rem; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #004aad 0%, #0078ff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-link { font-weight: 600; color: #555 !important; padding: 8px 18px !important; border-radius: 30px; transition: all 0.3s; }
+        .nav-link:hover { color: var(--primary) !important; background: rgba(0, 74, 173, 0.06); }
+        .nav-link.active { color: #fff !important; background: var(--primary); box-shadow: 0 4px 10px rgba(0, 74, 173, 0.3); }
+
+        /* Avatar e Dropdown */
+        .user-avatar { width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--primary); padding: 2px; }
+        .vip-border { border-color: var(--gold) !important; }
+        .dropdown-menu-custom {
+            border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 15px !important;
+            min-width: 220px; padding: 10px;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #555; transition: 0.2s;
+        }
+        .dropdown-menu-custom .dropdown-item:hover { background: #f0f7ff; color: var(--primary); }
+        .dropdown-menu-custom .dropdown-item i { margin-right: 10px; font-size: 16px; }
+
+        /* --- 2. Hero Section --- */
+        .hero {
+            background: linear-gradient(135deg, #f0f7ff 0%, #fff 100%);
+            padding: 60px 0 80px; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%; width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(0,74,173,0.05) 0%, transparent 70%);
+            border-radius: 50%; z-index: 0;
+        }
+        .hero-title { font-size: 3rem; line-height: 1.2; font-weight: 900; color: #111; margin-bottom: 20px; position: relative; z-index: 1; }
+        .hero-title span { color: var(--primary); }
+        .hero-desc { font-size: 1.1rem; color: #666; margin-bottom: 35px; position: relative; z-index: 1; max-width: 500px; }
+
+        /* --- 3. Stats Bar --- */
+        .stats-bar {
+            background: linear-gradient(135deg, #004aad 0%, #003366 100%);
+            color: #fff; padding: 35px 0; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 74, 173, 0.25);
+            margin-top: 30px; position: relative; z-index: 2;
+        }
+        .stat-num { font-size: 32px; font-weight: 800; display: block; line-height: 1; }
+        .stat-desc { font-size: 13px; opacity: 0.8; }
+
+        /* --- 4. Biz Cards --- */
+        .biz-card {
+            background: #fff; border-radius: 16px; padding: 30px; height: 100%;
+            border: 1px solid #f0f0f0; transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            text-decoration: none; display: block; color: inherit; position: relative;
+        }
+        .biz-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--primary); }
+        .biz-icon { width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 20px; }
+
+        .card-story .biz-icon { background: #fff0f0; color: #dc3545; }
+        .card-edu .biz-icon { background: #eef4ff; color: var(--primary); }
+        .card-task .biz-icon { background: #fff8e1; color: #ffc107; }
+        .card-map .biz-icon { background: #e8f5e9; color: #198754; }
+
+        .btn-arrow { position: absolute; bottom: 25px; right: 25px; width: 30px; height: 30px; border-radius: 50%; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #aaa; }
+        .biz-card:hover .btn-arrow { background: var(--primary); color: #fff; }
+
+        @media (max-width: 991px) {
+            .navbar-collapse { background: #ffffff; padding: 20px; border-radius: 16px; margin-top: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        }
+    </style>
+    <script>
+        (function() {
+            var status = localStorage.getItem('yanhe_user_status');
+            var path = window.location.pathname;
+            var page = path.substring(path.lastIndexOf('/') + 1);
+            // 如果是VIP访问此页，自动应用VIP标识样式（通过脚本控制或CSS类）
+            window.isVip = (status === 'vip');
+        })();
+    </script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="index_login_it.html">YanHe</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-1 text-primary"></i>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center gap-1 me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index_login_it.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story_it.html">Storie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education_it.html">Education</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service_it.html">Servizi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="culture_it.html">Mappa Dialetti</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3 ms-lg-4">
+                    <a href="index.html" class="btn btn-light rounded-circle shadow-sm border d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <span style="font-size:12px; font-weight:bold;">CN</span>
+                    </a>
+
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="userDropdown" data-bs-toggle="dropdown">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="User" class="rounded-circle user-avatar shadow-sm" id="navAvatar">
+                            <span class="d-none d-md-inline ms-2 fw-bold text-dark">Li YanHe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
+                            <li class="px-3 py-2 border-bottom mb-2">
+                                <div class="fw-bold text-dark">Li YanHe</div>
+                                <div class="small text-muted" id="userStatusLabel">Studente Certificato</div>
+                            </li>
+                            <li><a class="dropdown-item" href="index_login_it.html"><i class="bi bi-person-badge"></i> Profilo Utente</a></li>
+                            <li><a class="dropdown-item" href="education_it.html"><i class="bi bi-mortarboard"></i> I Miei Corsi</a></li>
+                            <li><a class="dropdown-item" href="index_login_it.html"><i class="bi bi-gear"></i> Impostazioni</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="index_it.html" onclick="localStorage.clear();"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="mb-4">
+                        <span class="badge-official"><i class="bi bi-patch-check-fill text-primary"></i> Partner Ministeriale</span>
+                        <span class="badge-official"><i class="bi bi-lightning-fill text-warning"></i> Account Attivo</span>
+                    </div>
+                    <h1 class="hero-title">
+                        Benvenuto,<br>esplora la <span>Saggezza Cinese</span>
+                    </h1>
+                    <p class="hero-desc">
+                        Il tuo viaggio nel mondo del cinese continua. Utilizza gli strumenti AI per accelerare il tuo apprendimento o accetta incarichi professionali.
+                    </p>
+                    <div class="d-flex gap-3 mb-5">
+                        <a href="service_it.html" class="btn btn-primary rounded-pill px-4 py-3 fw-bold shadow-lg">Gestisci Incarichi</a>
+                        <a href="education_it.html" class="btn btn-outline-dark rounded-pill px-4 py-3 fw-bold">Continua a Studiare</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block text-center">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800" class="img-fluid rounded-4 shadow-lg border border-4 border-white" style="transform: rotate(-2deg);">
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="row text-center gy-4 gx-0">
+                    <div class="col-6 col-md-3 border-end border-white border-opacity-25">
+                        <span class="stat-num counter" data-target="28">0</span>
+                        <span class="stat-desc">Paesi Raggiunti</span>
+                    </div>
+                    <div class="col-6 col-md-3 border-end-md border-white border-opacity-25">
+                        <span class="stat-num counter" data-target="12000">0</span>
+                        <span class="stat-desc">Esperti Attivi</span>
+                    </div>
+                    <div class="col-6 col-md-3 border-end border-white border-opacity-25">
+                        <span class="stat-num">¥<span class="counter" data-target="86000">0</span></span>
+                        <span class="stat-desc">Guadagno Medio</span>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <span class="stat-num counter" data-target="5320">0</span>
+                        <span class="stat-desc">Studenti Aiutati</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5 pb-5">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <a href="story_it.html" class="biz-card card-story">
+                    <div class="biz-icon"><i class="bi bi-camera-reels"></i></div>
+                    <div class="biz-title">Storie Cinesi</div>
+                    <div class="biz-sub">Partecipa alla community e scopri culture autentiche.</div>
+                    <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="education_it.html" class="biz-card card-edu">
+                    <div class="biz-icon"><i class="bi bi-mortarboard"></i></div>
+                    <div class="biz-title">Education Cloud</div>
+                    <div class="biz-sub">Riprendi le tue lezioni con il supporto AI.</div>
+                    <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="service_it.html" class="biz-card card-task">
+                    <div class="biz-icon"><i class="bi bi-briefcase"></i></div>
+                    <div class="biz-title">Hub Servizi</div>
+                    <div class="biz-sub">Trova nuovi progetti di traduzione e interpretariato.</div>
+                    <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="culture_it.html" class="biz-card card-map">
+                    <div class="biz-icon"><i class="bi bi-map"></i></div>
+                    <div class="biz-title">Mappa Dialetti</div>
+                    <div class="biz-sub">GIS interattivo per la protezione dei dialetti.</div>
+                    <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4 text-center small">
+        <div class="container">
+            <p class="mb-1 fw-bold">YanHe International Education © 2026</p>
+            <div class="text-white-50">Opera in concorso Challenge Cup 2026</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Apply VIP style if needed
+            if(window.isVip) {
+                document.getElementById('navAvatar').classList.add('vip-border');
+                document.getElementById('userStatusLabel').innerHTML = '<i class="bi bi-star-fill text-warning"></i> Membro PRO';
+            }
+
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                const updateCounter = () => {
+                    const c = +counter.innerText.replace(/,/g, '');
+                    if(c < target) {
+                        counter.innerText = Math.ceil(c + increment).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                };
+                updateCounter();
+            });
+        });
+    </script>
+</body>
+</html>

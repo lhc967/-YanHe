@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>方言文化地图 (VIP尊享版) - 言禾 YanHe</title>
+    <title>Mappa Culturale dei Dialetti (Edizione VIP) - YanHe</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <script src="https://assets.pyecharts.org/assets/maps/china.js"></script>
 
     <style>
-        /* --- 全局样式 --- */
+        /* --- Stili Globali --- */
         :root { --primary: #004aad; --gold: #d4af37; --beijing-red: #c9171e; }
         body {
             font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -18,7 +18,7 @@
             transition: background-color 0.5s ease;
         }
 
-        /* --- 导航栏 (已登录样式) --- */
+        /* --- Barra di Navigazione (Stile Login) --- */
         .navbar-custom {
             background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
             box-shadow: 0 2px 15px rgba(0,0,0,0.03); height: 70px; z-index: 1000;
@@ -32,8 +32,8 @@
         .nav-link:hover { color: var(--primary) !important; background: rgba(0, 74, 173, 0.06); }
         .nav-link.active { color: #fff !important; background: var(--primary); box-shadow: 0 4px 10px rgba(0, 74, 173, 0.3); }
 
-        /* 用户头像 */
-        .user-avatar { width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--gold); padding: 2px; } /* VIP金色边框 */
+        /* Avatar Utente */
+        .user-avatar { width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--gold); padding: 2px; } /* Bordo Oro VIP */
         .dropdown-menu-custom {
             border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 15px !important;
             min-width: 200px; padding: 10px; z-index: 1001;
@@ -44,7 +44,7 @@
         .dropdown-menu-custom .dropdown-item:hover { background: #f0f7ff; color: var(--primary); }
         .dropdown-menu-custom .dropdown-item i { margin-right: 10px; font-size: 16px; vertical-align: middle; }
 
-        /* --- 模式切换器 --- */
+        /* --- Selettore Modalità --- */
         .mode-switch-container {
             position: absolute; top: 90px; left: 50%; transform: translateX(-50%); z-index: 50;
             background: #fff; padding: 4px; border-radius: 30px;
@@ -57,10 +57,10 @@
         .mode-btn.active { background: #eee; color: #333; }
         .mode-btn.pro-active { background: linear-gradient(135deg, #111, #333); color: #ffd700; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-        /* --- 地图容器 --- */
+        /* --- Contenitore Mappa --- */
         .map-container { width: 100%; height: 100%; position: relative; }
 
-        /* --- 抽屉 --- */
+        /* --- Pannello (Drawer) --- */
         .content-drawer {
             position: absolute; bottom: 0; left: 0; right: 0;
             background: #fff; border-radius: 24px 24px 0 0;
@@ -90,7 +90,7 @@
         .tab-pane.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 内容元素 */
+        /* Elementi Contenuto */
         .culture-item { display: flex; gap: 15px; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 12px; margin-bottom: 15px; align-items: center; }
         .culture-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
         .dialect-word { color: var(--beijing-red); font-weight: 800; font-size: 18px; margin-right: 5px; }
@@ -101,7 +101,7 @@
         .chat-user { background: #e3f2fd; color: #004aad; align-self: flex-end; }
         .dialect-highlight { color: var(--beijing-red); font-weight: bold; border-bottom: 2px dotted rgba(201, 23, 30, 0.3); }
 
-        /* AI 测评 */
+        /* Valutazione AI */
         .mic-btn-wrapper { position: relative; width: 80px; height: 80px; margin: 20px auto; }
         .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 2; position: relative; transition: all 0.3s; }
         .mic-btn.recording { background: #ff4d4f; transform: scale(1.1); }
@@ -112,45 +112,45 @@
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="home.html">言禾 YanHe</a>
+            <a class="navbar-brand" href="home.html">YanHe</a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <i class="bi bi-list fs-1 text-primary"></i>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-center gap-1 me-auto">
-                    <li class="nav-item"><a class="nav-link" href="home.html">首页</a></li>
-                    <li class="nav-item"><a class="nav-link" href="story.html">中国故事</a></li>
-                    <li class="nav-item"><a class="nav-link" href="education.html">教育云</a></li>
-                    <li class="nav-item"><a class="nav-link" href="service.html">任务大厅</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="culture.html">方言地图</a></li>
+                    <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story.html">Storie Cinesi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education.html">Education Cloud</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service.html">Task Hub</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="culture.html">Mappa Dialetti</a></li>
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0 ms-lg-4">
-                    <a href="culture_en_vip.html" class="btn btn-light rounded-circle shadow-sm border" style="width: 40px; height: 40px; display:flex; align-items:center; justify-content:center;" title="Switch to English">
+                    <a href="culture_en_vip.html" class="btn btn-light rounded-circle shadow-sm border" style="width: 40px; height: 40px; display:flex; align-items:center; justify-content:center;" title="Passa all'inglese">
                         <span style="font-size:12px; font-weight:bold;">EN</span>
                     </a>
 
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                 alt="User" class="rounded-circle user-avatar shadow-sm">
-                            <span class="d-none d-md-inline ms-2 fw-bold text-dark">李言禾</span>
+                                 alt="Utente" class="rounded-circle user-avatar shadow-sm">
+                            <span class="d-none d-md-inline ms-2 fw-bold text-dark">Li Yanhe</span>
                             <span class="badge bg-warning text-dark ms-2"><i class="bi bi-star-fill"></i> PRO</span>
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" aria-labelledby="userDropdown">
                             <li class="px-3 py-2 border-bottom mb-2">
-                                <div class="fw-bold text-dark">李言禾</div>
-                                <div class="small text-muted"><i class="bi bi-star-fill text-warning"></i> Pro 年度会员</div>
+                                <div class="fw-bold text-dark">Li Yanhe</div>
+                                <div class="small text-muted"><i class="bi bi-star-fill text-warning"></i> Membro Annuale Pro</div>
                             </li>
-                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-person-badge"></i> 个人主页</a></li>
-                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-mortarboard"></i> 我的课程</a></li>
-                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-star"></i> 收藏夹</a></li>
-                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-heart"></i> 点赞内容</a></li>
-                             <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-people"></i> 我的关注</a></li>
+                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-person-badge"></i> Profilo</a></li>
+                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-mortarboard"></i> I miei corsi</a></li>
+                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-star"></i> Preferiti</a></li>
+                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-heart"></i> Mi piace</a></li>
+                             <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-people"></i> Seguiti</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-gear"></i> 设置</a></li>
-                            <li><a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-gear"></i> Impostazioni</a></li>
+                            <li><a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -159,8 +159,8 @@
     </nav>
 
     <div class="mode-switch-container">
-        <button class="mode-btn active" id="btnStd" onclick="togglePro(false)">探索模式</button>
-        <button class="mode-btn" id="btnPro" onclick="togglePro(true)">Pro 挑战 <i class="bi bi-lightning-fill text-warning"></i></button>
+        <button class="mode-btn active" id="btnStd" onclick="togglePro(false)">Esplorazione</button>
+        <button class="mode-btn" id="btnPro" onclick="togglePro(true)">Sfida Pro <i class="bi bi-lightning-fill text-warning"></i></button>
     </div>
 
     <div class="map-container">
@@ -171,15 +171,15 @@
         <div class="drawer-hero" id="heroBg">
             <div class="btn-close-custom" onclick="closeDrawer()"><i class="bi bi-x-lg"></i></div>
             <div class="hero-content">
-                <h2 class="hero-title fw-bold" id="dCity">加载中...</h2>
+                <h2 class="hero-title fw-bold" id="dCity">Caricamento...</h2>
                 <div id="dTags"></div>
             </div>
         </div>
 
         <div class="nav-tabs-custom">
-            <div class="tab-link active" onclick="switchTab(this, 'culture')">文化与词汇</div>
-            <div class="tab-link pro-tab" onclick="switchTab(this, 'scenario')"><i class="bi bi-joystick"></i> 场景实战</div>
-            <div class="tab-link pro-tab" onclick="switchTab(this, 'ai')"><i class="bi bi-mic-fill"></i> AI 测评</div>
+            <div class="tab-link active" onclick="switchTab(this, 'culture')">Cultura e Lessico</div>
+            <div class="tab-link pro-tab" onclick="switchTab(this, 'scenario')"><i class="bi bi-joystick"></i> Simulazione</div>
+            <div class="tab-link pro-tab" onclick="switchTab(this, 'ai')"><i class="bi bi-mic-fill"></i> Valutazione AI</div>
         </div>
 
         <div class="drawer-body">
@@ -191,8 +191,8 @@
             <div id="tab-scenario" class="tab-pane">
                 <div class="card border-0 bg-light">
                     <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
-                        <strong id="sTitle">场景加载中...</strong>
-                        <span class="badge bg-warning text-dark">Lv.2 进阶 (VIP)</span>
+                        <strong id="sTitle">Caricamento scenario...</strong>
+                        <span class="badge bg-warning text-dark">Liv.2 Avanzato (VIP)</span>
                     </div>
                     <div class="card-body position-relative p-3" style="min-height: 200px;">
                         <div id="scenarioContent"></div>
@@ -202,21 +202,21 @@
 
             <div id="tab-ai" class="tab-pane">
                 <div class="text-center pt-3">
-                    <p class="text-muted small mb-2">请按住按钮，用方言大声朗读：</p>
+                    <p class="text-muted small mb-2">Tieni premuto il pulsante e leggi ad alta voce in dialetto:</p>
                     <h2 class="fw-bold mb-1" id="aiTarget">---</h2>
                     <p class="text-muted small fst-italic" id="aiMeaning">---</p>
                     <div class="mic-btn-wrapper">
                         <div class="mic-btn" id="micBtn" onmousedown="startRecord()" onmouseup="stopRecord()"><i class="bi bi-mic-fill"></i></div>
                     </div>
-                    <p class="small text-muted" id="micStatus">按住 说话</p>
+                    <p class="small text-muted" id="micStatus">Premi per parlare</p>
                     <div id="aiResult" style="display: none;" class="mt-4 border-top pt-3">
                         <div class="d-flex align-items-center justify-content-center gap-3">
                             <div class="score-circle">
-                                <span class="fw-bold fs-1">95</span><span class="small">S级</span>
+                                <span class="fw-bold fs-1">95</span><span class="small">Grado S</span>
                             </div>
                             <div class="text-start small text-muted">
-                                <div>发音准确度: <span class="text-dark fw-bold">98%</span></div>
-                                <div class="text-success mt-1"><i class="bi bi-check-circle-fill"></i> 味道太正了！</div>
+                                <div>Accuratezza: <span class="text-dark fw-bold">98%</span></div>
+                                <div class="text-success mt-1"><i class="bi bi-check-circle-fill"></i> Pronuncia perfetta!</div>
                             </div>
                         </div>
                     </div>
@@ -228,33 +228,33 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // --- 核心状态：已登录且是VIP ---
+        // --- Stato Core: Login effettuato come VIP ---
         let isVip = true;
 
         const cityData = {
-            '北京': {
-                city: '北京 · 京城', tags: ['儿化音', '局气'],
+            'Pechino': {
+                city: 'Pechino · La Capitale', tags: ['Erhua', 'Juqi'],
                 bg: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800',
-                intro: '北京话透着一股皇城根下的自信与幽默。',
+                intro: 'Il dialetto di Pechino riflette la fiducia e l\'umorismo tipici di chi vive ai piedi della città imperiale.',
                 cultureItems: [
-                    { title: '精神内核', img: 'https://images.unsplash.com/photo-1562624632-6019a7795325?w=200', word: '局气', desc: '形容人仗义、守规矩。' }
+                    { title: 'Nucleo Spirituale', img: 'https://images.unsplash.com/photo-1562624632-6019a7795325?w=200', word: 'Juqi', desc: 'Descrive una persona corretta, leale e che segue le regole.' }
                 ],
                 scenario: {
-                    title: '胡同问路',
+                    title: 'Chiedere indicazioni nei Hutong',
                     chats: [
-                        {role: 'npc', text: '哟，老爷子，<span class="dialect-highlight">借光</span>？'},
-                        {role: 'user', text: '<span class="dialect-highlight">劳驾</span>，去鼓楼怎么走？'}
+                        {role: 'npc', text: 'Ehi, signore, <span class="dialect-highlight">permesso</span>?'},
+                        {role: 'user', text: '<span class="dialect-highlight">Scusi</span>, per andare alla Torre del Tamburo?'}
                     ]
                 },
-                aiChallenge: { word: '这事儿真地道', meaning: '（意思：这件事做得非常标准）' }
+                aiChallenge: { word: '这事儿真地道', meaning: '(Significato: Questo è fatto a regola d\'arte)' }
             },
-            '成都': {
-                city: '四川 · 成都', tags: ['火锅', '安逸'],
+            'Chengdu': {
+                city: 'Sichuan · Chengdu', tags: ['Hotpot', 'Anyi'],
                 bg: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600',
-                intro: '成都方言以幽默著称，生活讲究“巴适”。',
-                cultureItems: [{ title: '生活态度', img: 'https://images.unsplash.com/photo-1524413992383-a26df851dc2d?w=200', word: '巴适', desc: '舒服、很好。' }],
-                scenario: { title: '火锅店', chats: [{role: 'npc', text: '几位？'}, {role: 'user', text: '三位，<span class="dialect-highlight">微辣</span>！'}] },
-                aiChallenge: { word: '巴适得板', meaning: '（意思：舒服极了）' }
+                intro: 'Il dialetto di Chengdu è noto per il suo umorismo e riflette lo stile di vita rilassato "Anyi".',
+                cultureItems: [{ title: 'Atteggiamento vitale', img: 'https://images.unsplash.com/photo-1524413992383-a26df851dc2d?w=200', word: 'Bashi', desc: 'Comodo, molto bene, eccellente.' }],
+                scenario: { title: 'Al ristorante di Hotpot', chats: [{role: 'npc', text: 'Quante persone?'}, {role: 'user', text: 'In tre, <span class="dialect-highlight">poco piccante</span>!'}] },
+                aiChallenge: { word: '巴适得板', meaning: '(Significato: È fantastico)' }
             }
         };
 
@@ -273,8 +273,8 @@
                     itemStyle: { areaColor: s.area, borderColor: s.border }
                 },
                 series: [
-                    { type: 'effectScatter', coordinateSystem: 'geo', data: [{name:'成都',value:[104.06,30.67]}], symbolSize: 14, itemStyle: { color: s.point } },
-                    { type: 'effectScatter', coordinateSystem: 'geo', data: [{name:'北京',value:[116.40,39.90]}], symbolSize: 20, itemStyle: { color: mode === 'pro' ? '#ffd700' : '#c9171e' }, rippleEffect: { color: mode === 'pro' ? '#ffd700' : '#c9171e', scale: 6 } }
+                    { type: 'effectScatter', coordinateSystem: 'geo', data: [{name:'Chengdu',value:[104.06,30.67]}], symbolSize: 14, itemStyle: { color: s.point } },
+                    { type: 'effectScatter', coordinateSystem: 'geo', data: [{name:'Pechino',value:[116.40,39.90]}], symbolSize: 20, itemStyle: { color: mode === 'pro' ? '#ffd700' : '#c9171e' }, rippleEffect: { color: mode === 'pro' ? '#ffd700' : '#c9171e', scale: 6 } }
                 ]
             };
         }
@@ -282,7 +282,7 @@
         myChart.on('click', function(params) { if(params.seriesIndex!==undefined) openDrawer(params.data.name); });
 
         function openDrawer(cityName) {
-            const data = cityData[cityName] || cityData['北京'];
+            const data = cityData[cityName] || cityData['Pechino'];
             document.getElementById('heroBg').style.backgroundImage = `url('${data.bg}')`;
             document.getElementById('dCity').innerText = data.city;
             document.getElementById('dTags').innerHTML = data.tags.map(t=>`<span class="badge bg-white text-dark bg-opacity-75 me-1">${t}</span>`).join('');
@@ -307,13 +307,12 @@
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById('tab-'+tabId).classList.add('active');
         }
 
-        // --- Pro 切换 (VIP直接切换) ---
+        // --- Pro Toggle (Switch diretto per VIP) ---
         function togglePro(active) {
             const btnStd = document.getElementById('btnStd');
             const btnPro = document.getElementById('btnPro');
 
             if(active) {
-                // 是VIP，直接切换
                 btnStd.classList.remove('active'); btnPro.classList.add('pro-active');
                 document.body.style.backgroundColor = '#1a1a1a';
                 myChart.setOption(getOption('pro'));
@@ -326,12 +325,12 @@
 
         function startRecord() {
             document.getElementById('micBtn').classList.add('recording');
-            document.getElementById('micStatus').innerText = '正在聆听...';
+            document.getElementById('micStatus').innerText = 'In ascolto...';
             document.getElementById('aiResult').style.display = 'none';
         }
         function stopRecord() {
             document.getElementById('micBtn').classList.remove('recording');
-            document.getElementById('micStatus').innerText = '分析完成';
+            document.getElementById('micStatus').innerText = 'Analisi completata';
             document.getElementById('aiResult').style.display = 'block';
         }
         window.addEventListener('resize', () => myChart.resize());

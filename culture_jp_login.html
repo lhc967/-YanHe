@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>方言文化マップ (VIP特典版) - 言禾 YanHe</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://assets.pyecharts.org/assets/maps/china.js"></script>
+
+    <style>
+        :root { --primary: #004aad; --gold: #d4af37; --beijing-red: #c9171e; }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            padding-top: 70px; background: #f8faff; overflow: hidden; height: 100vh;
+        }
+
+        /* --- ナビゲーションバー --- */
+        .navbar-custom {
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03); height: 70px; z-index: 1000;
+        }
+        .navbar-brand {
+            font-weight: 900; font-size: 1.6rem; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #004aad 0%, #0078ff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-link { font-weight: 600; color: #555 !important; padding: 8px 18px !important; border-radius: 30px; transition: 0.3s; }
+        .nav-link.active { color: #fff !important; background: var(--primary); }
+
+        /* --- 地図コンテナ (PC全画面修正) --- */
+        .map-container {
+            position: fixed;
+            top: 70px; /* ナビバーの高さ */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            background: #f8faff;
+            transition: background-color 0.5s ease;
+        }
+
+        /* --- モード切替スイッチ --- */
+        .mode-switch-container {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 50;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); padding: 5px; border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); display: flex; gap: 4px;
+        }
+        .mode-btn { border: none; padding: 8px 24px; border-radius: 25px; font-weight: 700; font-size: 13px; background: transparent; transition: 0.3s; }
+        .mode-btn.active { background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .mode-btn.pro-active { background: linear-gradient(135deg, #111, #333); color: #ffd700; }
+
+        /* --- コンテンツドロワー (Drawer) --- */
+        .content-drawer {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: #fff; border-radius: 24px 24px 0 0;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            transform: translateY(110%); transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 100; height: 75vh; display: flex; flex-direction: column;
+        }
+        .content-drawer.show { transform: translateY(0); }
+        .drawer-hero { height: 140px; position: relative; color: #fff; background-size: cover; background-position: center; flex-shrink: 0; }
+        .drawer-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8)); }
+        .hero-content { position: absolute; bottom: 15px; left: 20px; z-index: 2; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#">言禾 YanHe</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">ホーム</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">方言マップ</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" class="rounded-circle border border-warning" style="width:40px; height:40px; padding:2px;">
+                        <span class="ms-2 fw-bold text-dark">李言禾 <span class="badge bg-warning text-dark">PRO</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="map-container" id="mapSection">
+        <div class="mode-switch-container">
+            <button class="mode-btn active" id="btnStd" onclick="togglePro(false)">探索モード</button>
+            <button class="mode-btn" id="btnPro" onclick="togglePro(true)">PRO チャレンジ <i class="bi bi-lightning-fill"></i></button>
+        </div>
+        <div id="china-map" style="width: 100%; height: 100%;"></div>
+    </div>
+
+    <div class="content-drawer" id="drawer">
+        <div class="drawer-hero" id="heroBg" style="background-image: url('https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800');">
+            <div class="p-3 text-end"><i class="bi bi-x-circle-fill fs-3 text-white" onclick="closeDrawer()" style="cursor:pointer;"></i></div>
+            <div class="hero-content">
+                <h2 class="fw-bold" id="dCity">都市名</h2>
+                <div id="dTags"><span class="badge bg-white text-dark me-1">伝統文化</span></div>
+            </div>
+        </div>
+        <div class="p-4 overflow-auto">
+            <h5 class="fw-bold">方言紹介</h5>
+            <p id="dIntro" class="text-muted">読み込み中...</p>
+            <hr>
+            <div class="alert alert-warning">
+                <i class="bi bi-star-fill me-2"></i>PRO特典: AI音声評価と実戦シミュレーションが利用可能です。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var myChart = echarts.init(document.getElementById('china-map'));
+
+        function getOption(mode) {
+            const isPro = mode === 'pro';
+            return {
+                backgroundColor: isPro ? '#1a1a1a' : '#f8faff',
+                tooltip: { trigger: 'item', formatter: '{b}' },
+                geo: {
+                    map: 'china',
+                    roam: true,
+                    // --- PC全画面・中央配置の重要プロパティ ---
+                    layoutCenter: ['50%', '50%'],
+                    layoutSize: '110%',
+                    label: { show: false },
+                    itemStyle: {
+                        areaColor: isPro ? '#2c3e50' : '#e0eaff',
+                        borderColor: isPro ? '#444' : '#fff',
+                        borderWidth: 1
+                    },
+                    emphasis: {
+                        itemStyle: { areaColor: isPro ? '#34495e' : '#c6d8ff' },
+                        label: { show: false }
+                    }
+                },
+                series: [
+                    {
+                        name: 'City',
+                        type: 'effectScatter',
+                        coordinateSystem: 'geo',
+                        data: [
+                            {name:'北京 (Beijing)', value:[116.40, 39.90]},
+                            {name:'成都 (Chengdu)', value:[104.06, 30.67]},
+                            {name:'上海 (Shanghai)', value:[121.47, 31.23]}
+                        ],
+                        symbolSize: 20,
+                        rippleEffect: { scale: 5, brushType: 'stroke' },
+                        itemStyle: { color: isPro ? '#ffd700' : '#c9171e' }
+                    }
+                ]
+            };
+        }
+
+        myChart.setOption(getOption('std'));
+
+        myChart.on('click', function(p) {
+            if(p.name) openDrawer(p.name);
+        });
+
+        function openDrawer(name) {
+            document.getElementById('dCity').innerText = name;
+            document.getElementById('dIntro').innerText = name + "の独特な文化と方言の世界へようこそ。PRO会員限定の学習コンテンツが用意されています。";
+            document.getElementById('drawer').classList.add('show');
+        }
+
+        function closeDrawer() {
+            document.getElementById('drawer').classList.remove('show');
+        }
+
+        function togglePro(active) {
+            const btnStd = document.getElementById('btnStd');
+            const btnPro = document.getElementById('btnPro');
+            const mapSection = document.getElementById('mapSection');
+
+            if(active) {
+                btnStd.classList.remove('active');
+                btnPro.classList.add('pro-active');
+                myChart.setOption(getOption('pro'));
+                mapSection.style.backgroundColor = '#1a1a1a';
+            } else {
+                btnStd.classList.add('active');
+                btnPro.classList.remove('pro-active');
+                myChart.setOption(getOption('std'));
+                mapSection.style.backgroundColor = '#f8faff';
+            }
+        }
+
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
+    </script>
+</body>
+</html>
