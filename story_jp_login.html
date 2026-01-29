@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>中国故事 - 言禾 YanHe (已登录)</title>
+    <title>中国の物語 - 言禾 YanHe (ログイン済み)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         /* --- 1. 基础变量 --- */
         :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f8faff; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; padding-top: 70px; background: var(--bg-light); overflow-y: scroll; }
+        body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; padding-top: 70px; background: var(--bg-light); overflow-y: scroll; }
 
         /* --- 2. 导航栏 (登录后) --- */
         .navbar-custom { background: rgba(255,255,255,0.95); backdrop-filter: blur(16px); box-shadow: 0 2px 15px rgba(0,0,0,0.04); height: 70px; z-index: 1000; }
@@ -20,7 +20,7 @@
 
         /* 用户下拉菜单 */
         .user-avatar { width: 40px; height: 40px; border: 2px solid var(--primary); padding: 2px; object-fit: cover; }
-        .dropdown-menu-custom { border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 15px !important; min-width: 220px; padding: 10px; }
+        .dropdown-menu-custom { border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 15px !important; min-width: 240px; padding: 10px; }
         .dropdown-menu-custom .dropdown-item { padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #555; transition: 0.2s; }
         .dropdown-menu-custom .dropdown-item:hover { background: #f0f7ff; color: var(--primary); }
         .dropdown-menu-custom .dropdown-item i { margin-right: 10px; font-size: 16px; vertical-align: middle; }
@@ -39,8 +39,6 @@
 
         /* --- 3. 顶部吸顶筛选区 (全宽) --- */
         .sticky-header-container { position: sticky; top: 70px; z-index: 90; background: rgba(248, 250, 255, 0.98); backdrop-filter: blur(5px); border-bottom: 1px solid rgba(0,0,0,0.03); padding-bottom: 10px; }
-
-        /* 移除 max-width，直接 padding 撑开 */
         .header-content-wrapper { width: 100%; padding: 0 20px; }
 
         .main-tabs { display: flex; justify-content: center; gap: 40px; padding: 12px 0 8px; font-weight: 600; color: #999; }
@@ -55,25 +53,17 @@
         .topic-pill:hover, .topic-pill.active { background: rgba(0, 74, 173, 0.1); border-color: transparent; color: var(--primary); font-weight: bold; }
 
         /* --- 4. 瀑布流 (全屏占满布局) --- */
-        .masonry-wrapper {
-            width: 98%;        /* 占满屏幕宽度 */
-            margin: 15px auto; /* 上下边距 */
-            max-width: none;   /* 移除最大宽度限制 */
-        }
-        .masonry-cols {
-            column-count: 2; /* 手机 2列 */
-            column-gap: 12px;
-        }
-        /* 响应式断点：屏幕越大列数越多 */
+        .masonry-wrapper { width: 98%; margin: 15px auto; max-width: none; }
+        .masonry-cols { column-count: 2; column-gap: 12px; }
         @media (min-width: 576px) { .masonry-cols { column-count: 2; column-gap: 16px; } }
         @media (min-width: 768px) { .masonry-cols { column-count: 3; column-gap: 16px; } }
         @media (min-width: 992px) { .masonry-cols { column-count: 4; column-gap: 20px; } }
         @media (min-width: 1200px) { .masonry-cols { column-count: 5; column-gap: 20px; } }
-        @media (min-width: 1400px) { .masonry-cols { column-count: 6; column-gap: 24px; } } /* 超大屏6列 */
+        @media (min-width: 1400px) { .masonry-cols { column-count: 6; column-gap: 24px; } }
 
         .pin-card {
             break-inside: avoid; display: inline-block; width: 100%;
-            background: #fff; border-radius: 12px; margin-bottom: 16px; /* 垂直间距 */
+            background: #fff; border-radius: 12px; margin-bottom: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02);
             overflow: hidden; cursor: pointer; transition: transform 0.3s;
         }
@@ -82,14 +72,12 @@
         .pin-body { padding: 12px 14px; }
         .pin-title { font-size: 14px; font-weight: bold; color: #222; line-height: 1.5; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* 底部互动栏 */
         .pin-footer { display: flex; justify-content: space-between; align-items: center; }
         .user-box { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; font-weight: 500; }
         .like-box { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #888; transition: 0.2s; }
         .like-box:hover { color: #ff2442; }
         .like-box.liked { color: #ff2442; }
 
-        /* 悬浮发布按钮 */
         .fab {
             position: fixed; bottom: 40px; right: 40px;
             width: 56px; height: 56px;
@@ -106,17 +94,17 @@
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="home.html">言禾 YanHe</a>
+            <a class="navbar-brand" href="home_jp.html">言禾 YanHe</a>
             <button class="navbar-toggler border-0 bg-light rounded-circle p-2" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                 <i class="bi bi-list fs-5"></i>
             </button>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link" href="home.html">首页</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="story.html">中国故事</a></li>
-                    <li class="nav-item"><a class="nav-link" href="education.html">教育云</a></li>
-                    <li class="nav-item"><a class="nav-link" href="service.html">任务大厅</a></li>
-                    <li class="nav-item"><a class="nav-link" href="culture.html">方言地图</a></li>
+                    <li class="nav-item"><a class="nav-link" href="home_jp.html">ホーム</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="story_jp.html">中国の物語</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education_jp.html">教育クラウド</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service_jp.html">タスク広場</a></li>
+                    <li class="nav-item"><a class="nav-link" href="culture_jp.html">方言マップ</a></li>
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
@@ -128,19 +116,19 @@
                         <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
                                  alt="User" class="rounded-circle user-avatar shadow-sm">
-                            <span class="d-none d-md-inline ms-2 fw-bold text-dark">李言禾</span>
+                            <span class="d-none d-md-inline ms-2 fw-bold text-dark">YanHe Li</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" aria-labelledby="userDropdown">
                              <li class="px-3 py-2 border-bottom mb-2">
-                                <div class="fw-bold text-dark">李言禾</div>
-                                <div class="small text-muted">VIP Pro用户</div>
+                                <div class="fw-bold text-dark">YanHe Li</div>
+                                <div class="small text-muted">VIP Pro ユーザー</div>
                             </li>
-                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-person-badge"></i> 个人主页</a></li>
-                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-star"></i> 我的收藏</a></li>
-                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-heart"></i> 我的点赞</a></li>
-                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-mortarboard"></i> 正在学习</a></li>
+                            <li><a class="dropdown-item" href="auth.profile_en.html"><i class="bi bi-person-badge"></i> マイページ</a></li>
+                            <li><a class="dropdown-item" href="auth.profile_en.html"><i class="bi bi-star"></i> コレクション</a></li>
+                            <li><a class="dropdown-item" href="auth.profile_en.html"><i class="bi bi-heart"></i> いいね一覧</a></li>
+                            <li><a class="dropdown-item" href="auth.profile_en.html"><i class="bi bi-mortarboard"></i> 学習中</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+                            <li><a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> ログアウト</a></li>
                         </ul>
                     </div>
                 </div>
@@ -152,22 +140,22 @@
     <div class="sticky-header-container">
         <div class="header-content-wrapper">
             <div class="main-tabs">
-                <div class="tab-item" onclick="switchMainTab(this, 'follow')">关注</div>
-                <div class="tab-item active" onclick="switchMainTab(this, 'discover')">发现</div>
+                <div class="tab-item" onclick="switchMainTab(this, 'follow')">フォロー</div>
+                <div class="tab-item active" onclick="switchMainTab(this, 'discover')">発見</div>
                 <div class="tab-item" onclick="getLocation(this)">同城 <i class="bi bi-geo-alt-fill" style="font-size:12px;"></i></div>
             </div>
 
             <div class="topic-scroll-box" id="tagList">
-                <a href="#" class="topic-pill active" onclick="filterTag(this)">全部推荐</a>
-                <a href="#" class="topic-pill" onclick="filterTag(this)">#网络热梗</a>
-                <a href="#" class="topic-pill" onclick="filterTag(this)">#留学生汉语角</a>
-                <a href="#" class="topic-pill" onclick="filterTag(this)">#汉服打卡</a>
-                <a href="#" class="topic-pill" onclick="filterTag(this)">#中华美食</a>
-                <a href="#" class="topic-pill" onclick="filterTag(this)">#HSK备考</a>
-                <a href="#" class="topic-pill" onclick="filterTag(this)">#中国方言</a>
-                <a href="#" class="topic-pill" onclick="filterTag(this)">#城市漫步</a>
-                <a href="#" class="topic-pill" onclick="filterTag(this)">#书法体验</a>
-                <a href="#" class="topic-pill" onclick="filterTag(this)">#中国历史</a>
+                <a href="#" class="topic-pill active" onclick="filterTag(this)">おすすめ</a>
+                <a href="#" class="topic-pill" onclick="filterTag(this)">#ネット流行語</a>
+                <a href="#" class="topic-pill" onclick="filterTag(this)">#留学生中国語コーナー</a>
+                <a href="#" class="topic-pill" onclick="filterTag(this)">#漢服体験</a>
+                <a href="#" class="topic-pill" onclick="filterTag(this)">#中華グルメ</a>
+                <a href="#" class="topic-pill" onclick="filterTag(this)">#HSK対策</a>
+                <a href="#" class="topic-pill" onclick="filterTag(this)">#中国の方言</a>
+                <a href="#" class="topic-pill" onclick="filterTag(this)">#街歩き</a>
+                <a href="#" class="topic-pill" onclick="filterTag(this)">#書道体験</a>
+                <a href="#" class="topic-pill" onclick="filterTag(this)">#中国の歴史</a>
             </div>
         </div>
     </div>
@@ -175,10 +163,10 @@
     <div class="masonry-wrapper">
         <div class="masonry-cols" id="masonryContent">
 
-            <div class="pin-card" onclick="location.href='story_detail.html'">
+            <div class="pin-card" onclick="location.href='story_detail_en.html'">
                 <img src="https://images.unsplash.com/photo-1543165365-07232fe12224?w=500&q=80" class="pin-img" style="aspect-ratio: 3/4;">
                 <div class="pin-body">
-                    <div class="pin-title">穿着汉服去上课是什么体验？老师都惊呆了！📸✨</div>
+                    <div class="pin-title">漢服を着て授業に行ったら？先生もびっくり！📸✨</div>
                     <div class="pin-footer">
                         <div class="user-box">
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lily" class="rounded-circle" width="20" height="20">
@@ -189,10 +177,10 @@
                 </div>
             </div>
 
-            <div class="pin-card" onclick="location.href='story_detail.html'">
+            <div class="pin-card" onclick="location.href='story_detail_en.html'">
                 <img src="https://images.unsplash.com/photo-1563245372-f21720e38c4d?w=500&q=80" class="pin-img" style="aspect-ratio: 3/5;">
                 <div class="pin-body">
-                    <div class="pin-title">挑战全网最辣火锅！重庆微辣真的不是开玩笑的🌶️🔥</div>
+                    <div class="pin-title">ネットで話題の激辛火鍋に挑戦！重慶の「微辛」は冗談じゃない🌶️🔥</div>
                     <div class="pin-footer">
                         <div class="user-box">
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="rounded-circle" width="20" height="20">
@@ -203,41 +191,41 @@
                 </div>
             </div>
 
-            <div class="pin-card" onclick="location.href='story_detail.html'">
+            <div class="pin-card" onclick="location.href='story_detail_en.html'">
                 <div style="position:relative;">
                     <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=500&q=80" class="pin-img" style="aspect-ratio: 16/9;">
                     <i class="bi bi-play-circle-fill text-white" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:40px; text-shadow:0 2px 10px rgba(0,0,0,0.5);"></i>
                 </div>
                 <div class="pin-body">
-                    <div class="pin-title">东北话教学：你看那个人贼拉风！(视频版)</div>
+                    <div class="pin-title">東北弁講座：あの人「賊拉風」（超かっこいい）！(動画版)</div>
                     <div class="pin-footer">
                         <div class="user-box">
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" class="rounded-circle" width="20" height="20">
-                            <span>Alex在东北</span>
+                            <span>Alex_in_東北</span>
                         </div>
                         <div class="like-box"><i class="bi bi-heart"></i> 122</div>
                     </div>
                 </div>
             </div>
 
-            <div class="pin-card" onclick="location.href='story_detail.html'">
+            <div class="pin-card" onclick="location.href='story_detail_en.html'">
                 <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80" class="pin-img" style="aspect-ratio: 1/1;">
                 <div class="pin-body">
-                    <div class="pin-title">HSK 6级写作万能模版，背完这10句直接过！📚</div>
+                    <div class="pin-title">HSK 6級作文の万能テンプレート，この10文で合格！📚</div>
                     <div class="pin-footer">
                         <div class="user-box">
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Teacher" class="rounded-circle" width="20" height="20">
-                            <span>中文王老师</span>
+                            <span>王先生_中国語</span>
                         </div>
                         <div class="like-box"><i class="bi bi-heart"></i> 5k</div>
                     </div>
                 </div>
             </div>
 
-            <div class="pin-card" onclick="location.href='story_detail.html'">
+            <div class="pin-card" onclick="location.href='story_detail_en.html'">
                 <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=500&q=80" class="pin-img" style="aspect-ratio: 4/3;">
                 <div class="pin-body">
-                    <div class="pin-title">周末同城活动：去胡同里学剪纸✂️</div>
+                    <div class="pin-title">週末の同城イベント：胡同で切り絵体験✂️</div>
                     <div class="pin-footer">
                         <div class="user-box">
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Art" class="rounded-circle" width="20" height="20">
@@ -248,10 +236,10 @@
                 </div>
             </div>
 
-             <div class="pin-card" onclick="location.href='story_detail.html'">
+             <div class="pin-card" onclick="location.href='story_detail_en.html'">
                 <img src="https://images.unsplash.com/photo-1555685812-4b943f3db990?w=500&q=80" class="pin-img" style="aspect-ratio: 3/4;">
                 <div class="pin-body">
-                    <div class="pin-title">我的中国室友教我打麻将，太复杂了！🀄️</div>
+                    <div class="pin-title">中国人のルームメイトに麻雀を教わったけど，複雑すぎる！🀄️</div>
                     <div class="pin-footer">
                         <div class="user-box">
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Tom" class="rounded-circle" width="20" height="20">
@@ -262,10 +250,10 @@
                 </div>
             </div>
 
-            <div class="pin-card" onclick="location.href='story_detail.html'">
+            <div class="pin-card" onclick="location.href='story_detail_en.html'">
                 <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=500&q=80" class="pin-img" style="aspect-ratio: 1/1;">
                 <div class="pin-body">
-                    <div class="pin-title">瑞士留学生：我为什么选择来中国留学？🇨🇭🇨🇳</div>
+                    <div class="pin-title">スイス人留学生：なぜ私は中国留学を選んだのか？🇨🇭🇨🇳</div>
                     <div class="pin-footer">
                         <div class="user-box">
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="rounded-circle" width="20" height="20">
@@ -276,10 +264,10 @@
                 </div>
             </div>
 
-            <div class="pin-card" onclick="location.href='story_detail.html'">
+            <div class="pin-card" onclick="location.href='story_detail_en.html'">
                 <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=80" class="pin-img" style="aspect-ratio: 16/9;">
                 <div class="pin-body">
-                    <div class="pin-title">跟好朋友一起去爬长城，腿都要断了！🏃‍♀️</div>
+                    <div class="pin-title">親友と長城へ。足が棒になった！🏃‍♀️</div>
                     <div class="pin-footer">
                         <div class="user-box">
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Friends" class="rounded-circle" width="20" height="20">
@@ -295,49 +283,46 @@
 
     <div style="height: 80px;"></div>
 
-    <a href="story_publish.html" class="fab shadow" title="发布笔记">
+    <a href="story_publish_en.html" class="fab shadow" title="投稿する">
         <i class="bi bi-plus-lg"></i>
     </a>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // 1. Tab 切换逻辑
+        // 1. Tab 切替
         function switchMainTab(el, type) {
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
-
-            if(type === 'follow') {
-                console.log('Switched to Following');
-            } else if (type === 'discover') {
-            }
+            if(type === 'follow') { console.log('Switched to Following'); }
+            else if (type === 'discover') { }
         }
 
-        // 2. 定位功能
+        // 2. 位置情報
         function getLocation(el) {
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
 
             if (navigator.geolocation) {
                 const originalText = el.innerHTML;
-                el.innerHTML = '定位中... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+                el.innerHTML = '測位中... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
 
                 setTimeout(() => {
                     el.innerHTML = '北京 <i class="bi bi-geo-alt-fill text-primary"></i>';
-                    alert('已定位到：北京。为您展示同城帖子。');
+                    alert('位置情報：北京。近くの投稿を表示します。');
                 }, 1000);
             } else {
-                alert("您的浏览器不支持定位");
+                alert("ブラウザが位置情報をサポートしていません");
             }
         }
 
-        // 3. 标签筛选
+        // 3. タグフィルタ
         function filterTag(el) {
             document.querySelectorAll('.topic-pill').forEach(p => p.classList.remove('active'));
             el.classList.add('active');
             console.log("Filtering by: " + el.innerText);
         }
 
-        // 4. 列表页快速点赞
+        // 4. いいね機能
         function toggleLike(el) {
             el.classList.toggle('liked');
             let icon = el.querySelector('i');

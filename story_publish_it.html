@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pubblica Nota - YanHe Storie</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f8faff; }
+        body { background: #fff; padding-top: 70px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+        .publish-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+
+        /* Area Caricamento */
+        .upload-area {
+            border: 2px dashed #ddd; border-radius: 16px; height: 400px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: #999; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fafafa;
+        }
+        .upload-area:hover { border-color: var(--primary); background: #f0f7ff; color: var(--primary); }
+        .preview-img { width: 100%; height: 100%; object-fit: contain; border-radius: 14px; display: none; }
+
+        /* Stili Form */
+        .form-control-lg {
+            font-weight: 700; border: none; border-bottom: 2px solid #f0f0f0;
+            border-radius: 0; padding-left: 0; font-size: 1.5rem;
+        }
+        .form-control-lg:focus { box-shadow: none; border-bottom-color: var(--primary); }
+
+        .form-control-text { border: none; padding-left: 0; resize: none; font-size: 1.1rem; }
+        .form-control-text:focus { box-shadow: none; }
+
+        /* Argomenti / Hashtag */
+        .tag-badge {
+            background: #f1f3f5; color: #444; padding: 8px 16px;
+            border-radius: 25px; font-size: 14px; margin-right: 8px;
+            cursor: pointer; transition: 0.2s; border: 1px solid transparent;
+        }
+        .tag-badge:hover { background: #e9ecef; }
+        .tag-badge.selected { background: rgba(0, 74, 173, 0.1); color: var(--primary); border-color: var(--primary); font-weight: 600; }
+
+        /* Opzioni Lista */
+        .list-group-item {
+            border: none; border-bottom: 1px solid #f8f8f8; padding: 18px 0;
+            cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; color: #333; font-weight: 500;
+        }
+        .list-group-item:hover { color: var(--primary); }
+
+        /* Navbar Fixed Custom */
+        .navbar-custom { padding: 0 5%; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top bg-white border-bottom navbar-custom">
+        <div class="container-fluid">
+            <a class="text-secondary text-decoration-none fw-bold" href="story_it.html">Annulla</a>
+            <span class="navbar-text mx-auto fw-bolder text-dark fs-5">Crea Nuovo Post</span>
+            <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" onclick="handlePublish()">Pubblica</button>
+        </div>
+    </nav>
+
+    <div class="publish-container">
+        <div class="row gx-5">
+            <div class="col-lg-5 mb-4">
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" hidden onchange="previewFile(this)">
+                    <img id="preview" class="preview-img">
+                    <div id="uploadPrompt" class="text-center">
+                        <i class="bi bi-cloud-arrow-up fs-1 mb-2"></i>
+                        <p class="mb-1 fw-bold">Clicca o trascina per caricare</p>
+                        <small class="text-muted">Immagini (JPG, PNG) o Video (MP4)</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <input type="text" class="form-control form-control-lg mb-4" placeholder="Aggiungi un titolo interessante...">
+                <textarea class="form-control form-control-text mb-4" rows="8" placeholder="Cosa sta succedendo? Condividi la tua esperienza in Cina..."></textarea>
+
+                <div class="mb-5">
+                    <p class="small text-muted mb-3 fw-bold"><i class="bi bi-hash"></i> ARGOMENTI POPOLARI</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># VitaInCina</span>
+                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># CucinaCinese</span>
+                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># StudioCinese</span>
+                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># CityWalk</span>
+                    </div>
+                </div>
+
+                <ul class="list-group">
+                    <li class="list-group-item" onclick="getLocation()">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-geo-alt me-3 text-primary fs-5"></i>
+                            <div>
+                                <div class="mb-0">Aggiungi Luogo</div>
+                                <div class="text-muted small fw-normal" id="locationText">Rileva posizione attuale</div>
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-right small text-muted"></i>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-lock me-3 text-primary fs-5"></i>
+                            <div>
+                                <div class="mb-0">Privacy</div>
+                                <div class="text-muted small fw-normal">Pubblico (visibile a tutti)</div>
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-right small text-muted"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function previewFile(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('preview');
+                    const prompt = document.getElementById('uploadPrompt');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    prompt.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function getLocation() {
+            const locText = document.getElementById('locationText');
+            locText.innerText = "Ricerca posizione...";
+            setTimeout(() => {
+                locText.innerText = "Università di Lingua e Cultura di Pechino (BLCU), Haidian";
+                locText.classList.remove('text-muted');
+                locText.classList.add('text-primary');
+            }, 1200);
+        }
+
+        function handlePublish() {
+            alert('✅ Post inviato con successo!\nSarà visibile nella community dopo la revisione.');
+            location.href='story_it.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Центр заданий - YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f8faff; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding-top: 70px; background: var(--bg-light); }
+
+        /* Навигация */
+        .navbar-custom { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.03); height: 70px; z-index: 1000; }
+        .navbar-brand { font-weight: 900; font-size: 1.5rem; color: var(--primary); letter-spacing: -0.5px; text-decoration: none; }
+        .nav-link { font-weight: 600; color: #555 !important; padding: 8px 18px !important; border-radius: 30px; transition: 0.3s; }
+        .nav-link:hover { color: var(--primary) !important; background: rgba(0, 74, 173, 0.06); }
+        .nav-link.active { color: #fff !important; background: var(--primary); }
+
+        /* Hero & Переключатель */
+        .service-hero { background: linear-gradient(180deg, #fff 0%, #f0f7ff 100%); padding: 40px 0 20px; text-align: center; }
+        .role-switch-container { background: #eef4fc; border-radius: 50px; padding: 5px; display: inline-flex; margin-bottom: 25px; }
+        .role-btn { padding: 10px 35px; border-radius: 40px; border: none; font-weight: bold; font-size: 14px; background: transparent; color: #666; transition: 0.3s; cursor: pointer; }
+        .role-btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(0, 74, 173, 0.3); }
+
+        /* Поиск */
+        .search-box-custom { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 50px; padding: 5px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; }
+        .search-input { border: none; flex: 1; padding: 10px 20px; border-radius: 50px; outline: none; font-size: 14px; }
+        .search-btn { border-radius: 50px; padding: 8px 30px; font-weight: bold; }
+
+        /* Карточки */
+        .task-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.02); transition: 0.2s; cursor: pointer; }
+        .task-card:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+        .price-tag { color: var(--accent); font-weight: 800; font-size: 1.2rem; }
+
+        /* Сайдбар */
+        .sidebar-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .rank-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 13px; }
+        .rank-num { width: 20px; height: 20px; background: #eee; color: #666; border-radius: 4px; text-align: center; line-height: 20px; font-weight: bold; margin-right: 10px; }
+
+        /* Вид заказчика */
+        .client-action-card { background: #fff; border-radius: 16px; padding: 40px; text-align: center; height: 100%; transition: 0.3s; cursor: pointer; border: 2px solid transparent; }
+        .client-action-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,74,173,0.1); }
+        .action-icon-lg { width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 20px; }
+        .market-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #eee; font-size: 14px; }
+
+        .d-none-custom { display: none !important; }
+
+        @media (max-width: 991px) {
+            .navbar-collapse { background: #ffffff; padding: 20px; border-radius: 16px; margin-top: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="index_ru.html">YanHe</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav mx-auto gap-1">
+                    <li class="nav-item"><a class="nav-link" href="index_ru.html">Главная</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story_ru.html">Истории</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education_ru.html">Обучение</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="service_ru.html">Задания</a></li>
+                    <li class="nav-item"><a class="nav-link" href="culture_ru.html">Карта</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0 ms-lg-4">
+                    <a href="login_ru.html" class="btn btn-outline-secondary rounded-pill btn-sm px-4 fw-bold">Вход</a>
+                    <a href="service.html" class="btn btn-primary rounded-pill btn-sm fw-bold px-3 shadow-sm border-0" style="background:var(--primary)">中文</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="service-hero">
+        <div class="container">
+            <div class="role-switch-container">
+                <button class="role-btn active" onclick="switchView('creator', this)">Я исполнитель (беру заказы)</button>
+                <button class="role-btn" onclick="switchView('client', this)">Я заказчик (даю задания)</button>
+            </div>
+            <div class="search-box-custom">
+                <input type="text" class="search-input" id="searchInput" placeholder="Поиск: юридический перевод, запись диалекта, корректура...">
+                <button class="btn btn-primary rounded-pill search-btn">Найти</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pb-5 mt-4">
+        <div id="creator-view">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-briefcase-fill text-primary"></i> Рекомендуемые задачи</h5>
+
+                    <div class="task-card" onclick="location.href='task_detail_ru.html'">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="badge bg-danger bg-opacity-10 text-danger mb-2">Бизнес-заказ</span>
+                                <h5 class="fw-bold mb-1">Перевод юридического контракта (EN > ZH)</h5>
+                                <div class="text-muted small mb-2">Требуется точность терминов и опыт в международном праве.</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="price-tag">¥ 500</div>
+                                <div class="small text-muted">/ 1к слов</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LawFirm" class="rounded-circle" width="24">
+                                <span class="small fw-bold text-secondary">Юридическая фирма JTC</span>
+                            </div>
+                            <span class="text-success small fw-bold">Активно: 3/5 мест</span>
+                        </div>
+                    </div>
+
+                    <div class="task-card" onclick="location.href='task_detail_ru.html'">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="badge bg-warning bg-opacity-10 text-dark mb-2">Диалекты</span>
+                                <h5 class="fw-bold mb-1">Запись 50 фраз на сучжоуском диалекте</h5>
+                                <div class="text-muted small mb-2">Для пополнения языковой базы YanHe. Нужен чистый выговор.</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="price-tag">¥ 120</div>
+                                <div class="small text-muted">/ пакет</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=YanHe" class="rounded-circle" width="24">
+                                <span class="small fw-bold text-secondary">YanHe Official</span>
+                            </div>
+                            <span class="small text-muted">Бессрочно</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="sidebar-card text-center bg-primary text-white" style="background: linear-gradient(135deg, var(--primary), var(--accent));">
+                        <div class="mb-2"><i class="bi bi-mortarboard-fill fs-1"></i></div>
+                        <h6 class="fw-bold">Верификация студентов</h6>
+                        <p class="small opacity-75 mb-3">Подтвердите статус студента BSU или BFSU для доступа к заказам без комиссии.</p>
+                        <a href="certification_ru.html" class="btn btn-sm btn-light text-primary rounded-pill w-100 fw-bold">Верифицироваться</a>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h6 class="fw-bold mb-3">🏆 Топ недели (ВУЗы)</h6>
+                        <div class="rank-item">
+                            <div class="d-flex align-items-center">
+                                <div class="rank-num" style="background:#ffd700; color:#fff;">1</div>
+                                <span>Студент Чжан (Англ. яз)</span>
+                            </div>
+                            <span class="fw-bold text-danger">¥ 3,200</span>
+                        </div>
+                        <div class="rank-item">
+                            <div class="d-flex align-items-center">
+                                <div class="rank-num">2</div>
+                                <span>Студент Ли (Нем. яз)</span>
+                            </div>
+                            <span class="fw-bold">¥ 1,850</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="client-view" class="d-none-custom">
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <div class="client-action-card bg-primary bg-opacity-10" onclick="location.href='task_publish_ru.html'">
+                        <div class="action-icon-lg bg-primary text-white shadow-sm"><i class="bi bi-pencil-square"></i></div>
+                        <h3 class="fw-bold text-primary">Создать заказ</h3>
+                        <p class="text-muted mt-3">Найдите экспертов из вузов для сложных переводов.<br>Защита сделки и двойная проверка качества.</p>
+                        <button class="btn btn-primary rounded-pill px-5 mt-2 fw-bold">Опубликовать</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="client-action-card bg-warning bg-opacity-10" onclick="location.href='ai_fast_service_ru.html'">
+                        <div class="action-icon-lg bg-warning text-white shadow-sm"><i class="bi bi-robot"></i></div>
+                        <h3 class="fw-bold text-dark">AI Экспресс-сервис</h3>
+                        <p class="text-muted mt-3">Мгновенный перевод и улучшение текста нейросетью.<br>Доступно 24/7 по низкой цене.</p>
+                        <button class="btn btn-warning text-white rounded-pill px-5 mt-2 fw-bold">Запустить AI</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-card mx-auto" style="max-width: 800px;">
+                <h5 class="fw-bold mb-3 text-center"><i class="bi bi-graph-up-arrow text-success"></i> Рыночные расценки (Средние)</h5>
+                <div class="market-row">
+                    <span>Юридический перевод (EN>ZH)</span>
+                    <span class="fw-bold">¥ 180 - 260 / 1к слов</span>
+                </div>
+                <div class="market-row">
+                    <span>Устный перевод (Японский)</span>
+                    <span class="fw-bold">¥ 800 - 1500 / день</span>
+                </div>
+                <div class="market-row">
+                    <span>Корректура эссе</span>
+                    <span class="fw-bold">¥ 300 - 800 / шт</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4 text-center small">
+        <div class="container">
+            <p class="mb-1">YanHe International Education © 2026</p>
+            <div class="text-white-50">Лицензия ICP №12345678 | <a href="charity_report_ru.html" class="text-white-50">Отчет о благотворительности</a></div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function switchView(role, btn) {
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const searchInput = document.getElementById('searchInput');
+            if (role === 'creator') {
+                searchInput.placeholder = "Поиск: юридический перевод, запись диалекта, корректура...";
+                document.getElementById('creator-view').classList.remove('d-none-custom');
+                document.getElementById('client-view').classList.add('d-none-custom');
+            } else {
+                searchInput.placeholder = "Поиск талантов: английский C1, устный перевод, носитель диалекта...";
+                document.getElementById('creator-view').classList.add('d-none-custom');
+                document.getElementById('client-view').classList.remove('d-none-custom');
+            }
+        }
+    </script>
+</body>
+</html>

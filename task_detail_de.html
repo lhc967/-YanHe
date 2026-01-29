@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>任务详情 - 《国际商法》合同条款翻译</title>
+    <title>Aufgabendetails - Übersetzung Internationales Wirtschaftsrecht</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f8faff; }
-        body { font-family: -apple-system, "PingFang SC", sans-serif; padding-top: 70px; background: var(--bg-light); }
+        body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif; padding-top: 70px; background: var(--bg-light); }
 
-        /* 导航栏复用 */
+        /* Navigation */
         .navbar-custom { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.03); height: 70px; z-index: 1000; }
         .navbar-brand { font-weight: 900; color: var(--primary); }
         .nav-link { font-weight: 600; color: #555 !important; }
 
-        /* 头部概览 */
+        /* Header-Übersicht */
         .task-header { background: #fff; padding: 30px 0; border-bottom: 1px solid #eee; }
         .price-large { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
         .tag-badge { padding: 5px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-right: 8px; }
 
-        /* 主内容区 */
+        /* Hauptinhalt */
         .content-card { background: #fff; border-radius: 12px; padding: 30px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
         .section-title { font-weight: bold; font-size: 18px; margin-bottom: 20px; border-left: 4px solid var(--primary); padding-left: 12px; }
 
-        /* 流程步进器 */
+        /* Prozess-Stepper */
         .step-container { display: flex; justify-content: space-between; position: relative; margin: 30px 0; }
         .step-container::before { content: ''; position: absolute; top: 15px; left: 0; right: 0; height: 2px; background: #eee; z-index: 0; }
         .step-item { position: relative; z-index: 1; text-align: center; background: #fff; padding: 0 10px; }
@@ -33,11 +33,11 @@
         .step-item.active .step-text { color: var(--primary); font-weight: bold; }
         .step-text { font-size: 12px; color: #999; }
 
-        /* 侧边栏雇主卡片 */
+        /* Seitenleiste Arbeitgeber */
         .employer-card { background: #fff; border-radius: 12px; padding: 25px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .credit-score { display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-top: 5px; }
 
-        /* 底部浮动栏 (移动端适配) */
+        /* Untere Leiste (Mobil) */
         .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
         .btn-bid { background: linear-gradient(135deg, #004aad, #0066cc); color: #fff; border: none; padding: 12px 40px; border-radius: 50px; font-weight: bold; box-shadow: 0 5px 15px rgba(0, 74, 173, 0.3); transition: 0.3s; }
         .btn-bid:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 74, 173, 0.4); }
@@ -46,9 +46,9 @@
 <body>
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom px-4">
-        <a class="navbar-brand" href="service.html"><i class="bi bi-chevron-left me-2"></i>返回大厅</a>
+        <a class="navbar-brand" href="service_de.html"><i class="bi bi-chevron-left me-2"></i>Marktplatz</a>
         <div class="ms-auto d-flex align-items-center gap-3">
-            <span class="text-muted small"><i class="bi bi-shield-check text-success"></i> 资金已由平台托管</span>
+            <span class="text-muted small"><i class="bi bi-shield-check text-success"></i> Mittel durch Plattform gesichert</span>
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40" class="rounded-circle border" width="35">
         </div>
     </nav>
@@ -58,20 +58,20 @@
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <div class="mb-2">
-                        <span class="tag-badge bg-primary bg-opacity-10 text-primary">翻译</span>
-                        <span class="tag-badge bg-warning bg-opacity-10 text-dark">加急</span>
-                        <span class="text-muted small">发布于 2小时前</span>
+                        <span class="tag-badge bg-primary bg-opacity-10 text-primary">Übersetzung</span>
+                        <span class="tag-badge bg-warning bg-opacity-10 text-dark">Dringend</span>
+                        <span class="text-muted small">Gepostet vor 2 Std.</span>
                     </div>
-                    <h2 class="fw-bold mb-3">《国际商法》合同条款英译中 (5000字)</h2>
+                    <h2 class="fw-bold mb-3">Übersetzung Vertragsklauseln "Internationales Wirtschaftsrecht" EN-CN (5000 Wörter)</h2>
                     <div class="d-flex gap-4 text-secondary small">
-                        <span><i class="bi bi-clock"></i> 截止：2026-01-15</span>
-                        <span><i class="bi bi-people"></i> 限制：BSU/北外 学生认证</span>
-                        <span><i class="bi bi-eye"></i> 128 浏览</span>
+                        <span><i class="bi bi-clock"></i> Deadline: 15.01.2026</span>
+                        <span><i class="bi bi-people"></i> Bedingung: BSU/BFSU Studenten</span>
+                        <span><i class="bi bi-eye"></i> 128 Ansichten</span>
                     </div>
                 </div>
                 <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                     <div class="price-large">¥ 1,500</div>
-                    <div class="text-muted small mt-1">托管资金 (含税)</div>
+                    <div class="text-muted small mt-1">Treuhandmittel (inkl. Steuer)</div>
                 </div>
             </div>
         </div>
@@ -85,50 +85,50 @@
                     <div class="step-container">
                         <div class="step-item active">
                             <div class="step-circle"><i class="bi bi-check"></i></div>
-                            <div class="step-text">需求发布</div>
+                            <div class="step-text">Veröffentlicht</div>
                         </div>
                         <div class="step-item active">
                             <div class="step-circle">2</div>
-                            <div class="step-text">人才竞标</div>
+                            <div class="step-text">Bietphase</div>
                         </div>
                         <div class="step-item">
                             <div class="step-circle">3</div>
-                            <div class="step-text">工作中</div>
+                            <div class="step-text">In Arbeit</div>
                         </div>
                         <div class="step-item">
                             <div class="step-circle">4</div>
-                            <div class="step-text">验收付款</div>
+                            <div class="step-text">Abnahme & Zahlung</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="content-card">
-                    <div class="section-title">需求详情</div>
+                    <div class="section-title">Anforderungen</div>
                     <div class="text-secondary" style="line-height: 1.8;">
-                        <p><strong>项目背景：</strong><br>我方为一家进出口贸易公司，现有一份关于跨境电商的采购合同需翻译成中文，供内部审核使用。</p>
-                        <p><strong>具体要求：</strong></p>
+                        <p><strong>Projekthintergrund:</strong><br>Wir sind ein Import-/Export-Handelsunternehmen und benötigen die Übersetzung eines Beschaffungsvertrags für grenzüberschreitenden E-Commerce ins Chinesische zur internen Prüfung.</p>
+                        <p><strong>Spezifische Anforderungen:</strong></p>
                         <ul>
-                            <li>字数约 5000 英文单词，需翻译为中文。</li>
-                            <li>要求术语准确，符合《中华人民共和国民法典》合同编的表述习惯。</li>
-                            <li>译者需具备法律背景或英语专业八级证书。</li>
-                            <li>排版需保持与原件一致（Word格式）。</li>
+                            <li>Ca. 5000 englische Wörter, zu übersetzen ins Chinesische.</li>
+                            <li>Präzise Terminologie erforderlich, konform mit den Formulierungen des Vertragsrechts des Zivilgesetzbuches der VR China.</li>
+                            <li>Übersetzer benötigt juristischen Hintergrund oder TEM-8 Zertifikat (Englisch).</li>
+                            <li>Formatierung muss dem Original entsprechen (Word-Format).</li>
                         </ul>
-                        <p><strong>附件：</strong></p>
+                        <p><strong>Anhang:</strong></p>
                         <div class="p-3 bg-light rounded border d-flex align-items-center gap-3" style="width: fit-content;">
                             <i class="bi bi-file-earmark-word fs-3 text-primary"></i>
                             <div>
                                 <div class="fw-bold small">Sample_Contract_Part1.docx</div>
-                                <div class="text-muted" style="font-size: 10px;">124 KB (仅试译部分)</div>
+                                <div class="text-muted" style="font-size: 10px;">124 KB (Nur Probe)</div>
                             </div>
-                            <button class="btn btn-sm btn-outline-secondary ms-2">预览</button>
+                            <button class="btn btn-sm btn-outline-secondary ms-2">Vorschau</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="content-card">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="section-title mb-0">竞标动态 (3人)</div>
-                        <span class="badge bg-success bg-opacity-10 text-success">招募中</span>
+                        <div class="section-title mb-0">Gebotsstatus (3 Personen)</div>
+                        <span class="badge bg-success bg-opacity-10 text-success">Rekrutierung läuft</span>
                     </div>
 
                     <div class="list-group list-group-flush">
@@ -136,21 +136,21 @@
                             <div class="d-flex align-items-center gap-3">
                                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jack" class="rounded-circle" width="40">
                                 <div>
-                                    <div class="fw-bold font-sm">英语系·张同学 <i class="bi bi-patch-check-fill text-primary small"></i></div>
-                                    <div class="small text-muted">已通过 BSU 学生认证</div>
+                                    <div class="fw-bold font-sm">Englisch · Zhang <i class="bi bi-patch-check-fill text-primary small"></i></div>
+                                    <div class="small text-muted">BSU verifiziert</div>
                                 </div>
                             </div>
-                            <span class="small text-muted">20分钟前 报价</span>
+                            <span class="small text-muted">Vor 20 Min. geboten</span>
                         </div>
                         <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center gap-3">
                                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lily" class="rounded-circle" width="40">
                                 <div>
-                                    <div class="fw-bold font-sm">法律系·李同学 <i class="bi bi-patch-check-fill text-primary small"></i></div>
-                                    <div class="small text-muted">已通过政法大学认证</div>
+                                    <div class="fw-bold font-sm">Recht · Li <i class="bi bi-patch-check-fill text-primary small"></i></div>
+                                    <div class="small text-muted">CUPL verifiziert</div>
                                 </div>
                             </div>
-                            <span class="small text-muted">1小时前 报价</span>
+                            <span class="small text-muted">Vor 1 Std. geboten</span>
                         </div>
                     </div>
                 </div>
@@ -159,27 +159,27 @@
             <div class="col-lg-4">
                 <div class="employer-card sticky-top" style="top: 90px;">
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LawFirm" class="rounded-circle mb-3" width="80">
-                    <h5 class="fw-bold">锦天城律师事务所</h5>
-                    <div class="credit-score"><i class="bi bi-star-fill"></i> 信用极好 780分</div>
+                    <h5 class="fw-bold">Jingtian & Gongcheng Anwälte</h5>
+                    <div class="credit-score"><i class="bi bi-star-fill"></i> Exzellent 780 Pkt.</div>
 
                     <hr class="my-4">
 
                     <div class="d-flex justify-content-between small mb-2">
-                        <span class="text-muted">发布任务</span>
-                        <span class="fw-bold">12 次</span>
+                        <span class="text-muted">Aufgaben</span>
+                        <span class="fw-bold">12 Mal</span>
                     </div>
                     <div class="d-flex justify-content-between small mb-2">
-                        <span class="text-muted">付款率</span>
+                        <span class="text-muted">Zahlungsrate</span>
                         <span class="fw-bold text-success">100%</span>
                     </div>
                     <div class="d-flex justify-content-between small mb-4">
-                        <span class="text-muted">平均验收</span>
-                        <span class="fw-bold">2.5 天</span>
+                        <span class="text-muted">Ø Abnahme</span>
+                        <span class="fw-bold">2.5 Tage</span>
                     </div>
 
-                    <button class="btn btn-outline-primary w-100 rounded-pill mb-2">私信咨询</button>
+                    <button class="btn btn-outline-primary w-100 rounded-pill mb-2">Nachricht</button>
                     <div class="alert alert-warning small mt-3 text-start" role="alert">
-                        <i class="bi bi-exclamation-circle-fill me-1"></i> 提示：请勿脱离平台私下交易，谨防诈骗。
+                        <i class="bi bi-exclamation-circle-fill me-1"></i> Hinweis: Handeln Sie nicht außerhalb der Plattform, um Betrug zu vermeiden.
                     </div>
                 </div>
             </div>
@@ -190,27 +190,27 @@
         <div class="d-flex gap-4">
             <div class="text-center" style="cursor: pointer;">
                 <i class="bi bi-heart fs-5"></i>
-                <div style="font-size: 10px;">收藏</div>
+                <div style="font-size: 10px;">Merken</div>
             </div>
             <div class="text-center" style="cursor: pointer;">
                 <i class="bi bi-share fs-5"></i>
-                <div style="font-size: 10px;">分享</div>
+                <div style="font-size: 10px;">Teilen</div>
             </div>
         </div>
         <div>
             <span class="me-3 fw-bold text-accent" style="font-size: 20px;">¥ 1,500</span>
-            <button class="btn-bid" onclick="applyTask()">立即竞标</button>
+            <button class="btn-bid" onclick="applyTask()">Jetzt bieten</button>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function applyTask() {
-            // 这里可以加一个 Modal 弹窗填写报价和优势
-            const confirmBid = confirm("确认参与竞标？\n您的简历和信用分将发送给雇主。");
+            // Hier könnte ein Modal für das Angebot erscheinen
+            const confirmBid = confirm("Gebot bestätigen?\nIhr Profil und Score werden an den Arbeitgeber gesendet.");
             if(confirmBid) {
-                alert("竞标成功！请等待雇主筛选。");
-                // 刷新页面或变更为已竞标状态
+                alert("Gebot erfolgreich! Bitte warten Sie auf die Auswahl des Arbeitgebers.");
+                // Seite aktualisieren oder Status ändern
             }
         }
     </script>

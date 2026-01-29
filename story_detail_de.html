@@ -1,39 +1,39 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>穿着汉服去上课 - 言禾故事</title>
+    <title>Im Hanfu zum Unterricht - YanHe Story</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root { --primary: #004aad; --red: #ff2442; --bg-light: #f8faff; }
         body { padding-top: 70px; background: #fff; }
 
-        /* 布局容器 */
+        /* Layout-Container */
         .detail-container { max-width: 1200px; margin: 30px auto; background: #fff; border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-wrap: wrap; border: 1px solid #eee; }
 
-        /* 左侧媒体区 */
+        /* Medienbereich links */
         .media-section { flex: 1.5; background: #000; position: relative; min-height: 600px; display: flex; align-items: center; justify-content: center; }
         .media-content { max-width: 100%; max-height: 80vh; object-fit: contain; }
 
-        /* 右侧互动区 */
+        /* Interaktionsbereich rechts */
         .interaction-section { flex: 1; padding: 24px; display: flex; flex-direction: column; height: 80vh; min-width: 350px; overflow-y: auto; }
 
-        /* 作者信息 */
+        /* Autor-Info */
         .author-card { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
         .author-info { display: flex; align-items: center; gap: 10px; }
         .author-avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #eee; }
         .btn-follow { border: 1px solid var(--red); color: var(--red); border-radius: 20px; padding: 4px 16px; font-size: 13px; font-weight: 600; background: #fff; transition: 0.2s; }
         .btn-follow.following { background: #eee; border-color: #eee; color: #999; }
 
-        /* 内容文本 */
+        /* Inhalt */
         .post-title { font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #333; }
         .post-desc { font-size: 15px; line-height: 1.6; color: #555; white-space: pre-wrap; margin-bottom: 15px; }
         .post-tags span { color: var(--primary); margin-right: 5px; cursor: pointer; }
         .post-date { font-size: 12px; color: #999; margin-top: 10px; }
 
-        /* 底部操作栏 (固定在右侧底部) */
+        /* Aktionsleiste (unten rechts fixiert) */
         .action-bar { margin-top: auto; padding-top: 20px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .action-item { display: flex; align-items: center; gap: 6px; cursor: pointer; color: #666; transition: 0.2s; }
         .action-item:hover { color: #333; }
@@ -45,13 +45,13 @@
 <body>
     <nav class="navbar navbar-expand-lg fixed-top bg-white border-bottom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold text-primary" href="story.html"><i class="bi bi-chevron-left"></i> 返回首页</a>
+            <a class="navbar-brand fw-bold text-primary" href="story_de.html"><i class="bi bi-chevron-left"></i> Zurück</a>
         </div>
     </nav>
 
     <div class="detail-container">
         <div class="media-section">
-            <img src="https://images.unsplash.com/photo-1543165365-07232fe12224?w=800&q=90" class="media-content" alt="Post Content">
+            <img src="https://images.unsplash.com/photo-1543165365-07232fe12224?w=800&q=90" class="media-content" alt="Post-Inhalt">
             </div>
 
         <div class="interaction-section">
@@ -59,38 +59,38 @@
                 <div class="author-info">
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lily" class="author-avatar">
                     <div>
-                        <div class="fw-bold" style="font-size:14px;">小雅_Hanfu</div>
-                        <div class="text-muted" style="font-size:11px;">北京体育大学 · 留学生</div>
+                        <div class="fw-bold" style="font-size:14px;">Lily_Hanfu</div>
+                        <div class="text-muted" style="font-size:11px;">Sportuniversität Peking · Studentin</div>
                     </div>
                 </div>
-                <button class="btn-follow" onclick="toggleFollow(this)">关注</button>
+                <button class="btn-follow" onclick="toggleFollow(this)">Folgen</button>
             </div>
 
             <div class="post-content">
-                <h1 class="post-title">穿着汉服去上课是什么体验？老师都惊呆了！📸✨</h1>
-                <p class="post-desc">今天终于鼓起勇气穿汉服去上古代文学课了！本来以为会很尴尬，结果同学们都说好看，老师还特意让我上台展示了一下汉服的形制。
+                <h1 class="post-title">Wie ist es, im Hanfu zum Unterricht zu gehen? Der Lehrer war schockiert! 📸✨</h1>
+                <p class="post-desc">Heute habe ich endlich den Mut aufgebracht, Hanfu zum Altliteratur-Kurs zu tragen! Ich dachte, es wäre peinlich, aber meine Kommilitonen fanden es schön, und der Lehrer bat mich sogar auf die Bühne, um den Stil zu zeigen.
 
-这套是明制的马面裙，真的很适合日常穿搭，走路带风～ 大家觉得留学生穿汉服奇怪吗？我觉得这是最好的文化体验！🇨🇳</p>
+Das ist ein Mamian-Rock im Ming-Stil, wirklich alltagstauglich und toll beim Gehen~ Findet ihr es seltsam, wenn internationale Studenten Hanfu tragen? Ich finde, es ist die beste Kulturerfahrung! 🇨🇳</p>
                 <div class="post-tags">
-                    <span>#汉服日常</span> <span>#留学生生活</span> <span>#中华文化</span> <span>#BSU</span>
+                    <span>#HanfuAlltag</span> <span>#Studentenleben</span> <span>#ChinesischeKultur</span> <span>#BSU</span>
                 </div>
-                <div class="post-date">01-08 14:30 · 北京</div>
+                <div class="post-date">08.01. 14:30 · Peking</div>
             </div>
 
             <div class="mt-4 border-top pt-3">
-                <div class="text-muted small mb-3">共 128 条评论</div>
+                <div class="text-muted small mb-3">128 Kommentare</div>
                 <div class="d-flex gap-2 mb-3">
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Tom" style="width:30px;height:30px;border-radius:50%">
                     <div>
                         <div class="small fw-bold text-secondary">Tom</div>
-                        <div class="small">太美了！我也想买一套，有链接吗？</div>
+                        <div class="small">So schön! Ich will auch einen kaufen, hast du einen Link?</div>
                     </div>
                 </div>
                  <div class="d-flex gap-2 mb-3">
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" style="width:30px;height:30px;border-radius:50%">
                     <div>
                         <div class="small fw-bold text-secondary">Sarah</div>
-                        <div class="small">Cool! It looks amazing on you.</div>
+                        <div class="small">Cool! Das steht dir ausgezeichnet.</div>
                     </div>
                 </div>
             </div>
@@ -119,11 +119,11 @@
 
     <script>
         function toggleFollow(btn) {
-            if(btn.innerText === '关注') {
-                btn.innerText = '已关注';
+            if(btn.innerText === 'Folgen') {
+                btn.innerText = 'Gefolgt';
                 btn.classList.add('following');
             } else {
-                btn.innerText = '关注';
+                btn.innerText = 'Folgen';
                 btn.classList.remove('following');
             }
         }

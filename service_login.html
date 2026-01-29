@@ -74,31 +74,32 @@
 
         /* 隐藏类 */
         .d-none-custom { display: none !important; }
-         /* --- 手机端导航栏白底修复 --- */
-        @media (max-width: 991px) {
-            .navbar-collapse {
-                background: #ffffff; /* 纯白背景 */
-                padding: 20px;
-                border-radius: 16px;
-                margin-top: 15px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-                border: 1px solid rgba(0,0,0,0.05);
+        /* --- 修复手机端导航栏背景透明问题 --- */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background: #ffffff; /* 纯白背景 */
+        padding: 20px;       /* 内边距，让文字不贴边 */
+        border-radius: 16px; /* 圆角，更好看 */
+        margin-top: 15px;    /* 和顶部导航栏拉开一点距离 */
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1); /* 加点阴影，更有层次感 */
+        border: 1px solid rgba(0,0,0,0.05); /* 淡淡的边框 */
+    }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="home_login.html">言禾 YanHe</a>
+            <a class="navbar-brand" href="home.html">言禾 YanHe</a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                 <i class="bi bi-list fs-5"></i>
             </button>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link" href="home_login.html">首页</a></li>
-                    <li class="nav-item"><a class="nav-link" href="story_login.html">中国故事</a></li>
+                    <li class="nav-item"><a class="nav-link" href="home.html">首页</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story.html">中国故事</a></li>
                     <li class="nav-item"><a class="nav-link" href="education.html">教育云</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="service_login.html">任务大厅</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="service.html">任务大厅</a></li>
                     <li class="nav-item"><a class="nav-link" href="culture.html">方言地图</a></li>
                 </ul>
 
@@ -118,7 +119,7 @@
                                 <div class="fw-bold text-dark">李言禾</div>
                                 <div class="small text-muted">学生认证用户</div>
                             </li>
-                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person-badge"></i> 个人主页</a></li>
+                            <li><a class="dropdown-item" href="index_login.html"><i class="bi bi-person-badge"></i> 个人主页</a></li>
                             <li><a class="dropdown-item" href="#"><i class="bi bi-wallet2"></i> 我的钱包</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
@@ -233,7 +234,7 @@
                         <div class="mb-2"><i class="bi bi-mortarboard-fill fs-1"></i></div>
                         <h6 class="fw-bold">高校语言人才认证</h6>
                         <p class="small opacity-75 mb-3">认证 BSU / 北外 等高校身份，解锁高薪商单，免除平台佣金。</p>
-                        <a button class="btn btn-sm btn-light text-primary rounded-pill w-100 fw-bold" href='certification.html'>立即认证</button></a>
+                        <button class="btn btn-sm btn-light text-primary rounded-pill w-100 fw-bold">立即认证</button>
                     </div>
 
                     <div class="sidebar-card">
@@ -267,7 +268,7 @@
                     <div class="sidebar-card border-success border-opacity-25 bg-success bg-opacity-10">
                         <h6 class="fw-bold text-success"><i class="bi bi-heart-fill me-1"></i> 语言扶贫计划</h6>
                         <p class="small text-muted mb-2">每完成一笔订单，我们将捐赠 1% 用于乡村儿童普通话推广。</p>
-                        <a href="charity_report.html" class="small text-success fw-bold text-decoration-underline">查看公益报告 ></a>
+                        <a href="#" class="small text-success fw-bold text-decoration-underline">查看公益报告 ></a>
                     </div>
                 </div>
             </div>
@@ -296,7 +297,7 @@
                             言禾自研大模型，秒级响应，低成本。<br>
                             <span class="badge bg-warning text-dark mt-2">24h 在线</span> <span class="badge bg-warning text-dark mt-2">立等可取</span>
                         </p>
-                        <a button class="btn btn-warning text-white rounded-pill px-5 mt-3 fw-bold" href='ai_fast_service.html'>试用 AI 助手</button></a>
+                        <button class="btn btn-warning text-white rounded-pill px-5 mt-3 fw-bold">试用 AI 助手</button>
                     </div>
                 </div>
             </div>
@@ -355,6 +356,4 @@
         }
     </script>
 </body>
-
 </html>
-

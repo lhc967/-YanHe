@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>发布笔记 - 言禾故事</title>
+    <title>投稿 - 言禾ストーリー</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
-        body { background: #fff; padding-top: 70px; }
+        body { background: #fff; padding-top: 70px; font-family: "Helvetica Neue", Arial, sans-serif; }
         .publish-container { max-width: 900px; margin: 30px auto; padding: 20px; }
 
-        /* 上传区域 */
+        /* アップロードエリア */
         .upload-area {
             border: 2px dashed #ddd; border-radius: 12px; height: 300px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -19,7 +19,7 @@
         .upload-area:hover { border-color: #004aad; background: #f0f7ff; color: #004aad; }
         .preview-img { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; display: none; }
 
-        /* 表单样式 */
+        /* フォームスタイル */
         .form-control-lg { font-weight: bold; border: none; border-bottom: 1px solid #eee; border-radius: 0; padding-left: 0; }
         .form-control-lg:focus { box-shadow: none; border-bottom-color: #004aad; }
         .form-control-text { border: none; padding-left: 0; resize: none; }
@@ -35,9 +35,9 @@
 <body>
     <nav class="navbar navbar-expand-lg fixed-top bg-white border-bottom">
         <div class="container px-4">
-            <a class="navbar-brand text-secondary" href="story.html">取消</a>
-            <span class="fw-bold">发布图文/视频</span>
-            <button class="btn btn-primary rounded-pill px-4" onclick="alert('发布成功！审核通过后将展示。'); location.href='story_login.html'">发布</button>
+            <a class="navbar-brand text-secondary" href="story_jp.html" style="font-size: 16px;">キャンセル</a>
+            <span class="fw-bold">投稿を作成</span>
+            <button class="btn btn-primary rounded-pill px-4" onclick="publishPost()">投稿</button>
         </div>
     </nav>
 
@@ -49,35 +49,35 @@
                     <img id="preview" class="preview-img">
                     <div id="uploadPrompt">
                         <i class="bi bi-cloud-arrow-up fs-1"></i>
-                        <p class="mt-2">拖拽或点击上传图片/视频</p>
-                        <small>支持 JPG, PNG, MP4</small>
+                        <p class="mt-2">写真/動画をドラッグまたはアップロード</p>
+                        <small>JPG, PNG, MP4 対応</small>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-7">
-                <input type="text" class="form-control form-control-lg mb-3" placeholder="填写标题会有更多赞哦～">
-                <textarea class="form-control form-control-text mb-4" rows="6" placeholder="分享你此刻的想法..."></textarea>
+                <input type="text" class="form-control form-control-lg mb-3" placeholder="タイトルを入力して注目度UP">
+                <textarea class="form-control form-control-text mb-4" rows="6" placeholder="今の気持ちをシェアしよう..."></textarea>
 
                 <div class="mb-4">
-                    <p class="small text-muted mb-2">添加话题</p>
+                    <p class="small text-muted mb-2">トピックを追加</p>
                     <div class="d-flex flex-wrap gap-2">
-                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># 留学生日常</span>
-                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># 中国美食</span>
-                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># 汉语学习</span>
-                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># 北京探店</span>
+                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># 留学生の日常</span>
+                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># 中国グルメ</span>
+                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># 中国語学習</span>
+                        <span class="tag-badge" onclick="this.classList.toggle('selected')"># 北京散歩</span>
                     </div>
                 </div>
 
                 <ul class="list-group">
                     <li class="list-group-item" onclick="getLocation()">
-                        <span><i class="bi bi-geo-alt me-2"></i> 添加地点</span>
+                        <span><i class="bi bi-geo-alt me-2"></i> 位置情報を追加</span>
                         <span class="text-muted small" id="locationText"></span>
                         <i class="bi bi-chevron-right small text-muted"></i>
                     </li>
                     <li class="list-group-item">
-                        <span><i class="bi bi-globe me-2"></i> 谁可以看</span>
-                        <span class="text-muted small">公开</span>
+                        <span><i class="bi bi-globe me-2"></i> 公開範囲</span>
+                        <span class="text-muted small">全体公開</span>
                         <i class="bi bi-chevron-right small text-muted"></i>
                     </li>
                 </ul>
@@ -100,10 +100,16 @@
         }
 
         function getLocation() {
-            document.getElementById('locationText').innerText = "定位中...";
+            document.getElementById('locationText').innerText = "測位中...";
             setTimeout(() => {
-                document.getElementById('locationText').innerText = "北京体育大学 · 海淀区";
+                document.getElementById('locationText').innerText = "北京体育大学・海淀区";
             }, 1000);
+        }
+
+        function publishPost() {
+            alert('投稿しました！審査後に公開されます。');
+            // ストーリーページへ戻る
+            location.href = "story_jp.html";
         }
     </script>
 </body>

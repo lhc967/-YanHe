@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>发布需求 - 言禾 YanHe</title>
+    <title>Aufgabe veröffentlichen - YanHe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f8faff; }
-        body { font-family: -apple-system, "PingFang SC", sans-serif; padding-top: 70px; background: var(--bg-light); }
+        body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif; padding-top: 70px; background: var(--bg-light); }
 
         .navbar-custom { background: #fff; box-shadow: 0 1px 5px rgba(0,0,0,0.05); height: 70px; }
         .navbar-brand { font-weight: 900; color: var(--primary); }
@@ -20,11 +20,11 @@
         .form-control, .form-select { padding: 12px; border-radius: 8px; border: 1px solid #eee; background: #fcfcfc; }
         .form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.1); background: #fff; }
 
-        /* 文件上传区 */
+        /* Datei-Upload-Zone */
         .upload-zone { border: 2px dashed #ddd; border-radius: 12px; padding: 40px; text-align: center; cursor: pointer; transition: 0.2s; background: #fafafa; }
         .upload-zone:hover { border-color: var(--primary); background: #f0f7ff; color: var(--primary); }
 
-        /* 底部结算条 */
+        /* Untere Aktionsleiste */
         .footer-action { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 20px; border-top: 1px solid #eee; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 100; }
         .price-display { font-size: 24px; font-weight: 900; color: var(--accent); }
     </style>
@@ -32,81 +32,81 @@
 <body>
 
     <nav class="navbar fixed-top navbar-custom px-4">
-        <a class="navbar-brand" href="service.html"><i class="bi bi-x-lg text-secondary me-3"></i>发布需求</a>
-        <span class="text-muted small">言禾担保交易</span>
+        <a class="navbar-brand" href="service_de.html"><i class="bi bi-x-lg text-secondary me-3"></i>Aufgabe erstellen</a>
+        <span class="text-muted small">YanHe Treuhand-Schutz</span>
     </nav>
 
     <div class="publish-container pb-5 mb-5">
         <form id="publishForm">
             <div class="form-card">
-                <h5 class="fw-bold mb-4">1. 需求描述</h5>
+                <h5 class="fw-bold mb-4">1. Anforderungsbeschreibung</h5>
 
                 <div class="mb-4">
-                    <label class="section-label">需求类型</label>
+                    <label class="section-label">Typ</label>
                     <div class="row g-2">
                         <div class="col-6 col-md-3">
                             <input type="radio" class="btn-check" name="type" id="t1" checked>
-                            <label class="btn btn-outline-primary w-100 rounded-pill" for="t1">笔译/翻译</label>
+                            <label class="btn btn-outline-primary w-100 rounded-pill" for="t1">Übersetzung</label>
                         </div>
                         <div class="col-6 col-md-3">
                             <input type="radio" class="btn-check" name="type" id="t2">
-                            <label class="btn btn-outline-primary w-100 rounded-pill" for="t2">方言配音</label>
+                            <label class="btn btn-outline-primary w-100 rounded-pill" for="t2">Audio/Dubbing</label>
                         </div>
                         <div class="col-6 col-md-3">
                             <input type="radio" class="btn-check" name="type" id="t3">
-                            <label class="btn btn-outline-primary w-100 rounded-pill" for="t3">文书润色</label>
+                            <label class="btn btn-outline-primary w-100 rounded-pill" for="t3">Lektorat</label>
                         </div>
                         <div class="col-6 col-md-3">
                             <input type="radio" class="btn-check" name="type" id="t4">
-                            <label class="btn btn-outline-primary w-100 rounded-pill" for="t4">其他定制</label>
+                            <label class="btn btn-outline-primary w-100 rounded-pill" for="t4">Sonstiges</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="section-label">需求标题</label>
-                    <input type="text" class="form-control" placeholder="一句话描述你的需求，如：5000字法律合同英译中">
+                    <label class="section-label">Titel</label>
+                    <input type="text" class="form-control" placeholder="Kurze Beschreibung, z.B.: Rechtsvertrag 5000 Wörter EN-CN">
                 </div>
 
                 <div class="mb-4">
-                    <label class="section-label">详细说明</label>
-                    <textarea class="form-control" rows="5" placeholder="请详细描述背景、受众、专业术语要求等..."></textarea>
+                    <label class="section-label">Details</label>
+                    <textarea class="form-control" rows="5" placeholder="Beschreiben Sie den Hintergrund, die Zielgruppe und spezielle Anforderungen..."></textarea>
                 </div>
 
                 <div class="mb-0">
-                    <label class="section-label">上传附件 (选填)</label>
+                    <label class="section-label">Anhang (Optional)</label>
                     <div class="upload-zone">
                         <i class="bi bi-cloud-arrow-up fs-2 text-muted"></i>
-                        <p class="mb-0 mt-2 text-muted small">点击或拖拽文件至此</p>
+                        <p class="mb-0 mt-2 text-muted small">Dateien hierher ziehen oder klicken</p>
                     </div>
                 </div>
             </div>
 
             <div class="form-card">
-                <h5 class="fw-bold mb-4">2. 预算与交付</h5>
+                <h5 class="fw-bold mb-4">2. Budget & Lieferung</h5>
 
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
-                        <label class="section-label">任务预算 (¥)</label>
+                        <label class="section-label">Budget (¥)</label>
                         <input type="number" class="form-control" id="budgetInput" placeholder="0.00" oninput="calculateTotal()">
-                        <div class="form-text">资金将托管至平台，验收通过后结算给人才。</div>
+                        <div class="form-text">Mittel werden treuhänderisch verwaltet und erst nach Abnahme ausgezahlt.</div>
                     </div>
                     <div class="col-md-6">
-                        <label class="section-label">期望交付日期</label>
+                        <label class="section-label">Liefertermin</label>
                         <input type="date" class="form-control">
                     </div>
                 </div>
 
                 <div class="form-check form-switch mb-3">
                     <input class="form-check-input" type="checkbox" id="urgentSwitch" onchange="calculateTotal()">
-                    <label class="form-check-label fw-bold" for="urgentSwitch">加急处理 (+ ¥20.00)</label>
-                    <div class="small text-muted">开启后将置顶展示，并推送给 VIP 人才。</div>
+                    <label class="form-check-label fw-bold" for="urgentSwitch">Express-Bearbeitung (+ ¥20.00)</label>
+                    <div class="small text-muted">Hervorgehobene Anzeige und Push an VIP-Talente.</div>
                 </div>
 
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="expertSwitch" checked>
-                    <label class="form-check-label fw-bold" for="expertSwitch">仅限认证人才接单</label>
-                    <div class="small text-muted">仅限通过高校/专业认证的用户竞标 (推荐)。</div>
+                    <label class="form-check-label fw-bold" for="expertSwitch">Nur zertifizierte Experten</label>
+                    <div class="small text-muted">Beschränkt auf verifizierte Hochschul-/Fach-Talente (Empfohlen).</div>
                 </div>
             </div>
         </form>
@@ -115,11 +115,11 @@
     <div class="footer-action">
         <div class="container d-flex justify-content-between align-items-center" style="max-width: 800px;">
             <div>
-                <div class="small text-muted">需托管总额</div>
+                <div class="small text-muted">Gesamtbetrag</div>
                 <div class="price-display" id="totalDisplay">¥ 0.00</div>
             </div>
             <button class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow" onclick="submitTask()">
-                发布并托管资金
+                Veröffentlichen & Zahlen
             </button>
         </div>
     </div>
@@ -137,18 +137,18 @@
         function submitTask() {
             const budget = parseFloat(document.getElementById('budgetInput').value);
             if (!budget || budget <= 0) {
-                alert("请输入有效的预算金额");
+                alert("Bitte geben Sie ein gültiges Budget ein.");
                 return;
             }
 
-            // 模拟提交 loading
+            // Simulierte Ladeanzeige
             const btn = document.querySelector('.btn-primary');
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> 处理中...';
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Verarbeitung...';
             btn.disabled = true;
 
             setTimeout(() => {
-                // 关键跳转：带参数跳转到收银台，触发 Task 场景
-                location.href = 'checkout.html?type=task';
+                // Weiterleitung zur Kasse mit Task-Parameter
+                location.href = 'checkout_de.html?type=task';
             }, 1000);
         }
     </script>

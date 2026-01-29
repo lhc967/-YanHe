@@ -81,22 +81,41 @@
             }
         }
     </style>
-<script>
+    <script>
     (function() {
         var status = localStorage.getItem('yanhe_user_status');
         var path = window.location.pathname;
         var page = path.substring(path.lastIndexOf('/') + 1);
 
-        // 如果是未登录页面，但状态是已登录，强制跳转到 _login 版本
-        if ((status === 'login' || status === 'vip') && !page.includes('_login')) {
-            window.location.href = page.replace('.html', '_login.html');
-        }
+        // 如果已登录 (login 或 vip)
+        if (status === 'login' || status === 'vip') {
 
-        // 反之亦然：如果没登录却在 _login 页面，强制退回普通版
-        if (!status && page.includes('_login')) {
-            window.location.href = page.replace('_login.html', '.html');
+            // 1. 针对 Culture 页面 (因为有 VIP 特殊版)
+            if (page === 'culture.html') {
+                if (status === 'vip') window.location.href = 'culture_vip.html';
+                else window.location.href = 'culture_login.html';
+            }
+            // 2. 针对其他所有页面 (自动加 _login)
+            // 比如 service.html -> service_login.html
+            else {
+                window.location.href = page.replace('.html', '_login.html');
+            }
         }
-    })();
+            // 【修改点3】新增：智能检测登录状态
+document.addEventListener('DOMContentLoaded', function() { // <--- 从这里开始删
+    // 1. 读取本地存储
+    var status = localStorage.getItem('yanhe_user_status');
+    var authSection = document.getElementById('auth-section');
+
+    // 2. 如果已经登录了
+    if (status === 'login' || status === 'vip') {
+        authSection.innerHTML = `
+            <div class="dropdown">
+                ... (中间省略) ...
+            </div>
+        `;
+    }
+}); // <--- 删到这里结束
 </script>
 </head>
 
@@ -118,7 +137,7 @@
                 </ul>
 
                 <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0 ms-lg-4">
-                    <a href="index_login.html" class="btn btn-outline-secondary rounded-pill btn-sm px-4 fw-bold">登录 / 注册</a>
+                    <a href="index_login.html class="btn btn-outline-secondary rounded-pill btn-sm px-4 fw-bold">登录 / 注册</a>
                     <a href="service_en.html" class="btn btn-primary rounded-pill btn-sm fw-bold px-3 shadow-sm border-0" style="background:var(--primary)">English</a>
                 </div>
             </div>
