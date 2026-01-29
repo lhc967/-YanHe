@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mappa Dialetti (Accesso Effettuato) - YanHe</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://assets.pyecharts.org/assets/maps/china.js"></script>
+
+    <style>
+        /* --- Stili Globali --- */
+        :root { --primary: #004aad; --gold: #d4af37; --beijing-red: #c9171e; }
+        body {
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding-top: 70px; background: #f8faff; overflow: hidden; height: 100vh;
+            transition: background-color 0.5s ease;
+        }
+
+        /* --- Barra di Navigazione --- */
+        .navbar-custom {
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03); height: 70px; z-index: 1000;
+        }
+        .navbar-brand {
+            font-weight: 900; font-size: 1.6rem; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #004aad 0%, #0078ff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-link { font-weight: 600; color: #555 !important; padding: 8px 18px !important; border-radius: 30px; transition: all 0.3s; }
+        .nav-link:hover { color: var(--primary) !important; background: rgba(0, 74, 173, 0.06); }
+        .nav-link.active { color: #fff !important; background: var(--primary); box-shadow: 0 4px 10px rgba(0, 74, 173, 0.3); }
+
+        /* Avatar Utente e Dropdown */
+        .user-avatar { width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--primary); padding: 2px; }
+        .dropdown-menu-custom {
+            border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 15px !important;
+            min-width: 220px; padding: 10px; z-index: 1001;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #555; transition: 0.2s;
+        }
+        .dropdown-menu-custom .dropdown-item:hover { background: #f0f7ff; color: var(--primary); }
+        .dropdown-menu-custom .dropdown-item i { margin-right: 10px; font-size: 16px; }
+
+        /* --- Switcher Modalità Mappa --- */
+        .mode-switch-container {
+            position: absolute; top: 90px; left: 50%; transform: translateX(-50%); z-index: 50;
+            background: #fff; padding: 4px; border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); display: flex; gap: 4px;
+        }
+        .mode-btn {
+            border: none; padding: 6px 20px; border-radius: 25px; font-weight: 700; font-size: 13px;
+            background: transparent; color: #666; transition: 0.3s;
+        }
+        .mode-btn.active { background: #eee; color: #333; }
+        .mode-btn.pro-active { background: linear-gradient(135deg, #111, #333); color: #ffd700; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        /* --- Mappa e Drawer --- */
+        .map-container { width: 100%; height: 100%; position: relative; }
+        .content-drawer {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: #fff; border-radius: 24px 24px 0 0;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            transform: translateY(110%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 100; height: 75vh; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .content-drawer.show { transform: translateY(0); }
+        .drawer-hero { height: 140px; position: relative; color: #fff; flex-shrink: 0; background-size: cover; background-position: center; }
+        .drawer-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)); }
+        .hero-content { position: absolute; bottom: 15px; left: 20px; right: 20px; z-index: 2; }
+
+        .nav-tabs-custom { display: flex; border-bottom: 1px solid #eee; padding: 0 10px; background: #fff; }
+        .tab-link { padding: 15px; font-weight: 600; color: #888; cursor: pointer; border-bottom: 3px solid transparent; font-size: 14px; flex: 1; text-align: center; }
+        .tab-link.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-link.pro-tab.active { color: #d4af37; border-bottom-color: #d4af37; }
+
+        /* Contenuti */
+        .culture-item { display: flex; gap: 15px; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 12px; margin-bottom: 15px; align-items: center; }
+        .culture-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+        .dialect-word { color: var(--beijing-red); font-weight: 800; font-size: 18px; margin-right: 5px; }
+        .chat-bubble { padding: 10px 14px; border-radius: 12px; font-size: 14px; max-width: 90%; margin-bottom: 10px; }
+        .chat-npc { background: #f1f3f5; align-self: flex-start; }
+        .chat-user { background: #e3f2fd; color: #004aad; align-self: flex-end; }
+
+        .pro-mask { filter: blur(5px); pointer-events: none; }
+        .pro-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="home_it.html">YanHe</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-1 text-primary"></i>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center gap-1 me-auto">
+                    <li class="nav-item"><a class="nav-link" href="home_it.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story_it.html">Storie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education_it.html">Education</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service_it.html">Servizi</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="culture_it.html">Mappa Dialetti</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3 ms-lg-4">
+                    <a href="culture.html" class="btn btn-light rounded-circle shadow-sm border d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <span style="font-size:12px; font-weight:bold;">CN</span>
+                    </a>
+
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="User" class="rounded-circle user-avatar shadow-sm">
+                            <span class="d-none d-md-inline ms-2 fw-bold text-dark">Li YanHe</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" aria-labelledby="userDropdown">
+                            <li class="px-3 py-2 border-bottom mb-2">
+                                <div class="fw-bold text-dark">Li YanHe</div>
+                                <div class="small text-muted">Studente Certificato</div>
+                            </li>
+                            <li><a class="dropdown-item" href="index_login_it.html"><i class="bi bi-person-badge"></i> Profilo Utente</a></li>
+                            <li><a class="dropdown-item" href="education_it.html"><i class="bi bi-mortarboard"></i> I Miei Corsi</a></li>
+                            <li><a class="dropdown-item" href="index_login_it.html"><i class="bi bi-star"></i> Preferiti</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index_login_it.html"><i class="bi bi-gear"></i> Impostazioni</a></li>
+                            <li><a class="dropdown-item text-danger" href="index_it.html"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mode-switch-container">
+        <button class="mode-btn active" id="btnStd" onclick="togglePro(false)">Esplora</button>
+        <button class="mode-btn" id="btnPro" onclick="togglePro(true)">Sfida Pro <i class="bi bi-lightning-fill text-warning"></i></button>
+    </div>
+
+    <div class="map-container">
+        <div id="china-map" style="width: 100%; height: 100%;"></div>
+    </div>
+
+    <div class="content-drawer" id="drawer">
+        <div class="drawer-hero" id="heroBg">
+            <div class="hero-content">
+                <h2 class="hero-title fw-bold" id="dCity">Caricamento...</h2>
+                <div id="dTags"></div>
+            </div>
+            <div class="btn-close-custom" onclick="closeDrawer()"><i class="bi bi-x-lg"></i></div>
+        </div>
+
+        <div class="nav-tabs-custom">
+            <div class="tab-link active" onclick="switchTab(this, 'culture')">Cultura e Vocaboli</div>
+            <div class="tab-link pro-tab" onclick="switchTab(this, 'scenario')"><i class="bi bi-joystick"></i> Dialoghi Reali</div>
+            <div class="tab-link pro-tab" onclick="switchTab(this, 'ai')"><i class="bi bi-mic-fill"></i> Test AI</div>
+        </div>
+
+        <div class="drawer-body">
+            <div id="tab-culture" class="tab-pane active">
+                <p class="text-muted small mb-3" id="dIntro"></p>
+                <div id="cultureList"></div>
+            </div>
+
+            <div id="tab-scenario" class="tab-pane">
+                <div class="card border-0 bg-light position-relative" style="min-height: 200px;">
+                    <div id="scenarioContent" class="pro-mask p-3"></div>
+                    <div id="proLock" class="pro-overlay">
+                        <div class="text-center bg-white p-4 rounded-4 shadow-sm border">
+                            <i class="bi bi-lock-fill fs-1 text-secondary mb-2"></i>
+                            <h6 class="fw-bold">Contenuto Esclusivo Pro</h6>
+                            <p class="small text-muted mb-3">Sblocca scenari immersivi in dialetto</p>
+                            <button class="btn btn-dark btn-sm rounded-pill px-4" onclick="togglePro(true)">Passa a Pro</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-ai" class="tab-pane text-center">
+                <div id="aiRealUI" style="display:none;">
+                    <p class="text-muted small mb-2">Tieni premuto e leggi in dialetto:</p>
+                    <h2 class="fw-bold mb-1" id="aiTargetReal">---</h2>
+                    <div class="mic-btn-wrapper">
+                        <div class="mic-btn" id="micBtn" onmousedown="startRecord()" onmouseup="stopRecord()"><i class="bi bi-mic-fill"></i></div>
+                    </div>
+                    <div id="aiResult" style="display: none;" class="mt-4 border-top pt-3">
+                        <div class="d-flex align-items-center justify-content-center gap-3">
+                            <div class="bg-success text-white rounded-circle p-3">95/100</div>
+                            <div class="text-start small">
+                                <strong>Pronuncia Ottima!</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="aiPlaceholder" class="py-5">
+                    <i class="bi bi-mic-mute-fill fs-1 text-secondary"></i>
+                    <h6 class="mt-2 fw-bold">Test AI Bloccato</h6>
+                    <button class="btn btn-sm btn-dark rounded-pill mt-2" onclick="togglePro(true)">Attiva Pro</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let isVip = false; // Stato VIP simulato
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('vip') === 'true' || localStorage.getItem('yanhe_user_status') === 'vip') {
+                isVip = true;
+                togglePro(true);
+            }
+        };
+
+        const cityData = {
+            'Pechino': {
+                city: 'Pechino (Beijing)', tags: ['Erhua', 'Juqi'],
+                bg: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800',
+                intro: 'Il dialetto di Pechino riflette la fiducia e l\'umorismo della capitale.',
+                cultureItems: [{ title: 'Spirito', img: 'https://images.unsplash.com/photo-1562624632-6019a7795325?w=200', word: 'Juqi', desc: 'Descrive una persona leale e onesta.' }],
+                scenario: { title: 'Chiedere indicazioni negli Hutong', chats: [{role: 'npc', text: 'Ehi, mi scusi, <span class="dialect-highlight">jieguang</span>?'}, {role: 'user', text: '<span class="dialect-highlight">Laojia</span>, come vado alla Torre del Tamburo?'}] },
+                aiChallenge: { word: 'Zhe shir zhen didao' }
+            }
+        };
+
+        var myChart = echarts.init(document.getElementById('china-map'));
+        function getOption(mode) {
+            const isDark = mode === 'pro';
+            return {
+                backgroundColor: isDark ? '#1a1a1a' : '#f8faff',
+                geo: { map: 'china', roam: true, zoom: 1.2, itemStyle: { areaColor: isDark ? '#2c3e50' : '#e0eaff', borderColor: isDark ? '#555' : '#fff' } },
+                series: [{ type: 'effectScatter', coordinateSystem: 'geo', data: [{name:'Pechino',value:[116.40,39.90]}], symbolSize: 20, itemStyle: { color: isDark ? '#ffd700' : '#c9171e' } }]
+            };
+        }
+        myChart.setOption(getOption('std'));
+        myChart.on('click', function(params) { if(params.data) openDrawer(params.data.name); });
+
+        function openDrawer(cityName) {
+            const data = cityData[cityName] || cityData['Pechino'];
+            document.getElementById('heroBg').style.backgroundImage = `url('${data.bg}')`;
+            document.getElementById('dCity').innerText = data.city;
+            document.getElementById('dIntro').innerText = data.intro;
+            document.getElementById('drawer').classList.add('show');
+            // Altri rendering dati...
+        }
+
+        function togglePro(active) {
+            if(active && !isVip) { window.location.href = 'unlock_pro_it.html'; return; }
+            const btnPro = document.getElementById('btnPro');
+            const btnStd = document.getElementById('btnStd');
+            if(active) {
+                btnStd.classList.remove('active'); btnPro.classList.add('pro-active');
+                document.body.style.backgroundColor = '#1a1a1a';
+                myChart.setOption(getOption('pro'));
+                document.getElementById('proLock').style.display = 'none';
+                document.getElementById('scenarioContent').classList.remove('pro-mask');
+                document.getElementById('aiRealUI').style.display = 'block';
+                document.getElementById('aiPlaceholder').style.display = 'none';
+            }
+        }
+
+        function closeDrawer() { document.getElementById('drawer').classList.remove('show'); }
+        function switchTab(el, id) { /* Logica switch tab */ }
+        function startRecord() { /* Logica audio */ }
+        function stopRecord() { document.getElementById('aiResult').style.display = 'block'; }
+    </script>
+</body>
+</html>

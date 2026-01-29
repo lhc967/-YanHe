@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+<head>
+    <meta charset="UTF-8">
+    <title>YanHe - {{ current_page|upper }} ({{ current_lang|upper }})</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 70px; }
+        .navbar-custom { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status-bar { background: #f8f9fa; padding: 10px; text-align: center; border-bottom: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+
+    <div class="status-bar">
+        当前页面: <strong>{{ current_page }}</strong> |
+        语言: <strong>{{ current_lang|upper }}</strong> |
+        状态: {% if is_login %}<span class="text-success">已登录 (Login)</span>{% else %}<span class="text-secondary">游客 (Guest)</span>{% endif %}
+    </div>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="{{ url_for('index_' + current_lang) }}">言禾 YanHe</a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('home_' + ('login_' if is_login else '') + current_lang) }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('service_' + ('login_' if is_login else '') + current_lang) }}">Service</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('culture_' + ('login_' if is_login else '') + current_lang) }}">Culture</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('education_' + ('login_' if is_login else '') + current_lang) }}">Education</a></li>
+                </ul>
+
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for(request.endpoint.rsplit('_', 1)[0] + '_cn') }}" class="btn btn-sm btn-outline-dark">CN</a>
+                    <a href="{{ url_for(request.endpoint.rsplit('_', 1)[0] + '_en') }}" class="btn btn-sm btn-outline-dark">EN</a>
+                    <a href="{{ url_for(request.endpoint.rsplit('_', 1)[0] + '_de') }}" class="btn btn-sm btn-outline-dark">DE</a>
+                    <a href="{{ url_for(request.endpoint.rsplit('_', 1)[0] + '_jp') }}" class="btn btn-sm btn-outline-dark">JP</a>
+                    <a href="{{ url_for(request.endpoint.rsplit('_', 1)[0] + '_it') }}" class="btn btn-sm btn-outline-dark">IT</a>
+                    <a href="{{ url_for(request.endpoint.rsplit('_', 1)[0] + '_ru') }}" class="btn btn-sm btn-outline-dark">RU</a>
+                </div>
+
+                <div class="ms-3">
+                    {% if is_login %}
+                        <a href="{{ url_for(current_page + '_' + current_lang) }}" class="btn btn-danger btn-sm">Logout</a>
+                    {% else %}
+                        {% if current_page in ['index','home','service','culture','education','culture_vip'] %}
+                            <a href="{{ url_for(current_page + '_login_' + current_lang) }}" class="btn btn-primary btn-sm">Login</a>
+                        {% else %}
+                            <button class="btn btn-secondary btn-sm" disabled>Login N/A</button>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">Current Template: {{ request.endpoint }}.html</h1>
+                <p class="col-md-8 fs-4">
+                    这是一个通用模板。在实际开发中，请在 <code>templates/</code> 文件夹下创建名为
+                    <code>{{ request.endpoint }}.html</code> 的文件来覆盖此内容。
+                </p>
+                <p>测试链接跳转：</p>
+                <ul>
+                    <li><a href="{{ url_for('checkout_' + current_lang) }}">前往收银台 (Checkout)</a></li>
+                    <li><a href="{{ url_for('ai_chat_' + current_lang) }}">AI 聊天 (AI Chat)</a></li>
+                    <li><a href="{{ url_for('culture_vip_' + ('login_' if is_login else '') + current_lang) }}">VIP 地图 (需登录版)</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Checkout - YanHe</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <title>安全なレジ - 言禾 YanHe</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        :root { --primary: #0052cc; --accent: #ffab00; --dark: #091e42; --bg-light: #f4f5f7; --gold: #d4af37; }
+        :root { --primary: #004aad; --accent: #ff6b00; --dark: #003366; --bg-light: #f4f6f9; --gold: #d4af37; }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
             background: var(--bg-light);
             padding-top: 70px;
             color: #333;
             min-height: 100vh;
         }
 
-        /* Navbar */
+        /* ナビゲーションバー */
         .navbar-custom { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); height: 70px; }
         .navbar-brand { font-weight: 900; font-size: 1.5rem; color: var(--primary) !important; letter-spacing: -0.5px; }
 
-        /* Demo Switcher */
+        /* デモ切り替えバー */
         .demo-switcher {
             background: #172b4d; color: #fff; padding: 10px; text-align: center; font-size: 13px;
         }
@@ -29,27 +28,27 @@
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;
             padding: 4px 12px; border-radius: 4px; margin: 0 5px; cursor: pointer; transition: 0.2s;
         }
-        .demo-btn.active { background: var(--accent); border-color: var(--accent); color: #172b4d; font-weight: 700; }
+        .demo-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
 
-        /* Countdown */
+        /* カウントダウン */
         .countdown-bar {
             background: #fff3cd; color: #856404; text-align: center; font-size: 13px; padding: 8px;
             border-bottom: 1px solid #ffeeba;
         }
 
-        /* Layout */
+        /* レイアウト */
         .checkout-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
 
-        /* General Card */
+        /* 通常カード (白背景) */
         .pay-card {
             background: #fff; border-radius: 12px; border: 1px solid #e0e0e0;
             padding: 25px; margin-bottom: 20px; transition: all 0.3s;
         }
-        .card-title-sm { font-size: 16px; font-weight: 700; color: #172b4d; margin-bottom: 20px; text-transform: uppercase; }
+        .card-title-sm { font-size: 16px; font-weight: 700; color: #333; margin-bottom: 20px; }
 
-        /* --- 🔥 Black Gold VIP Card --- */
+        /* --- 🔥 ブラックゴールド VIP カード --- */
         .vip-card {
-            background: linear-gradient(135deg, #091e42 0%, #222 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
             border-radius: 20px; padding: 30px; color: #fff; position: relative; overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-bottom: 20px;
         }
@@ -65,41 +64,41 @@
         .vip-list li { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 5px; }
         .vip-list i { color: var(--gold); margin-right: 8px; }
 
-        /* --- Standard Product Info --- */
+        /* --- 商品情報 (コース/タスク) --- */
         .product-info { display: flex; gap: 20px; align-items: flex-start; }
         .product-thumb { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; background: #eee; flex-shrink: 0; }
         .product-title { font-weight: 700; font-size: 18px; margin-bottom: 5px; color: #000; }
         .product-desc { font-size: 14px; color: #666; line-height: 1.5; }
-        .tag-course { background: #e3f2fd; color: #0052cc; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 5px; }
+        .tag-course { background: #e3f2fd; color: #004aad; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 5px; }
         .tag-escrow { background: #e3fcef; color: #006644; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 5px; }
 
-        /* Payment Methods */
+        /* 支払い方法 */
         .payment-method {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 15px 20px; border: 1px solid #ebecf0; border-radius: 10px;
+            padding: 15px 20px; border: 1px solid #eee; border-radius: 10px;
             cursor: pointer; transition: 0.2s; margin-bottom: 12px;
         }
-        .payment-method:hover { border-color: var(--primary); background: #f4f5f7; }
-        .payment-method.active { border-color: var(--primary); background: rgba(0, 82, 204, 0.05); }
-        .check-circle { color: #dfe1e6; font-size: 20px; }
+        .payment-method:hover { border-color: var(--primary); background: #f8faff; }
+        .payment-method.active { border-color: var(--primary); background: rgba(0, 74, 173, 0.05); }
+        .check-circle { color: #ddd; font-size: 20px; }
         .payment-method.active .check-circle { color: var(--primary); }
 
-        /* Summary */
+        /* 金額行 */
         .price-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #505f79; }
-        .total-price { font-size: 28px; font-weight: 800; color: #172b4d; }
+        .total-price { font-size: 28px; font-weight: 800; color: #333; }
 
-        /* Button */
+        /* ボタン */
         .btn-pay {
             background: var(--primary); color: #fff; border: none; width: 100%; padding: 14px;
             font-size: 16px; font-weight: 700; border-radius: 6px;
-            box-shadow: 0 4px 10px rgba(0, 82, 204, 0.2); transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 74, 173, 0.2); transition: 0.2s;
         }
-        .btn-pay:hover { background: #0747a6; transform: translateY(-1px); }
+        .btn-pay:hover { background: #003d8f; transform: translateY(-1px); }
 
-        /* Success View */
+        /* 成功画面 */
         .success-view { display: none; text-align: center; padding: 60px 20px; }
         .success-icon {
-            width: 80px; height: 80px; background: #36b37e; color: #fff;
+            width: 80px; height: 80px; background: #28a745; color: #fff;
             border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
             font-size: 40px; margin-bottom: 24px; animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -110,22 +109,22 @@
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="home_en.html">YanHe</a>
+            <a class="navbar-brand" href="home_jp.html">言禾 YanHe</a>
             <div class="ms-auto text-muted small d-flex align-items-center gap-2">
-                <i class="bi bi-shield-lock-fill text-success"></i> SSL Secure Checkout
+                <i class="bi bi-shield-lock-fill text-success"></i> 銀聯認証 SSL安全支払い
             </div>
         </div>
     </nav>
 
     <div class="demo-switcher">
-        <span><i class="bi bi-eye"></i> Judge Demo Mode:</span>
-        <button class="demo-btn active" onclick="switchScenario('membership')">Scenario A: Membership (VIP)</button>
-        <button class="demo-btn" onclick="switchScenario('course')">Scenario B: Buy Course</button>
-        <button class="demo-btn" onclick="switchScenario('task')">Scenario C: Task Escrow</button>
+        <span><i class="bi bi-eye"></i> 審査員デモモード：</span>
+        <button class="demo-btn active" onclick="switchScenario('membership')">A：VIP会員</button>
+        <button class="demo-btn" onclick="switchScenario('course')">B：コース購入</button>
+        <button class="demo-btn" onclick="switchScenario('task')">C：タスク委託</button>
     </div>
 
     <div class="countdown-bar">
-        <i class="bi bi-clock"></i> Price reserved for <strong id="timer">14:59</strong>
+        <i class="bi bi-clock"></i> 価格は確保されています。<strong id="timer">14:59</strong> 以内にお支払いください。
     </div>
 
     <div class="checkout-container" id="checkoutView">
@@ -137,14 +136,14 @@
                     </div>
 
                 <div class="pay-card">
-                    <div class="card-title-sm">Payment Method</div>
+                    <div class="card-title-sm">支払い方法の選択</div>
 
                     <div class="payment-method active" onclick="selectPay(this)">
                         <div class="d-flex align-items-center gap-3">
-                            <i class="bi bi-credit-card-2-front text-primary fs-4"></i>
+                            <i class="bi bi-wechat text-success fs-4"></i>
                             <div>
-                                <div class="fw-bold">Credit / Debit Card</div>
-                                <div class="small text-muted">Visa, MasterCard, Amex</div>
+                                <div class="fw-bold">WeChat Pay (微信支付)</div>
+                                <div class="small text-muted">推奨、安全・高速</div>
                             </div>
                         </div>
                         <i class="bi bi-check-circle-fill check-circle"></i>
@@ -152,10 +151,10 @@
 
                     <div class="payment-method" onclick="selectPay(this)">
                         <div class="d-flex align-items-center gap-3">
-                            <i class="bi bi-paypal text-primary fs-4"></i>
+                            <i class="bi bi-alipay text-primary fs-4"></i>
                             <div>
-                                <div class="fw-bold">PayPal</div>
-                                <div class="small text-muted">Fast & Safe</div>
+                                <div class="fw-bold">Alipay (支付宝)</div>
+                                <div class="small text-muted">花唄・余額宝対応</div>
                             </div>
                         </div>
                         <i class="bi bi-circle check-circle"></i>
@@ -163,10 +162,10 @@
 
                     <div class="payment-method" onclick="selectPay(this)">
                         <div class="d-flex align-items-center gap-3">
-                            <i class="bi bi-wechat text-success fs-4"></i>
+                            <i class="bi bi-credit-card-2-back text-dark fs-4"></i>
                             <div>
-                                <div class="fw-bold">WeChat Pay</div>
-                                <div class="small text-muted">Cross-border payment</div>
+                                <div class="fw-bold">クレジットカード / 銀聯</div>
+                                <div class="small text-muted">法人ネットバンキング対応</div>
                             </div>
                         </div>
                         <i class="bi bi-circle check-circle"></i>
@@ -176,30 +175,30 @@
                 <div class="pay-card" id="invoiceCard" style="display:none;">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="needInvoice">
-                        <label class="form-check-label fw-bold" for="needInvoice">I need an invoice / receipt</label>
+                        <label class="form-check-label fw-bold" for="needInvoice">領収書/請求書の発行を希望する</label>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="pay-card sticky-top" style="top: 130px;">
-                    <div class="card-title-sm">Summary</div>
+                    <div class="card-title-sm">費用内訳</div>
 
                     <div id="priceDetails"></div>
 
                     <hr>
 
                     <div class="d-flex justify-content-between align-items-end mb-4">
-                        <span class="fw-bold">Total</span>
-                        <span class="total-price" id="totalPrice">$14.99</span>
+                        <span class="fw-bold">支払総額</span>
+                        <span class="total-price" id="totalPrice">¥ 98.00</span>
                     </div>
 
                     <button class="btn-pay" onclick="handlePay()" id="btnPay">
-                        Pay Now
+                        今すぐ支払う
                     </button>
 
                     <div class="text-center mt-3 text-muted" style="font-size: 12px;">
-                        <i class="bi bi-shield-check"></i> Secure 256-bit SSL Encrypted
+                        <i class="bi bi-shield-check"></i> プラットフォームが資金を保証、7日間無条件返金
                     </div>
                 </div>
             </div>
@@ -208,98 +207,98 @@
 
     <div class="container success-view" id="successView">
         <div class="success-icon"><i class="bi bi-check-lg"></i></div>
-        <h2 class="fw-bold mb-3" id="successTitle">Payment Successful!</h2>
-        <p class="text-muted mb-5" id="successDesc">Your Pro membership is now active.</p>
+        <h2 class="fw-bold mb-3" id="successTitle">支払い成功！</h2>
+        <p class="text-muted mb-5" id="successDesc">Pro会員特典がすぐに有効になります。</p>
 
         <div class="d-flex justify-content-center gap-3">
-            <button class="btn btn-outline-secondary rounded-pill px-4" onclick="location.href='index_en_login_en.html'">View Order</button>
-            <button class="btn btn-primary rounded-pill px-5 fw-bold" onclick="finishAndRedirect()">Continue</button>
+            <a href="home_jp.html" class="btn btn-outline-secondary rounded-pill px-4">ホームに戻る</a>
+            <button class="btn btn-primary rounded-pill px-5 fw-bold" onclick="finishAndRedirect()">今すぐ体験</button>
         </div>
     </div>
 
     <script>
-        // Scenario Data
+        // シナリオデータ設定
         const scenarios = {
             'membership': {
-                // Black Gold Card
+                // VIPカード
                 cardHtml: `
                     <div class="vip-card">
                         <div class="vip-tag">Pro Membership</div>
-                        <div class="vip-title">YanHe Pro Yearly</div>
-                        <div class="vip-desc">Student Exclusive Offer | Unlimited Access</div>
-                        <div class="vip-price">$14.99 <span style="font-size:14px; color:#aaa; font-weight:normal;">/year</span></div>
+                        <div class="vip-title">言禾 Pro 年間会員</div>
+                        <div class="vip-desc">学生認証限定割引 | 365日使い放題</div>
+                        <div class="vip-price">¥98 <span style="font-size:14px; color:#aaa; font-weight:normal;">/年</span></div>
                         <ul class="vip-list">
-                            <li><i class="bi bi-check-circle-fill"></i> Unlock all dialect scenarios</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Unlimited AI pronunciation tests</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Exclusive Gold Map & Avatar</li>
+                            <li><i class="bi bi-check-circle-fill"></i> 全方言の実践シーンをアンロック</li>
+                            <li><i class="bi bi-check-circle-fill"></i> AIによる発音矯正が無制限</li>
+                            <li><i class="bi bi-check-circle-fill"></i> ブラックゴールド地図と専用アイコン</li>
                         </ul>
                     </div>
                 `,
                 detailsHTML: `
-                    <div class="price-row"><span>Original Price</span><span class="text-decoration-line-through">$49.99</span></div>
-                    <div class="price-row text-success"><span>Student Discount</span><span>- $35.00</span></div>
-                    <div class="price-row text-muted"><span>Tax</span><span>$0.00</span></div>
+                    <div class="price-row"><span>通常価格</span><span class="text-decoration-line-through">¥ 298.00</span></div>
+                    <div class="price-row text-success"><span>学生割引</span><span>- ¥ 200.00</span></div>
+                    <div class="price-row text-muted"><span>税金</span><span>¥ 0.00</span></div>
                 `,
-                total: '$14.99',
-                btnText: 'Pay $14.99',
+                total: '¥ 98.00',
+                btnText: '支払う ¥98.00',
                 showInvoice: false,
-                successTitle: 'Welcome to Pro!',
-                successDesc: 'Your membership is active. Enjoy exclusive features now.'
+                successTitle: 'Pro会員へようこそ！',
+                successDesc: '特典が有効になりました。方言マップの全高級機能を今すぐご利用いただけます。'
             },
             'course': {
-                // Course Card (White)
+                // コースカード (白背景)
                 cardHtml: `
                     <div class="pay-card">
-                        <div class="card-title-sm">Course Details</div>
+                        <div class="card-title-sm">コース情報</div>
                         <div class="product-info">
                             <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=200" class="product-thumb">
                             <div>
-                                <div class="product-title">Business Chinese: Negotiation</div>
+                                <div class="product-title">ビジネス中国語：上級交渉戦略</div>
                                 <div class="product-desc">
-                                    <span class="tag-course"><i class="bi bi-play-circle-fill"></i> Single Lesson Unlock</span><br>
-                                    Includes: 45min Video + Terminology List + AI Practice
+                                    <span class="tag-course"><i class="bi bi-play-circle-fill"></i> 単発レッスン解除</span><br>
+                                    内容：45分HD動画 + ビジネス用語集 + AIシミュレーション
                                 </div>
                             </div>
                         </div>
                     </div>
                 `,
                 detailsHTML: `
-                    <div class="price-row"><span>Original Price</span><span class="text-decoration-line-through">$29.99</span></div>
-                    <div class="price-row text-success"><span>Limited Offer</span><span>- $10.00</span></div>
+                    <div class="price-row"><span>コース定価</span><span class="text-decoration-line-through">¥ 199.00</span></div>
+                    <div class="price-row text-success"><span>期間限定割引</span><span>- ¥ 100.00</span></div>
                 `,
-                total: '$19.99',
-                btnText: 'Pay $19.99',
+                total: '¥ 99.00',
+                btnText: '支払う ¥99.00',
                 showInvoice: true,
-                successTitle: 'Course Unlocked!',
-                successDesc: 'You can now access the course content in "My Learning".'
+                successTitle: 'コースのアンロックに成功！',
+                successDesc: '「マイコース」から学習を開始できます。'
             },
             'task': {
-                // Task Card (White)
+                // タスクカード (白背景)
                 cardHtml: `
                     <div class="pay-card">
-                        <div class="card-title-sm">Escrow Details</div>
+                        <div class="card-title-sm">預かり詳細</div>
                         <div class="product-info">
                             <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=200" class="product-thumb">
                             <div>
-                                <div class="product-title">Escrow: Legal Contract Translation</div>
+                                <div class="product-title">資金預かり：法律契約書翻訳案件</div>
                                 <div class="product-desc">
-                                    <span class="tag-escrow"><i class="bi bi-shield-lock"></i> Funds Held in Escrow</span><br>
-                                    Task ID: #88392<br>Funds released only upon your approval.
+                                    <span class="tag-escrow"><i class="bi bi-shield-lock"></i> プラットフォーム保証</span><br>
+                                    タスク番号：#88392<br>検収完了後にのみクリエイターへ支払われます。
                                 </div>
                             </div>
                         </div>
                     </div>
                 `,
                 detailsHTML: `
-                    <div class="price-row"><span>Task Bounty</span><span>$80.00</span></div>
-                    <div class="price-row"><span>Platform Fee (5%)</span><span>$4.00</span></div>
-                    <div class="price-row text-primary"><span>Urgent Fee</span><span>$1.00</span></div>
+                    <div class="price-row"><span>タスク報酬</span><span>¥ 500.00</span></div>
+                    <div class="price-row"><span>手数料 (5%)</span><span>¥ 25.00</span></div>
+                    <div class="price-row text-primary"><span>特急料金</span><span>¥ 10.00</span></div>
                 `,
-                total: '$85.00',
-                btnText: 'Deposit $85.00',
+                total: '¥ 535.00',
+                btnText: '資金を預ける ¥535.00',
                 showInvoice: true,
-                successTitle: 'Funds Secured',
-                successDesc: 'Task published. Freelancers will be notified immediately.'
+                successTitle: '資金の預かり完了',
+                successDesc: 'タスクが公開されました。クリエイターが受注すると通知が届きます。'
             }
         };
 
@@ -309,17 +308,20 @@
             currentScenario = type;
             const data = scenarios[type];
 
-            // Buttons
+            // ボタン状態
             document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+            // 手動クリックでなければ event がない場合があるためチェック
+            if (event && event.target) event.target.classList.add('active');
 
-            // Fade effect
+            // 切り替えエフェクト
             const container = document.getElementById('checkoutView');
             container.style.opacity = '0.5';
 
             setTimeout(() => {
-                // Insert Card & Details
+                // 1. 左側コンテンツ置換
                 document.getElementById('productSection').innerHTML = data.cardHtml;
+
+                // 2. 右側コンテンツ置換
                 document.getElementById('priceDetails').innerHTML = data.detailsHTML;
                 document.getElementById('totalPrice').innerText = data.total;
                 document.getElementById('btnPay').innerText = data.btnText;
@@ -344,7 +346,7 @@
             const btn = document.getElementById('btnPay');
             const data = scenarios[currentScenario];
 
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> 安全に処理中...';
             btn.style.opacity = '0.8';
             btn.disabled = true;
 
@@ -358,18 +360,18 @@
             }, 1500);
         }
 
-        // Logic for Redirects
+        // コアリダイレクトロジック
         function finishAndRedirect() {
             if (currentScenario === 'membership') {
-                // Set VIP & Go to Map
+                // VIP設定 -> 地図 (VIP版)
                 localStorage.setItem('yanhe_user_status', 'vip');
-                window.location.href = 'culture_login_en.html?login=success';
+                window.location.href = "culture_en_vip.html?login=success";
             } else if (currentScenario === 'course') {
-                // Go to Learning
-                window.location.href = 'learning_login_en.html';
+                // コース -> 再生ページ
+                window.location.href = "course_paid_en.html";
             } else {
-                // Go to Service Hub
-                window.location.href = 'service_login_en.html';
+                // タスク -> サービス一覧 (日本語)
+                window.location.href = "service_jp.html";
             }
         }
 
@@ -382,8 +384,14 @@
             document.getElementById('timer').innerText = `${m}:${s}`;
         }, 1000);
 
-        // Init
-        switchScenario('membership');
+        // URLパラメータからの初期化
+        const urlParams = new URLSearchParams(window.location.search);
+        const typeParam = urlParams.get('type');
+        if (typeParam && scenarios[typeParam]) {
+            switchScenario(typeParam);
+        } else {
+            switchScenario('membership');
+        }
     </script>
 </body>
 </html>

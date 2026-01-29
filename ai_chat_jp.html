@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI チューター - 言禾 YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        /* --- グローバルスタイル --- */
+        :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f8faff; --chat-bg: #f0f2f5; }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            padding-top: 70px; /* ナビゲーションバーの高さ確保 */
+            background: var(--bg-light);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        /* --- ナビゲーションバー (固定) --- */
+        .navbar-custom {
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(16px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04); height: 70px; flex-shrink: 0;
+            top: 0; left: 0; right: 0;
+        }
+        .navbar-brand {
+            font-weight: 900; font-size: 1.5rem;
+            background: linear-gradient(135deg, #004aad 0%, #0078ff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* --- チャットエリア --- */
+        .chat-container {
+            flex: 1; background: var(--chat-bg); padding: 20px;
+            overflow-y: auto; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth;
+        }
+        .message-wrapper { display: flex; align-items: flex-end; gap: 10px; animation: fadeInUp 0.3s ease; }
+        .message-wrapper.user { justify-content: flex-end; }
+
+        .avatar {
+            width: 40px; height: 40px; border-radius: 50%; background: #ddd; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .avatar.ai { background: #fff; color: #004aad; }
+        .avatar.user { background: var(--primary); color: #fff; }
+
+        .bubble {
+            max-width: 75%; padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.5;
+            position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.05); word-wrap: break-word;
+        }
+        .bubble.ai { background: #fff; color: #333; border-bottom-left-radius: 4px; }
+        .bubble.user { background: var(--primary); color: #fff; border-bottom-right-radius: 4px; }
+
+        .ai-tools { margin-top: 8px; font-size: 11px; display: flex; gap: 10px; opacity: 0.7; }
+        .tool-btn { cursor: pointer; display: flex; align-items: center; gap: 3px; transition: 0.2s; }
+        .tool-btn:hover { color: var(--primary); opacity: 1; }
+
+        /* --- 入力エリア --- */
+        .input-area {
+            background: #fff; padding: 15px 20px; border-top: 1px solid #eee; flex-shrink: 0;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .input-box {
+            background: #f8f9fa; border: 1px solid #eee; border-radius: 25px; padding: 10px 20px;
+            flex: 1; outline: none; transition: 0.3s;
+        }
+        .input-box:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.1); }
+        .btn-send {
+            width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: #fff;
+            border: none; display: flex; align-items: center; justify-content: center; font-size: 18px;
+            transition: 0.2s;
+        }
+        .btn-send:hover { transform: scale(1.05); background: #003882; }
+        .btn-mic { color: #666; font-size: 22px; cursor: pointer; padding: 5px; }
+
+        /* --- 言語切り替えスイッチ --- */
+        .lang-switch {
+            display: flex; background: #eef1f6; border-radius: 20px; padding: 3px;
+            font-size: 12px; font-weight: bold;
+        }
+        .lang-option { padding: 4px 12px; border-radius: 16px; color: #888; text-decoration: none; transition: 0.3s; display: inline-block; }
+        .lang-option.active { background: #fff; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: default; }
+        .lang-option:not(.active):hover { color: #555; background: rgba(0,0,0,0.02); }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* スマホナビ修正 */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: #ffffff; padding: 20px; border-radius: 16px; margin-top: 15px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="home_jp.html">言禾 YanHe</a>
+
+            <div class="d-none d-md-block position-absolute start-50 translate-middle-x fw-bold text-secondary">
+                <i class="bi bi-robot text-primary me-1"></i> AI チューター (Beta)
+            </div>
+
+            <div class="d-flex align-items-center gap-3 ms-auto">
+                <div class="lang-switch">
+                    <a href="ai_chat.html" class="lang-option">中</a>
+                    <span class="lang-option active">JP</span>
+                </div>
+                <a href="education_jp.html" class="btn btn-light rounded-circle btn-sm"><i class="bi bi-x-lg"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="chat-container" id="chatBox">
+        <div class="message-wrapper ai">
+            <div class="avatar ai"><i class="bi bi-robot"></i></div>
+            <div class="bubble ai">
+                <div>こんにちは！私はあなたのAIチューターです。何か話したいことや、作文の添削はありますか？</div>
+                <div class="ai-tools">
+                    <span class="tool-btn"><i class="bi bi-translate"></i> 翻訳</span>
+                    <span class="tool-btn"><i class="bi bi-stars"></i> 添削</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <i class="bi bi-mic-fill btn-mic"></i>
+        <input type="text" class="input-box" id="userInput" placeholder="メッセージを入力..." onkeydown="if(event.keyCode==13) sendMessage()">
+        <button class="btn-send" onclick="sendMessage()"><i class="bi bi-send-fill"></i></button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+            const chatBox = document.getElementById('chatBox');
+
+            // 1. ユーザーメッセージ
+            chatBox.insertAdjacentHTML('beforeend', `
+                <div class="message-wrapper user">
+                    <div class="bubble user">${text}</div>
+                    <div class="avatar user"><i class="bi bi-person-fill"></i></div>
+                </div>
+            `);
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // 2. AI応答シミュレーション (日本語)
+            setTimeout(() => {
+                chatBox.insertAdjacentHTML('beforeend', `
+                    <div class="message-wrapper ai">
+                        <div class="avatar ai"><i class="bi bi-robot"></i></div>
+                        <div class="bubble ai">
+                            <div>その場合は、「地道 (dì dao)」という言葉を使うと、より自然な表現になりますよ。</div>
+                            <div class="ai-tools">
+                                <span class="tool-btn"><i class="bi bi-volume-up"></i> 読み上げ</span>
+                            </div>
+                        </div>
+                    </div>
+                `);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

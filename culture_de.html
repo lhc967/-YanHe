@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dialekt-Kulturkarte (VIP-Edition) - YanHe</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://assets.pyecharts.org/assets/maps/china.js"></script>
+
+    <style>
+        /* --- Globale Stile --- */
+        :root { --primary: #004aad; --gold: #d4af37; --beijing-red: #c9171e; }
+        body {
+            font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            padding-top: 70px; background: #f8faff; overflow: hidden; height: 100vh;
+            transition: background-color 0.5s ease;
+        }
+
+        /* --- Navigationsleiste (Eingeloggt) --- */
+        .navbar-custom {
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03); height: 70px; z-index: 1000;
+        }
+        .navbar-brand {
+            font-weight: 900; font-size: 1.6rem; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #004aad 0%, #0078ff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-link { font-weight: 600; color: #555 !important; padding: 8px 18px !important; border-radius: 30px; transition: all 0.3s; }
+        .nav-link:hover { color: var(--primary) !important; background: rgba(0, 74, 173, 0.06); }
+        .nav-link.active { color: #fff !important; background: var(--primary); box-shadow: 0 4px 10px rgba(0, 74, 173, 0.3); }
+
+        /* Benutzer-Avatar */
+        .user-avatar { width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--gold); padding: 2px; } /* VIP Goldrand */
+        .dropdown-menu-custom {
+            border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 15px !important;
+            min-width: 200px; padding: 10px; z-index: 1001;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #555; transition: 0.2s;
+        }
+        .dropdown-menu-custom .dropdown-item:hover { background: #f0f7ff; color: var(--primary); }
+        .dropdown-menu-custom .dropdown-item i { margin-right: 10px; font-size: 16px; vertical-align: middle; }
+
+        /* --- Modus-Umschalter --- */
+        .mode-switch-container {
+            position: absolute; top: 90px; left: 50%; transform: translateX(-50%); z-index: 50;
+            background: #fff; padding: 4px; border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); display: flex; gap: 4px;
+        }
+        .mode-btn {
+            border: none; padding: 6px 20px; border-radius: 25px; font-weight: 700; font-size: 13px;
+            background: transparent; color: #666; transition: 0.3s;
+        }
+        .mode-btn.active { background: #eee; color: #333; }
+        .mode-btn.pro-active { background: linear-gradient(135deg, #111, #333); color: #ffd700; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        /* --- Karten-Container --- */
+        .map-container { width: 100%; height: 100%; position: relative; }
+
+        /* --- Drawer (Schublade) --- */
+        .content-drawer {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: #fff; border-radius: 24px 24px 0 0;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            transform: translateY(110%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 100; height: 75vh; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .content-drawer.show { transform: translateY(0); }
+        .drawer-hero {
+            height: 140px; position: relative; color: #fff; flex-shrink: 0;
+            background-size: cover; background-position: center;
+        }
+        .drawer-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)); }
+        .hero-content { position: absolute; bottom: 15px; left: 20px; right: 20px; z-index: 2; }
+        .btn-close-custom {
+            position: absolute; top: 15px; right: 15px; z-index: 10;
+            background: rgba(0,0,0,0.3); border-radius: 50%; width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer;
+        }
+
+        .nav-tabs-custom { display: flex; border-bottom: 1px solid #eee; padding: 0 10px; background: #fff; }
+        .tab-link { padding: 15px; font-weight: 600; color: #888; cursor: pointer; border-bottom: 3px solid transparent; font-size: 14px; flex: 1; text-align: center; }
+        .tab-link.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-link.pro-tab.active { color: #d4af37; border-bottom-color: #d4af37; }
+        .drawer-body { flex: 1; overflow-y: auto; padding: 20px; background: #fff; }
+        .tab-pane { display: none; animation: fadeIn 0.3s; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Inhaltselemente */
+        .culture-item { display: flex; gap: 15px; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 12px; margin-bottom: 15px; align-items: center; }
+        .culture-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+        .dialect-word { color: var(--beijing-red); font-weight: 800; font-size: 18px; margin-right: 5px; }
+
+        .chat-row { margin-bottom: 12px; display: flex; flex-direction: column; }
+        .chat-bubble { padding: 10px 14px; border-radius: 12px; font-size: 14px; max-width: 90%; }
+        .chat-npc { background: #f1f3f5; color: #333; align-self: flex-start; }
+        .chat-user { background: #e3f2fd; color: #004aad; align-self: flex-end; }
+        .dialect-highlight { color: var(--beijing-red); font-weight: bold; border-bottom: 2px dotted rgba(201, 23, 30, 0.3); }
+
+        /* KI-Bewertung */
+        .mic-btn-wrapper { position: relative; width: 80px; height: 80px; margin: 20px auto; }
+        .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 2; position: relative; transition: all 0.3s; }
+        .mic-btn.recording { background: #ff4d4f; transform: scale(1.1); }
+        .score-circle { width: 90px; height: 90px; border-radius: 50%; border: 4px solid #28a745; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #28a745; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="home_de.html">YanHe</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-1 text-primary"></i>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center gap-1 me-auto">
+                    <li class="nav-item"><a class="nav-link" href="home_de.html">Startseite</a></li>
+                    <li class="nav-item"><a class="nav-link" href="story_de.html">Geschichten</a></li>
+                    <li class="nav-item"><a class="nav-link" href="education_de.html">Bildung</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service_de.html">Marktplatz</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="culture_de.html">Kulturkarte</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0 ms-lg-4">
+                    <a href="culture_de_vip.html" class="btn btn-light rounded-circle shadow-sm border" style="width: 40px; height: 40px; display:flex; align-items:center; justify-content:center;" title="Switch to English">
+                        <span style="font-size:12px; font-weight:bold;">DE</span>
+                    </a>
+
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                                 alt="User" class="rounded-circle user-avatar shadow-sm">
+                            <span class="d-none d-md-inline ms-2 fw-bold text-dark">Li Yanhe</span>
+                            <span class="badge bg-warning text-dark ms-2"><i class="bi bi-star-fill"></i> PRO</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" aria-labelledby="userDropdown">
+                            <li class="px-3 py-2 border-bottom mb-2">
+                                <div class="fw-bold text-dark">Li Yanhe</div>
+                                <div class="small text-muted"><i class="bi bi-star-fill text-warning"></i> Pro Jahresmitglied</div>
+                            </li>
+                            <li><a class="dropdown-item" href="auth.profile_de.html"><i class="bi bi-person-badge"></i> Profil</a></li>
+                            <li><a class="dropdown-item" href="auth.profile_de.html"><i class="bi bi-mortarboard"></i> Meine Kurse</a></li>
+                            <li><a class="dropdown-item" href="auth.profile_de.html"><i class="bi bi-star"></i> Favoriten</a></li>
+                            <li><a class="dropdown-item" href="auth.profile_de.html"><i class="bi bi-heart"></i> Gefällt mir</a></li>
+                             <li><a class="dropdown-item" href="auth.profile_de.html"><i class="bi bi-people"></i> Gefolgt</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="auth.profile_de.html"><i class="bi bi-gear"></i> Einstellungen</a></li>
+                            <li><a class="dropdown-item text-danger" href="index_de.html"><i class="bi bi-box-arrow-right"></i> Abmelden</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mode-switch-container">
+        <button class="mode-btn active" id="btnStd" onclick="togglePro(false)">Entdecker</button>
+        <button class="mode-btn" id="btnPro" onclick="togglePro(true)">Pro Challenge <i class="bi bi-lightning-fill text-warning"></i></button>
+    </div>
+
+    <div class="map-container">
+        <div id="china-map" style="width: 100%; height: 100%;"></div>
+    </div>
+
+    <div class="content-drawer" id="drawer">
+        <div class="drawer-hero" id="heroBg">
+            <div class="btn-close-custom" onclick="closeDrawer()"><i class="bi bi-x-lg"></i></div>
+            <div class="hero-content">
+                <h2 class="hero-title fw-bold" id="dCity">Wird geladen...</h2>
+                <div id="dTags"></div>
+            </div>
+        </div>
+
+        <div class="nav-tabs-custom">
+            <div class="tab-link active" onclick="switchTab(this, 'culture')">Kultur & Vokabeln</div>
+            <div class="tab-link pro-tab" onclick="switchTab(this, 'scenario')"><i class="bi bi-joystick"></i> Szenarien</div>
+            <div class="tab-link pro-tab" onclick="switchTab(this, 'ai')"><i class="bi bi-mic-fill"></i> KI-Bewertung</div>
+        </div>
+
+        <div class="drawer-body">
+            <div id="tab-culture" class="tab-pane active">
+                <p class="text-muted small mb-3" id="dIntro"></p>
+                <div id="cultureList"></div>
+            </div>
+
+            <div id="tab-scenario" class="tab-pane">
+                <div class="card border-0 bg-light">
+                    <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                        <strong id="sTitle">Szenario wird geladen...</strong>
+                        <span class="badge bg-warning text-dark">Lv.2 Fortgeschritten (VIP)</span>
+                    </div>
+                    <div class="card-body position-relative p-3" style="min-height: 200px;">
+                        <div id="scenarioContent"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-ai" class="tab-pane">
+                <div class="text-center pt-3">
+                    <p class="text-muted small mb-2">Halten Sie die Taste gedrückt und lesen Sie laut im Dialekt vor:</p>
+                    <h2 class="fw-bold mb-1" id="aiTarget">---</h2>
+                    <p class="text-muted small fst-italic" id="aiMeaning">---</p>
+                    <div class="mic-btn-wrapper">
+                        <div class="mic-btn" id="micBtn" onmousedown="startRecord()" onmouseup="stopRecord()"><i class="bi bi-mic-fill"></i></div>
+                    </div>
+                    <p class="small text-muted" id="micStatus">Halten zum Sprechen</p>
+                    <div id="aiResult" style="display: none;" class="mt-4 border-top pt-3">
+                        <div class="d-flex align-items-center justify-content-center gap-3">
+                            <div class="score-circle">
+                                <span class="fw-bold fs-1">95</span><span class="small">Rang S</span>
+                            </div>
+                            <div class="text-start small text-muted">
+                                <div>Aussprache: <span class="text-dark fw-bold">98%</span></div>
+                                <div class="text-success mt-1"><i class="bi bi-check-circle-fill"></i> Klingt sehr authentisch!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // --- Kernstatus: Eingeloggt und VIP ---
+        let isVip = true;
+
+        const cityData = {
+            '北京': {
+                city: 'Peking · Die Hauptstadt', tags: ['R-Laut', 'Fairness'],
+                bg: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800',
+                intro: 'Der Peking-Dialekt strahlt das Selbstvertrauen und den Humor der Kaiserstadt aus.',
+                cultureItems: [
+                    { title: 'Geisteshaltung', img: 'https://images.unsplash.com/photo-1562624632-6019a7795325?w=200', word: '局气 (Jú qi)', desc: 'Beschreibt jemanden, der loyal ist und Regeln befolgt.' }
+                ],
+                scenario: {
+                    title: 'Nach dem Weg fragen',
+                    chats: [
+                        {role: 'npc', text: 'Hey, mein Herr, <span class="dialect-highlight">darf ich stören</span>?'},
+                        {role: 'user', text: '<span class="dialect-highlight">Entschuldigung</span>, wie komme ich zum Trommelturm?'}
+                    ]
+                },
+                aiChallenge: { word: '这事儿真地道', meaning: '(Bedeutung: Das ist wirklich authentisch)' }
+            },
+            '成都': {
+                city: 'Sichuan · Chengdu', tags: ['Feuertopf', 'Gemütlich'],
+                bg: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600',
+                intro: 'Der Chengdu-Dialekt ist für seinen Humor bekannt, das Leben ist "gemütlich" (Ba Shi).',
+                cultureItems: [{ title: 'Lebenseinstellung', img: 'https://images.unsplash.com/photo-1524413992383-a26df851dc2d?w=200', word: '巴适 (Ba Shi)', desc: 'Bequem, sehr gut.' }],
+                scenario: { title: 'Im Feuertopf-Restaurant', chats: [{role: 'npc', text: 'Wie viele Personen?'}, {role: 'user', text: 'Drei, <span class="dialect-highlight">leicht scharf</span>!'}] },
+                aiChallenge: { word: '巴适得板', meaning: '(Bedeutung: Extrem gemütlich)' }
+            }
+        };
+
+        var myChart = echarts.init(document.getElementById('china-map'));
+        const mapStyles = {
+            std: { bg: '#f8faff', area: '#e0eaff', border: '#fff', point: '#004aad' },
+            pro: { bg: '#1a1a1a', area: '#2c3e50', border: '#555', point: '#ffd700' }
+        };
+
+        function getOption(mode) {
+            const s = mode === 'pro' ? mapStyles.pro : mapStyles.std;
+            return {
+                backgroundColor: s.bg,
+                geo: {
+                    map: 'china', roam: true, zoom: 1.2, label: {show: false},
+                    itemStyle: { areaColor: s.area, borderColor: s.border }
+                },
+                series: [
+                    { type: 'effectScatter', coordinateSystem: 'geo', data: [{name:'成都',value:[104.06,30.67]}], symbolSize: 14, itemStyle: { color: s.point } },
+                    { type: 'effectScatter', coordinateSystem: 'geo', data: [{name:'北京',value:[116.40,39.90]}], symbolSize: 20, itemStyle: { color: mode === 'pro' ? '#ffd700' : '#c9171e' }, rippleEffect: { color: mode === 'pro' ? '#ffd700' : '#c9171e', scale: 6 } }
+                ]
+            };
+        }
+        myChart.setOption(getOption('std'));
+        myChart.on('click', function(params) { if(params.seriesIndex!==undefined) openDrawer(params.data.name); });
+
+        function openDrawer(cityName) {
+            const data = cityData[cityName] || cityData['北京'];
+            document.getElementById('heroBg').style.backgroundImage = `url('${data.bg}')`;
+            document.getElementById('dCity').innerText = data.city;
+            document.getElementById('dTags').innerHTML = data.tags.map(t=>`<span class="badge bg-white text-dark bg-opacity-75 me-1">${t}</span>`).join('');
+            document.getElementById('dIntro').innerText = data.intro;
+
+            document.getElementById('cultureList').innerHTML = data.cultureItems.map(item => `
+                <div class="culture-item"><img src="${item.img}" class="culture-thumb"><div><div class="dialect-word">${item.word}</div><div class="small text-muted">${item.desc}</div></div></div>
+            `).join('');
+
+            document.getElementById('sTitle').innerText = data.scenario.title;
+            document.getElementById('scenarioContent').innerHTML = data.scenario.chats.map(c => `<div class="chat-row"><div class="chat-bubble ${c.role==='user'?'chat-user':'chat-npc'}">${c.text}</div></div>`).join('');
+            document.getElementById('aiTarget').innerText = data.aiChallenge.word;
+            document.getElementById('aiMeaning').innerText = data.aiChallenge.meaning;
+
+            document.getElementById('drawer').classList.add('show');
+            switchTab(document.querySelector('.tab-link'), 'culture');
+        }
+
+        function closeDrawer() { document.getElementById('drawer').classList.remove('show'); }
+        function switchTab(el, tabId) {
+            document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active')); el.classList.add('active');
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById('tab-'+tabId).classList.add('active');
+        }
+
+        // --- Pro Umschaltung (VIP direkt wechseln) ---
+        function togglePro(active) {
+            const btnStd = document.getElementById('btnStd');
+            const btnPro = document.getElementById('btnPro');
+
+            if(active) {
+                // Ist VIP, direkt umschalten
+                btnStd.classList.remove('active'); btnPro.classList.add('pro-active');
+                document.body.style.backgroundColor = '#1a1a1a';
+                myChart.setOption(getOption('pro'));
+            } else {
+                btnStd.classList.add('active'); btnPro.classList.remove('pro-active');
+                document.body.style.backgroundColor = '#f8faff';
+                myChart.setOption(getOption('std'));
+            }
+        }
+
+        function startRecord() {
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micStatus').innerText = 'Höre zu...';
+            document.getElementById('aiResult').style.display = 'none';
+        }
+        function stopRecord() {
+            document.getElementById('micBtn').classList.remove('recording');
+            document.getElementById('micStatus').innerText = 'Analyse abgeschlossen';
+            document.getElementById('aiResult').style.display = 'block';
+        }
+        window.addEventListener('resize', () => myChart.resize());
+    </script>
+</body>
+</html>

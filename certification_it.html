@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificazione Talenti - YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --accent: #d4af37; --bg-light: #f8faff; }
+        body { font-family: -apple-system, system-ui, sans-serif; padding-top: 70px; background: var(--bg-light); }
+
+        .navbar-custom { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.03); height: 70px; z-index: 1000; }
+
+        .auth-hero { background: linear-gradient(135deg, #004aad, #002a4d); color: #fff; padding: 60px 0; position: relative; overflow: hidden; }
+        .auth-hero::after { content: ''; position: absolute; right: -50px; bottom: -50px; width: 300px; height: 300px; background: url('https://upload.wikimedia.org/wikipedia/zh/thumb/2/23/Beijing_Sport_University_Logo.svg/1200px-Beijing_Sport_University_Logo.svg.png') no-repeat center/contain; opacity: 0.1; filter: grayscale(100%); }
+
+        .benefit-card { background: #fff; padding: 20px; border-radius: 12px; text-align: center; height: 100%; border: 1px solid rgba(0,0,0,0.05); transition: 0.3s; }
+        .benefit-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .icon-box { width: 50px; height: 50px; background: #eef4fc; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 15px; }
+
+        .form-container { background: #fff; padding: 40px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); margin-top: -50px; position: relative; z-index: 2; }
+        .form-label { font-weight: bold; font-size: 14px; color: #555; }
+        .form-control, .form-select { padding: 12px; border-radius: 8px; border: 1px solid #eee; background: #f9f9f9; }
+        .form-control:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.1); }
+
+        .upload-box { border: 2px dashed #ddd; border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; transition: 0.2s; background: #fcfcfc; }
+        .upload-box:hover { border-color: var(--primary); background: #f0f7ff; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container px-4">
+            <a class="navbar-brand fw-bold" href="service_it.html" style="color:var(--primary)"><i class="bi bi-chevron-left"></i> Torna all'Hub</a>
+        </div>
+    </nav>
+
+    <div class="auth-hero text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-3">Certificazione Esclusiva Talenti Universitari</h2>
+            <p class="opacity-75 mb-4">Unisciti al database esperti di YanHe e trasforma le tue competenze linguistiche in valore</p>
+            <div class="d-flex justify-content-center gap-3 mb-4">
+                <span class="badge bg-white text-primary px-3 py-2 rounded-pill"><i class="bi bi-mortarboard-fill"></i> BSU Pechino</span>
+                <span class="badge bg-white text-dark px-3 py-2 rounded-pill opacity-75">BFSU</span>
+                <span class="badge bg-white text-dark px-3 py-2 rounded-pill opacity-75">BLCU</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="form-container">
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-4">
+                            <div class="benefit-card">
+                                <div class="icon-box"><i class="bi bi-coin"></i></div>
+                                <h6 class="fw-bold">Zero Commissioni</h6>
+                                <p class="small text-muted m-0">Certificazione Alumni senza costi</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="benefit-card">
+                                <div class="icon-box"><i class="bi bi-lightning-charge"></i></div>
+                                <h6 class="fw-bold">Priorità Incarichi</h6>
+                                <p class="small text-muted m-0">Accesso prioritario ai progetti premium</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="benefit-card">
+                                <div class="icon-box"><i class="bi bi-award"></i></div>
+                                <h6 class="fw-bold">Certificato Stage</h6>
+                                <p class="small text-muted m-0">Rilascio attestato ufficiale di pratica</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <form onsubmit="event.preventDefault(); submitAuth();">
+                        <h5 class="fw-bold mb-4 border-start border-4 border-primary ps-3">Passaggio 1: Informazioni di Base</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" placeholder="Come indicato sul tesserino">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Università di Appartenenza</label>
+                                <select class="form-select">
+                                    <option selected>Beijing Sport University (BSU)</option>
+                                    <option>BFSU (Lingue Straniere Pechino)</option>
+                                    <option>BLCU (Lingua e Cultura Pechino)</option>
+                                    <option>Altra Università</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Dipartimento / Specializzazione</label>
+                                <input type="text" class="form-control" placeholder="Es: Lingue / Organizzazioni Internazionali">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Matricola</label>
+                                <input type="text" class="form-control" placeholder="Inserisci il numero di matricola">
+                            </div>
+                        </div>
+
+                        <h5 class="fw-bold mb-4 border-start border-4 border-primary ps-3">Passaggio 2: Verifica Identità</h5>
+                        <div class="mb-4">
+                            <label class="form-label mb-2">Carica foto del Tesserino Universitario / Carta dello Studente</label>
+                            <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+                                <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                                <p class="mb-0 mt-2 text-secondary">Clicca per caricare l'immagine (JPG/PNG)</p>
+                                <p class="small text-muted">Dimensione massima 5MB</p>
+                                <input type="file" id="fileInput" hidden>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="agree" required>
+                            <label class="form-check-label small text-muted" for="agree">
+                                Dichiaro che le informazioni fornite sono veritiere e accetto il "Patto dei Creatori di YanHe"
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm">Invia per la Revisione</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function submitAuth() {
+            // Simulazione invio
+            const btn = document.querySelector('button[type="submit"]');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Invio in corso...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('🎉 Invio completato con successo! La revisione sarà terminata entro 24 ore. Riceverai una notifica via SMS.');
+                window.location.href = 'service_it.html'; // Ritorno all'Hub
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

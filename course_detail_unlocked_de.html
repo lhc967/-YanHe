@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>播放中 - 商务汉语谈判</title>
+    <title>Wiedergabe - Business Chinesisch Verhandlung</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root { --primary: #004aad; --bg-light: #f8faff; }
-        body { padding-top: 70px; background: var(--bg-light); font-family: -apple-system, sans-serif; }
+        body { padding-top: 70px; background: var(--bg-light); font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif; }
         .navbar-custom { background: #fff; height: 70px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .nav-avatar { width: 38px; height: 38px; border-radius: 50%; }
 
-        /* 视频容器 (解锁状态) */
+        /* Video-Container (Entsperrt) */
         .video-wrapper {
             background: #000; width: 100%; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; position: relative;
             display: flex; align-items: center; justify-content: center;
         }
-        /* 模拟视频界面 */
+        /* Simuliertes Video-Interface */
         .fake-video-ui {
             width: 100%; height: 100%; background: linear-gradient(45deg, #111, #222);
             position: relative; display: flex; flex-direction: column; justify-content: space-between;
@@ -31,7 +31,7 @@
 
         @keyframes playProgress { to { width: 100%; } }
 
-        /* 目录样式 */
+        /* Playlist-Stil */
         .playlist-box { background: #fff; border-radius: 12px; height: 100%; border: 1px solid #eee; overflow: hidden; display: flex; flex-direction: column; }
         .chapter-item { padding: 15px; border-bottom: 1px solid #f9f9f9; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .chapter-item:hover { background: #f5faff; }
@@ -45,9 +45,9 @@
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold text-primary" href="home.html">言禾 YanHe</a>
+            <a class="navbar-brand fw-bold text-primary" href="home_de.html">YanHe</a>
             <div class="d-flex align-items-center ms-auto gap-3">
-                <a href="education.html" class="btn btn-outline-secondary btn-sm rounded-pill px-3">返回课程表</a>
+                <a href="education_de.html" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Zurück zum Kursplan</a>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LiHua" class="nav-avatar border">
             </div>
         </div>
@@ -57,7 +57,7 @@
         <div id="unlockToast" class="toast align-items-center text-white bg-success border-0 show" role="alert">
             <div class="d-flex">
                 <div class="toast-body">
-                    <i class="bi bi-check-circle-fill me-2"></i> 购买成功！本节视频已解锁。
+                    <i class="bi bi-check-circle-fill me-2"></i> Kauf erfolgreich! Dieses Video ist nun freigeschaltet.
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>
@@ -69,11 +69,11 @@
             <div class="col-lg-8">
                 <div class="video-wrapper">
                     <div class="fake-video-ui">
-                        <div class="p-3 text-white text-shadow small">04. 情景模拟：酒桌上的博弈</div>
+                        <div class="p-3 text-white text-shadow small">04. Szenario-Simulation: Strategien am Esstisch</div>
 
                         <div class="video-overlay-center">
                             <i class="bi bi-play-circle" style="font-size: 50px; opacity: 0.8;"></i>
-                            <div class="mt-2">正在播放...</div>
+                            <div class="mt-2">Wird abgespielt...</div>
                         </div>
 
                         <div class="progress-bar-video">
@@ -84,21 +84,21 @@
 
                 <div class="mt-4">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h2 class="fw-bold mb-0">04. 情景模拟：酒桌上的博弈</h2>
-                        <button class="btn btn-primary rounded-pill px-4" onclick="alert('AI 助教已启动！')"><i class="bi bi-robot"></i> 提问 AI</button>
+                        <h2 class="fw-bold mb-0">04. Szenario-Simulation: Strategien am Esstisch</h2>
+                        <button class="btn btn-primary rounded-pill px-4" onclick="alert('KI-Assistent gestartet!')"><i class="bi bi-robot"></i> KI fragen</button>
                     </div>
                     <div class="text-muted small mt-2">
-                        <span><i class="bi bi-unlock-fill text-success"></i> 已购买</span>
+                        <span><i class="bi bi-unlock-fill text-success"></i> Gekauft</span>
                         <span class="mx-2">|</span>
                         <span>18:20</span>
                     </div>
                     <hr>
                     <div class="bg-light p-3 rounded small text-secondary">
-                        <strong>本节重点：</strong>
+                        <strong>Schwerpunkte dieser Lektion:</strong>
                         <ul>
-                            <li>如何委婉地拒绝劝酒？ (Polite Refusal)</li>
-                            <li>敬酒的顺序与措辞 (Toasting Etiquette)</li>
-                            <li>“给面子”在商务谈判中的实际应用。</li>
+                            <li>Wie lehnt man Alkohol höflich ab? (Polite Refusal)</li>
+                            <li>Reihenfolge und Wortwahl beim Zuprosten (Toasting Etiquette)</li>
+                            <li>Die praktische Anwendung von "Gesicht geben" in Geschäftsverhandlungen.</li>
                         </ul>
                     </div>
                 </div>
@@ -106,36 +106,36 @@
 
             <div class="col-lg-4">
                 <div class="playlist-box">
-                    <div class="p-3 border-bottom bg-light fw-bold">课程目录</div>
+                    <div class="p-3 border-bottom bg-light fw-bold">Kursverzeichnis</div>
 
                     <div class="overflow-auto" style="max-height: 500px;">
                         <div class="chapter-item text-muted">
-                            <span class="small">01. 导论：谈判思维</span>
+                            <span class="small">01. Einführung: Verhandlungsdenken</span>
                             <i class="bi bi-check-circle-fill text-success"></i>
                         </div>
                         <div class="chapter-item text-muted">
-                            <span class="small">02. 核心词汇：报价</span>
+                            <span class="small">02. Kernvokabular: Angebot</span>
                             <i class="bi bi-check-circle-fill text-success"></i>
                         </div>
                         <div class="chapter-item text-muted">
-                            <span class="small">03. 情景：初次见面</span>
+                            <span class="small">03. Szenario: Erstes Treffen</span>
                             <i class="bi bi-check-circle-fill text-success"></i>
                         </div>
 
                         <div class="chapter-item active">
                             <div>
                                 <i class="bi bi-play-fill text-primary"></i>
-                                <span class="small text-dark">04. 情景：酒桌博弈</span>
+                                <span class="small text-dark">04. Szenario: Esstisch-Strategie</span>
                             </div>
-                            <span class="badge-vip">已解锁</span>
+                            <span class="badge-vip">Freigeschaltet</span>
                         </div>
 
                         <div class="chapter-item">
-                            <span class="small">05. 文化：面子工程</span>
+                            <span class="small">05. Kultur: Gesichtswahrung</span>
                             <i class="bi bi-lock-fill text-muted"></i>
                         </div>
                         <div class="chapter-item">
-                            <span class="small">06. 合同条款解析</span>
+                            <span class="small">06. Analyse von Vertragsklauseln</span>
                             <i class="bi bi-lock-fill text-muted"></i>
                         </div>
                     </div>
@@ -146,7 +146,7 @@
 
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        // 自动消失 Toast
+        // Toast automatisch ausblenden
         setTimeout(() => {
             var toastEl = document.getElementById('unlockToast');
             var toast = new bootstrap.Toast(toastEl);

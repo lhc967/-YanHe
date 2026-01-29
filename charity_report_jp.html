@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>言語貧困支援レポート - 言禾 YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --green: #28a745; --bg-light: #f8faff; }
+        body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; padding-top: 70px; background: var(--bg-light); }
+
+        .navbar-custom { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.03); height: 70px; z-index: 1000; }
+
+        /* ヘッダー統計 */
+        .charity-hero { background: #fff; padding: 50px 0; text-align: center; border-bottom: 1px solid #eee; }
+        .stat-card { padding: 20px; border-right: 1px solid #eee; }
+        .stat-card:last-child { border-right: none; }
+        .stat-num { font-size: 2.5rem; font-weight: 900; color: var(--green); margin-bottom: 5px; }
+        .stat-label { color: #666; font-size: 14px; }
+
+        /* 地図セクション */
+        .map-section { height: 300px; background: #e9ecef; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; position: relative; overflow: hidden; }
+        .map-section img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        .map-overlay { position: absolute; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 20px; border-radius: 30px; bottom: 20px; left: 20px; }
+
+        /* ストーリーリスト */
+        .story-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02); height: 100%; transition: 0.3s; }
+        .story-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .story-img { height: 180px; background: #ddd; position: relative; }
+        .story-img img { width: 100%; height: 100%; object-fit: cover; }
+        .story-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; color: var(--green); }
+        .story-body { padding: 20px; }
+
+        /* 透明性テーブル */
+        .transparency-table th { background: #f8f9fa; font-weight: bold; border-top: none; }
+        .transparency-table td { vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container px-4">
+            <a class="navbar-brand fw-bold" href="service_jp.html" style="color:var(--primary)"><i class="bi bi-chevron-left"></i> 戻る</a>
+            <span class="ms-auto fw-bold text-success"><i class="bi bi-heart-fill me-1"></i> 言禾チャリティ</span>
+        </div>
+    </nav>
+
+    <div class="charity-hero">
+        <div class="container">
+            <h2 class="fw-bold mb-4">翻訳依頼の一つひとつが、希望を届けます</h2>
+            <p class="text-muted mb-5 mw-600 mx-auto">YanHeは収益の1%を「言語貧困支援計画」に寄付し、遠隔地の子供たちの標準語学習支援や、絶滅危惧方言の保護活動に充てています。</p>
+
+            <div class="row g-4">
+                <div class="col-md-4 stat-card">
+                    <div class="stat-num">¥128,450</div>
+                    <div class="stat-label">累計寄付総額</div>
+                </div>
+                <div class="col-md-4 stat-card">
+                    <div class="stat-num">5,320</div>
+                    <div class="stat-label">支援児童数 (人)</div>
+                </div>
+                <div class="col-md-4 stat-card">
+                    <div class="stat-num">12</div>
+                    <div class="stat-label">言語教室設立数 (箇所)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+
+        <h4 class="fw-bold mb-4 border-start border-4 border-success ps-3">活動の足跡</h4>
+        <div class="map-section">
+            <img src="https://images.unsplash.com/photo-1530906622963-8a60586a49c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Rural China">
+            <div class="map-overlay">
+                <i class="bi bi-geo-alt-fill text-danger"></i> 現在の重点プロジェクト：雲南省怒江リス族自治州 標準語普及支援
+            </div>
+        </div>
+
+        <h4 class="fw-bold mb-4 border-start border-4 border-success ps-3">活動ニュース</h4>
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="story-card">
+                    <div class="story-img">
+                        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Education">
+                        <span class="story-badge">標準語普及</span>
+                    </div>
+                    <div class="story-body">
+                        <h6 class="fw-bold">山奥の子供たちに言葉の翼を</h6>
+                        <p class="small text-muted mb-3">2025年12月、涼山州へ500セットの「音声絵本」を寄贈し、子供たちが楽しく標準語を学べるよう支援しました。</p>
+                        <a href="#" class="text-success small fw-bold">続きを読む ></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="story-card">
+                    <div class="story-img">
+                        <img src="https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Culture">
+                        <span class="story-badge">方言保護</span>
+                    </div>
+                    <div class="story-body">
+                        <h6 class="fw-bold">消えゆく声を救う</h6>
+                        <p class="small text-muted mb-3">タスク広場で募集した「方言収集」により、初の「蘇州古街口述歴史」デジタルアーカイブの構築に成功しました。</p>
+                        <a href="#" class="text-success small fw-bold">アーカイブを見る ></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="story-card">
+                    <div class="story-img">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b955?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Teacher">
+                        <span class="story-badge">学生ボランティア</span>
+                    </div>
+                    <div class="story-body">
+                        <h6 class="fw-bold">BSUの学生が行動中</h6>
+                        <p class="small text-muted mb-3">北京体育大学の学生20名に対し、長期休暇を利用したスポーツと言語の教育ボランティア活動資金を提供しました。</p>
+                        <a href="#" class="text-success small fw-bold">活動日記を見る ></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="fw-bold mb-4 border-start border-4 border-success ps-3">寄付金の使途公開 (リアルタイム)</h4>
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 transparency-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="ps-4">日付</th>
+                            <th scope="col">プロジェクト名</th>
+                            <th scope="col">支出額</th>
+                            <th scope="col">実施機関/担当</th>
+                            <th scope="col">証憑</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ps-4 text-muted">2026-01-12</td>
+                            <td>雲南怒江 教材購入</td>
+                            <td class="fw-bold text-danger">- ¥12,000</td>
+                            <td>新華書店</td>
+                            <td><i class="bi bi-file-earmark-pdf text-primary cursor-pointer"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 text-muted">2026-01-10</td>
+                            <td>方言収集機材購入</td>
+                            <td class="fw-bold text-danger">- ¥5,600</td>
+                            <td>ソニー専門店</td>
+                            <td><i class="bi bi-file-earmark-pdf text-primary cursor-pointer"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 text-muted">2026-01-08</td>
+                            <td>ボランティア活動補助金 (第一期)</td>
+                            <td class="fw-bold text-danger">- ¥8,000</td>
+                            <td>YanHe財務部</td>
+                            <td><i class="bi bi-file-earmark-pdf text-primary cursor-pointer"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-white text-center py-3">
+                <button class="btn btn-outline-secondary btn-sm rounded-pill">もっと見る</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-5 text-center small">
+        <p class="mb-0">言禾公益基金会は第三者会計事務所による年度監査を受けています。</p>
+    </footer>
+
+</body>
+</html>

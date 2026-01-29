@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapporto di Beneficenza - YanHe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #004aad; --green: #28a745; --bg-light: #f8faff; }
+        body { font-family: -apple-system, system-ui, sans-serif; padding-top: 70px; background: var(--bg-light); }
+
+        .navbar-custom { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.03); height: 70px; z-index: 1000; }
+
+        /* Statistiche Hero */
+        .charity-hero { background: #fff; padding: 50px 0; text-align: center; border-bottom: 1px solid #eee; }
+        .stat-card { padding: 20px; border-right: 1px solid #eee; }
+        .stat-card:last-child { border-right: none; }
+        .stat-num { font-size: 2.5rem; font-weight: 900; color: var(--green); margin-bottom: 5px; }
+        .stat-label { color: #666; font-size: 14px; }
+
+        /* Placeholder Mappa */
+        .map-section { height: 300px; background: #e9ecef; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; position: relative; overflow: hidden; }
+        .map-section img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        .map-overlay { position: absolute; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 20px; border-radius: 30px; bottom: 20px; left: 20px; }
+
+        /* Lista Storie */
+        .story-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02); height: 100%; transition: 0.3s; }
+        .story-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .story-img { height: 180px; background: #ddd; position: relative; }
+        .story-img img { width: 100%; height: 100%; object-fit: cover; }
+        .story-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; color: var(--green); }
+        .story-body { padding: 20px; }
+
+        /* Tabella Trasparenza */
+        .transparency-table th { background: #f8f9fa; font-weight: bold; border-top: none; }
+        .transparency-table td { vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+        <div class="container px-4">
+            <a class="navbar-brand fw-bold" href="service_it.html" style="color:var(--primary)"><i class="bi bi-chevron-left"></i> Torna</a>
+            <span class="ms-auto fw-bold text-success"><i class="bi bi-heart-fill me-1"></i> YanHe Sociale</span>
+        </div>
+    </nav>
+
+    <div class="charity-hero">
+        <div class="container">
+            <h2 class="fw-bold mb-4">Ogni traduzione trasmette speranza</h2>
+            <p class="text-muted mb-5 mw-600 mx-auto">YanHe si impegna a destinare l'1% dei profitti al "Programma di Riduzione della Povertà Linguistica", aiutando i bambini delle aree remote a imparare la lingua nazionale e proteggendo i dialetti in via di estinzione.</p>
+
+            <div class="row g-4">
+                <div class="col-md-4 stat-card">
+                    <div class="stat-num">¥128,450</div>
+                    <div class="stat-label">Donazioni Totali Accumulate</div>
+                </div>
+                <div class="col-md-4 stat-card">
+                    <div class="stat-num">5,320</div>
+                    <div class="stat-label">Bambini Rurali Aiutati (persone)</div>
+                </div>
+                <div class="col-md-4 stat-card">
+                    <div class="stat-num">12</div>
+                    <div class="stat-label">Stazioni Educative Create</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+
+        <h4 class="fw-bold mb-4 border-start border-4 border-success ps-3">Le Nostre Impronte</h4>
+        <div class="map-section">
+            <img src="https://images.unsplash.com/photo-1530906622963-8a60586a49c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Rural China">
+            <div class="map-overlay">
+                <i class="bi bi-geo-alt-fill text-danger"></i> Progetto attuale: Promozione della lingua nella prefettura di Nujiang, Yunnan
+            </div>
+        </div>
+
+        <h4 class="fw-bold mb-4 border-start border-4 border-success ps-3">Aggiornamenti Sociali</h4>
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="story-card">
+                    <div class="story-img">
+                        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Education">
+                        <span class="story-badge">Promozione Linguistica</span>
+                    </div>
+                    <div class="story-body">
+                        <h6 class="fw-bold">Una finestra per i bambini delle montagne</h6>
+                        <p class="small text-muted mb-3">Nel dicembre 2025, il team YanHe ha donato 500 set di "libri illustrati sonori" nella prefettura di Liangshan per aiutare i bambini a parlare il mandarino.</p>
+                        <a href="#" class="text-success small fw-bold">Leggi di più ></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="story-card">
+                    <div class="story-img">
+                        <img src="https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Culture">
+                        <span class="story-badge">Protezione Dialetti</span>
+                    </div>
+                    <div class="story-body">
+                        <h6 class="fw-bold">Salvare le voci che scompaiono</h6>
+                        <p class="small text-muted mb-3">Grazie alle attività di "raccolta dialettale" sull'Hub, abbiamo creato il primo archivio digitale sulla storia orale di Suzhou.</p>
+                        <a href="#" class="text-success small fw-bold">Visualizza archivio ></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="story-card">
+                    <div class="story-img">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b955?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Teacher">
+                        <span class="story-badge">Volontariato Studentesco</span>
+                    </div>
+                    <div class="story-body">
+                        <h6 class="fw-bold">Studenti BSU in azione</h6>
+                        <p class="small text-muted mb-3">YanHe finanzia 20 studenti della BSU per attività di insegnamento bilingue (sport + lingua) in aree remote durante le vacanze.</p>
+                        <a href="#" class="text-success small fw-bold">Diario del volontariato ></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="fw-bold mb-4 border-start border-4 border-success ps-3">Trasparenza dei Fondi (Tempo Reale)</h4>
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 transparency-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="ps-4">Data</th>
+                            <th scope="col">Nome Progetto</th>
+                            <th scope="col">Importo Speso</th>
+                            <th scope="col">Ente/Gestore</th>
+                            <th scope="col">Ricevuta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ps-4 text-muted">12-01-2026</td>
+                            <td>Acquisto libri di testo Yunnan Nujiang</td>
+                            <td class="fw-bold text-danger">- ¥12,000</td>
+                            <td>Libreria Xinhua</td>
+                            <td><i class="bi bi-file-earmark-pdf text-primary cursor-pointer"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 text-muted">10-01-2026</td>
+                            <td>Acquisto attrezzature raccolta dialetti</td>
+                            <td class="fw-bold text-danger">- ¥5,600</td>
+                            <td>Sony Store</td>
+                            <td><i class="bi bi-file-earmark-pdf text-primary cursor-pointer"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 text-muted">08-01-2026</td>
+                            <td>Sussidi per volontari (1° lotto)</td>
+                            <td class="fw-bold text-danger">- ¥8,000</td>
+                            <td>Dip. Finanziario YanHe</td>
+                            <td><i class="bi bi-file-earmark-pdf text-primary cursor-pointer"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-white text-center py-3">
+                <button class="btn btn-outline-secondary btn-sm rounded-pill">Carica altri record</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-5 text-center small">
+        <p class="mb-0">La Fondazione YanHe Charity è soggetta a revisione annuale da parte di revisori contabili terzi.</p>
+    </footer>
+
+</body>
+</html>

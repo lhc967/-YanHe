@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>课程播放 - 商务汉语谈判</title>
+    <title>Kurs - Business Chinesisch Verhandlung</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root { --primary: #004aad; --accent: #ff6b00; --bg-light: #f8faff; }
-        body { padding-top: 70px; background: var(--bg-light); font-family: -apple-system, "PingFang SC", sans-serif; }
+        body { padding-top: 70px; background: var(--bg-light); font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
-        /* 导航栏保持一致 */
+        /* Navigationsleiste konsistent halten */
         .navbar-custom { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); height: 70px; z-index: 1000; }
         .navbar-brand { font-weight: 900; color: var(--primary) !important; }
         .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1px solid #eee; }
 
-        /* 视频播放区 */
+        /* Videoplayer-Bereich */
         .video-container {
             background: #000; width: 100%; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -27,14 +27,14 @@
         }
         .play-btn-overlay:hover { background: rgba(0,0,0,0.5); }
 
-        /* 锁定遮罩 */
+        /* Sperr-Overlay */
         .lock-overlay {
             position: absolute; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
             display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff;
-            z-index: 10; display: none; /* 默认隐藏 */
+            z-index: 10; display: none; /* Standardmäßig ausgeblendet */
         }
 
-        /* 目录区 */
+        /* Inhaltsverzeichnis */
         .playlist-card { background: #fff; border-radius: 12px; border: 1px solid #eee; height: 100%; display: flex; flex-direction: column; }
         .playlist-header { padding: 20px; border-bottom: 1px solid #eee; }
         .video-tabs { display: flex; gap: 10px; margin-top: 10px; }
@@ -60,9 +60,9 @@
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="home.html">言禾 YanHe</a>
+            <a class="navbar-brand" href="home_de.html">YanHe</a>
             <div class="d-flex align-items-center ms-auto gap-3">
-                <a href="education.html" class="btn btn-outline-secondary btn-sm rounded-pill px-3">返回课程表</a>
+                <a href="education_de.html" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Zurück zum Kursplan</a>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=LiHua" class="nav-avatar">
             </div>
         </div>
@@ -76,42 +76,42 @@
 
                     <div class="play-btn-overlay" id="playBtn" onclick="startVideo()">
                         <i class="bi bi-play-circle-fill" style="font-size: 60px;"></i>
-                        <div class="mt-2 fw-bold">点击开始学习</div>
+                        <div class="mt-2 fw-bold">Klicken zum Lernen</div>
                     </div>
 
                     <div class="lock-overlay" id="lockMask">
                         <i class="bi bi-lock-fill" style="font-size: 50px; margin-bottom: 15px;"></i>
-                        <h4 class="fw-bold">本节为高阶付费内容</h4>
-                        <p class="text-white-50 mb-4">解锁本章及后续所有情景剧视频</p>
+                        <h4 class="fw-bold">Dies ist ein Premium-Inhalt</h4>
+                        <p class="text-white-50 mb-4">Schalten Sie dieses Kapitel und alle folgenden Szenarien frei</p>
                         <button class="btn btn-danger rounded-pill px-5 fw-bold" onclick="goToPay(99)">
-                            解锁本节 (¥ 99)
+                            Dieses Kapitel freischalten (¥ 99)
                         </button>
-                        <button class="btn btn-link text-white small mt-2" onclick="previewFree()">试看 30 秒</button>
+                        <button class="btn btn-link text-white small mt-2" onclick="previewFree()">30 Sekunden testen</button>
                     </div>
                 </div>
 
                 <div class="mt-4">
-                    <h2 class="fw-bold" id="lessonTitle">01. 课程导论：中国人的谈判思维</h2>
+                    <h2 class="fw-bold" id="lessonTitle">01. Einführung: Chinesische Verhandlungsmentalität</h2>
                     <div class="d-flex gap-3 text-muted small mt-2">
-                        <span><i class="bi bi-eye"></i> 1.2w 次观看</span>
-                        <span><i class="bi bi-star-fill text-warning"></i> 4.9 分</span>
+                        <span><i class="bi bi-eye"></i> 12k Aufrufe</span>
+                        <span><i class="bi bi-star-fill text-warning"></i> 4.9 Punkte</span>
                         <span><i class="bi bi-clock"></i> 15:00</span>
                     </div>
                     <hr>
-                    <h5 class="fw-bold mt-4">课程简介</h5>
-                    <p class="text-secondary">本课程专为具备中级汉语水平的学习者设计，结合真实的商务场景，深度解析中国商业环境中的谈判策略与语言艺术。</p>
+                    <h5 class="fw-bold mt-4">Kursbeschreibung</h5>
+                    <p class="text-secondary">Dieser Kurs richtet sich an Lernende mit mittlerem Chinesisch-Niveau und analysiert anhand realer Geschäftsszenarien eingehend Verhandlungsstrategien und Sprachkunst im chinesischen Geschäftsumfeld.</p>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="playlist-card">
                     <div class="playlist-header">
-                        <h5 class="fw-bold m-0">课程目录</h5>
+                        <h5 class="fw-bold m-0">Kursverzeichnis</h5>
                         <div class="video-tabs">
-                            <span class="v-tab active" onclick="filterType('all', this)">全部</span>
-                            <span class="v-tab" onclick="filterType('grammar', this)">精讲课</span>
-                            <span class="v-tab" onclick="filterType('scenario', this)">情景剧</span>
-                            <span class="v-tab" onclick="filterType('culture', this)">文化角</span>
+                            <span class="v-tab active" onclick="filterType('all', this)">Alle</span>
+                            <span class="v-tab" onclick="filterType('grammar', this)">Theorie</span>
+                            <span class="v-tab" onclick="filterType('scenario', this)">Szenario</span>
+                            <span class="v-tab" onclick="filterType('culture', this)">Kultur</span>
                         </div>
                     </div>
 
@@ -132,36 +132,36 @@
 
     <div class="card shadow-lg" id="aiChatBox" style="position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; z-index: 1050; display: none; border-radius: 16px; border: none;">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center" style="border-radius: 16px 16px 0 0;">
-            <span class="fw-bold"><i class="bi bi-robot me-2"></i>AI 助教</span>
+            <span class="fw-bold"><i class="bi bi-robot me-2"></i>KI-Assistent</span>
             <button type="button" class="btn-close btn-close-white btn-sm" onclick="toggleAiChat()"></button>
         </div>
         <div class="card-body bg-light overflow-auto" id="chatBody">
             <div class="d-flex align-items-start mb-3">
                 <div class="bg-white p-2 rounded shadow-sm small text-dark" style="max-width: 80%;">
-                    你好！我是言禾 AI 助教。关于这节课有什么不懂的词汇，可以随时问我哦！
+                    Hallo! Ich bin der YanHe KI-Assistent. Wenn du Fragen zum Vokabular dieser Lektion hast, kannst du mich jederzeit fragen!
                 </div>
             </div>
         </div>
         <div class="card-footer bg-white">
             <div class="input-group">
-                <input type="text" class="form-control border-0 bg-light" placeholder="输入问题..." id="chatInput">
+                <input type="text" class="form-control border-0 bg-light" placeholder="Frage eingeben..." id="chatInput">
                 <button class="btn btn-link text-primary" onclick="sendMessage()"><i class="bi bi-send-fill"></i></button>
             </div>
         </div>
     </div>
 
     <script>
-        // 模拟课程数据
+        // Simulierte Kursdaten
         const chapters = [
-            { id: 1, title: "01. 导论：中国人的谈判思维", type: "grammar", isPaid: false, duration: "15:00" },
-            { id: 2, title: "02. 核心词汇：报价与还价", type: "grammar", isPaid: false, duration: "22:30" },
-            { id: 3, title: "03. 情景模拟：初次见面寒暄", type: "scenario", isPaid: true, price: 99, duration: "10:45" },
-            { id: 4, title: "04. 情景模拟：酒桌上的博弈", type: "scenario", isPaid: true, price: 99, duration: "18:20" },
-            { id: 5, title: "05. 文化：面子工程", type: "culture", isPaid: true, price: 199, duration: "12:00" },
-            { id: 6, title: "06. 合同条款深度解析", type: "grammar", isPaid: true, price: 199, duration: "35:00" }
+            { id: 1, title: "01. Einführung: Chinesische Verhandlungsmentalität", type: "grammar", isPaid: false, duration: "15:00" },
+            { id: 2, title: "02. Kernvokabular: Angebot und Gegenangebot", type: "grammar", isPaid: false, duration: "22:30" },
+            { id: 3, title: "03. Szenario: Begrüßung beim ersten Treffen", type: "scenario", isPaid: true, price: 99, duration: "10:45" },
+            { id: 4, title: "04. Szenario: Strategien beim Geschäftsessen", type: "scenario", isPaid: true, price: 99, duration: "18:20" },
+            { id: 5, title: "05. Kultur: Das Gesicht wahren", type: "culture", isPaid: true, price: 199, duration: "12:00" },
+            { id: 6, title: "06. Tiefe Analyse von Vertragsklauseln", type: "grammar", isPaid: true, price: 199, duration: "35:00" }
         ];
 
-        // 初始化渲染
+        // Initiales Rendern
         renderChapters(chapters);
 
         function renderChapters(data) {
@@ -169,10 +169,10 @@
             list.innerHTML = '';
             data.forEach((item, index) => {
                 const badge = item.isPaid
-                    ? `<span class="tag-paid"><i class="bi bi-lock-fill"></i> 付费</span>`
-                    : `<span class="tag-free">免费</span>`;
+                    ? `<span class="tag-paid"><i class="bi bi-lock-fill"></i> Kostenpflichtig</span>`
+                    : `<span class="tag-free">Kostenlos</span>`;
 
-                const activeClass = index === 0 ? 'active' : ''; // 默认选中第一个
+                const activeClass = index === 0 ? 'active' : ''; // Erstes Element standardmäßig aktiv
 
                 list.innerHTML += `
                     <div class="chapter-item ${activeClass} ${item.isPaid ? 'locked' : ''}" onclick="playChapter(${item.id}, '${item.title}', ${item.isPaid}, ${item.price})">
@@ -190,7 +190,7 @@
             });
         }
 
-        // 筛选逻辑
+        // Filterlogik
         function filterType(type, btn) {
             document.querySelectorAll('.v-tab').forEach(el => el.classList.remove('active'));
             btn.classList.add('active');
@@ -203,7 +203,7 @@
             }
         }
 
-        // 播放逻辑
+        // Abspiellogik
         function playChapter(id, title, isPaid, price) {
             document.querySelectorAll('.chapter-item').forEach(el => el.classList.remove('active'));
             event.currentTarget.classList.add('active');
@@ -211,17 +211,17 @@
             document.getElementById('lessonTitle').innerText = title;
 
             if(isPaid) {
-                // 显示付费遮罩
+                // Kostenpflichtige Maske anzeigen
                 document.getElementById('playBtn').style.display = 'none';
                 document.getElementById('lockMask').style.display = 'flex';
-                // 更新按钮价格
-                document.querySelector('.btn-danger').innerText = `解锁本节 (¥ ${price})`;
+                // Buttonpreis aktualisieren
+                document.querySelector('.btn-danger').innerText = `Dieses Kapitel freischalten (¥ ${price})`;
                 document.querySelector('.btn-danger').setAttribute('onclick', `goToPay(${price})`);
             } else {
-                // 免费播放
+                // Kostenlos abspielen
                 document.getElementById('lockMask').style.display = 'none';
                 document.getElementById('playBtn').style.display = 'flex';
-                // 模拟重置播放器
+                // Player zurücksetzen simulieren
                 document.getElementById('videoCover').style.opacity = '0.8';
             }
         }
@@ -229,22 +229,22 @@
         function startVideo() {
             document.getElementById('playBtn').style.display = 'none';
             document.getElementById('videoCover').style.opacity = '0';
-            // 这里可以插入真实 video 标签
-            alert('视频开始播放...');
+            // Hier kann ein echtes Video-Tag eingefügt werden
+            alert('Video wird abgespielt...');
         }
 
         function goToPay(price) {
-            // 跳转到 checkout.html 并带上价格参数（模拟）
-            // 在 checkout.html 中你需要写一段 JS 来读取这个参数并更新显示价格
-            window.location.href = `checkout.html?price=${price}&course=商务汉语`;
+            // Weiterleitung zu checkout.html mit Preisparameter (simuliert)
+            // In checkout.html müssen Sie JS schreiben, um diesen Parameter zu lesen und den Preis zu aktualisieren
+            window.location.href = `checkout_de.html?price=${price}&course=Business Chinesisch`;
         }
 
         function previewFree() {
-            alert('试看模式启动：播放前 30 秒...');
+            alert('Vorschaumodus gestartet: Die ersten 30 Sekunden werden abgespielt...');
             document.getElementById('lockMask').style.display = 'none';
         }
 
-        // --- AI 聊天逻辑 ---
+        // --- KI-Chat-Logik ---
         function toggleAiChat() {
             const chat = document.getElementById('aiChatBox');
             chat.style.display = chat.style.display === 'none' ? 'block' : 'none';
@@ -255,7 +255,7 @@
             const body = document.getElementById('chatBody');
             if(!input.value) return;
 
-            // 用户消息
+            // Benutzernachricht
             body.innerHTML += `
                 <div class="d-flex align-items-end justify-content-end mb-3">
                     <div class="bg-primary text-white p-2 rounded shadow-sm small text-start" style="max-width: 80%;">
@@ -264,16 +264,16 @@
                 </div>
             `;
 
-            // 模拟回复
+            // Simulierte Antwort
             setTimeout(() => {
                 body.innerHTML += `
                     <div class="d-flex align-items-start mb-3">
                         <div class="bg-white p-2 rounded shadow-sm small text-dark" style="max-width: 80%;">
-                            这是一个很好的问题！"${input.value}" 在商务场景中通常表示...
+                            Das ist eine gute Frage! "${input.value}" bedeutet im geschäftlichen Kontext normalerweise...
                         </div>
                     </div>
                 `;
-                body.scrollTop = body.scrollHeight; // 滚动到底部
+                body.scrollTop = body.scrollHeight; // Nach unten scrollen
             }, 800);
 
             input.value = '';
