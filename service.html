@@ -79,6 +79,37 @@
                 box-shadow: 0 10px 40px rgba(0,0,0,0.1);
                 border: 1px solid rgba(0,0,0,0.05);
             }
+            /* --- 导航栏全局样式（包含毛玻璃） --- */
+.navbar-custom { 
+    background: rgba(255,255,255,0.8) !important; /* 透明度设为 0.8 */
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px); /* 兼容 iOS */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
+    height: 70px; 
+    z-index: 1000; 
+}
+
+/* --- 手机端下拉菜单透明修复 --- */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        /* 关键：去掉纯白背景，改为透明毛玻璃 */
+        background: rgba(255, 255, 255, 0.85) !important; 
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        
+        padding: 20px;
+        border-radius: 20px;
+        margin-top: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.3); /* 增加一道白边，增加质感 */
+    }
+
+    /* 修复展开时可能出现的背景溢出 */
+    .navbar-custom {
+        height: auto !important; /* 手机端展开时允许高度自适应 */
+        min-height: 70px;
+    }
+}
         }
     </style>
 <script>
@@ -351,4 +382,5 @@
         }
     </script>
 </body>
+
 </html>
